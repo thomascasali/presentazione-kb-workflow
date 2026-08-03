@@ -5,7 +5,7 @@
 - React 18 via CDN (unpkg.com)
 - Babel standalone per transpilazione JSX
 - SVG per diagrammi e simulatori
-- Google Fonts: Inter, JetBrains Mono, Space Grotesk
+- Google Fonts: Fraunces, Public Sans, IBM Plex Mono
 - NESSUN bundler, NESSUN npm, NESSUN framework aggiuntivo. Solo file HTML standalone, apribili anche da `file://`.
 
 ## Architettura

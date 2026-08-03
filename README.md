@@ -1,6 +1,8 @@
 # Dare una memoria all'AI — come ho costruito un sistema di conoscenza per Claude Code
 
-Presentazione interattiva per studenti ITTS (indirizzo Informatica) su come funziona `claude-kb-workflow`: un sistema di memoria a tre livelli (sessioni → wiki → KB stabile) per far ricordare all'AI quello che impara lavorando, invece di ripartire da zero ogni volta.
+▶️ **Vedi la presentazione**: https://thomascasali.github.io/presentazione-kb-workflow/
+
+Presentazione interattiva su come funziona `claude-kb-workflow`, rivolta a chi si avvicina alla programmazione: un sistema di memoria a tre livelli (sessioni → wiki → KB stabile) per far ricordare all'AI quello che impara lavorando, invece di ripartire da zero ogni volta.
 
 ## Contenuti
 
@@ -24,7 +26,7 @@ Presentazione interattiva per studenti ITTS (indirizzo Informatica) su come funz
 - HTML5 + CSS3
 - React 18 (via CDN, zero build)
 - Babel standalone (transpiler JSX in-browser)
-- Google Fonts (Inter, JetBrains Mono, Space Grotesk)
+- Google Fonts (Fraunces, Public Sans, IBM Plex Mono)
 
 Nessun bundler, nessun `npm install`: ogni file HTML è autonomo e si apre anche direttamente da `file://`.
 
@@ -48,4 +50,4 @@ Il workflow non richiede build step: pubblica l'intera cartella così com'è, pe
 
 ## Autore
 
-ITTS · Indirizzo Informatica
+Thomas Casali — [GitHub](https://github.com/thomascasali) · [LinkedIn](https://www.linkedin.com/in/thomas-casali-b038462a5/)
