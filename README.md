@@ -7,14 +7,14 @@ Presentazione interattiva per studenti ITTS (indirizzo Informatica) su come funz
 | Atto | Titolo | Argomenti | Slide |
 |------|--------|-----------|-------|
 | 1 | Il problema | L'amnesia dell'AI, 15+ prodotti reali gestiti ogni sera, l'idea di Karpathy | 5 |
-| 2 | L'architettura | I tre livelli, il cancello di promozione, l'orchestra di agenti | 6 |
+| 2 | L'architettura | I tre livelli, l'esame di promozione, l'orchestra di agenti | 6 |
 | 3 | Le tre storie | 10 agenti fantasma, il bug dei 4 caratteri, il recupero in un'ora, i 26 errori | 8 |
 | 4 | Perché lo regalo | Mappa vs territorio, le 3 lezioni trasferibili, come provarlo | 5 |
 
 ## Caratteristiche
 
 - **24 slide** interattive in 4 atti
-- **3 simulatori interattivi veri** (viaggio di un fatto attraverso il cancello, orchestra in azione, spot the bug)
+- **3 simulatori interattivi veri** (viaggio di un fatto attraverso l'esame, orchestra in azione, spot the bug)
 - Design moderno con tema scuro, palette diversa per ogni atto
 - Navigazione da tastiera (frecce, spazio, ESC, tasti numerici 1-9)
 - Responsive per mobile, tablet e proiettore/LIM

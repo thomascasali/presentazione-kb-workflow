@@ -125,7 +125,7 @@
             <g>
               <line x1="452" y1="30" x2="452" y2="150" stroke={dot && dot.blocked ? colors.danger : colors.warn} strokeWidth="3" strokeDasharray="6,4" />
               <text x="452" y="20" textAnchor="middle" fill={dot && dot.blocked ? colors.danger : colors.warn} fontSize="18">🔒</text>
-              <text x="452" y="164" textAnchor="middle" fill={colors.textMuted} fontSize="9">cancello</text>
+              <text x="452" y="164" textAnchor="middle" fill={colors.textMuted} fontSize="9">esame</text>
             </g>
 
             <rect x="480" y="40" width="150" height="100" fill={colors.bgLight} stroke={colors.accent} strokeWidth="2" rx="8" />
@@ -144,7 +144,7 @@
           </svg>
           <div style={{ display: 'flex', gap: '12px', marginTop: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
             <button onClick={travel} disabled={running} style={{ padding: '10px 20px', background: running ? colors.bgLight : colors.accent, border: 'none', borderRadius: '6px', color: running ? colors.textMuted : '#fff', cursor: running ? 'not-allowed' : 'pointer', fontSize: '13px', fontWeight: '600' }}>▶ Fai viaggiare questo fatto</button>
-            {dot && dot.blocked && <span style={{ color: colors.danger, fontWeight: '600', fontSize: '13px' }}>⛔ Bloccato al cancello: mancano i requisiti</span>}
+            {dot && dot.blocked && <span style={{ color: colors.danger, fontWeight: '600', fontSize: '13px' }}>⛔ Bocciato all'esame: mancano i requisiti</span>}
             {dot && dot.promoted && <span style={{ color: colors.success, fontWeight: '600', fontSize: '13px' }}>✓ Promosso alla KB stabile</span>}
           </div>
         </div>
@@ -244,7 +244,7 @@
           <div style={{ fontSize: 'clamp(40px, 8vw, 56px)', marginBottom: '20px' }}>🏗️</div>
           <div style={{ fontSize: '12px', color: colors.accent, textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '16px' }}>Atto 2</div>
           <h1 style={{ fontSize: 'clamp(28px, 6vw, 46px)', fontWeight: '700', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '16px' }}>L'architettura</h1>
-          <p style={{ fontSize: 'clamp(15px, 2.4vw, 19px)', color: colors.textDim, maxWidth: '560px', lineHeight: '1.6' }}>Tre livelli, un cancello che decide cosa merita di restare.</p>
+          <p style={{ fontSize: 'clamp(15px, 2.4vw, 19px)', color: colors.textDim, maxWidth: '560px', lineHeight: '1.6' }}>Tre livelli, un esame che decide cosa merita di restare.</p>
         </div>
       ),
 
@@ -275,7 +275,7 @@
         </div>
       ),
 
-      // 2.4 - Il cancello di promozione: perché
+      // 2.4 - L'esame di promozione: perché
       () => (
         <div style={{ padding: '30px' }}>
           <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -289,7 +289,7 @@
           <Box type="danger">
             <strong style={{ color: colors.text }}>Un libro di testo pieno di appunti non verificati non è più un libro di testo: è rumore.</strong>
           </Box>
-          <Box type="success" title="La regola del cancello — entrambi richiesti">
+          <Box type="success" title="La regola dell'esame — entrambi i requisiti richiesti">
             ✅ Verificato in produzione &nbsp;+&nbsp; ✅ Visto almeno 2 volte
           </Box>
         </div>

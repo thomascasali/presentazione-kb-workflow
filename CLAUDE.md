@@ -55,7 +55,7 @@ Conteggio slide: Atto 1 = 5, Atto 2 = 6, Atto 3 = 8, Atto 4 = 5 → **24 slide t
 
 ## Simulatori interattivi
 
-- **Atto 2, slide 2.3 — "Il viaggio di un fatto"**: componente React con `useState` + `setInterval`. Un pallino si muove tra i riquadri Sessioni sporche → Wiki viva → cancello → KB stabile. Due checkbox ("Verificato in produzione", "Visto almeno 2 volte") determinano se il pallino passa il cancello o si blocca.
+- **Atto 2, slide 2.3 — "Il viaggio di un fatto"**: componente React con `useState` + `setInterval`. Un pallino si muove tra i riquadri Sessioni sporche → Wiki viva → esame → KB stabile. Due checkbox ("Verificato in produzione", "Visto almeno 2 volte") determinano se il pallino passa l'esame o si blocca.
 - **Atto 2, slide 2.6 — "L'orchestra in azione"**: card cliccabili per i ruoli (Direttore, 4 specialisti, Controllore) con pannello informativo, più un bottone che anima una sequenza a step (con `setTimeout` incatenati) che mostra il ciclo lavoro → verifica → correzione → verifica → fine, includendo un passaggio in cui il controllore respinge il lavoro.
 - **Atto 3, slide 3.3 — "Spot the bug"**: due blocchi di codice affiancati, uno corretto (`---`) e uno con il bug reale (`\---`). Un bottone rivela ed evidenzia il carattere di troppo con un'animazione CSS (`@keyframes pulseBug`).
 
