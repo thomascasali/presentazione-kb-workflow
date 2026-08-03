@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atto 4 - La macchina completa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #15120f;
+      --bg-card: #1e1a15;
+      --bg-light: #29231d;
+      --border: #3c332a;
+      --text: #f4eee3;
+      --text-dim: #d2c8b8;
+      --text-muted: #a89a83;
+      --success: #6fae5c;
+      --danger: #e0563a;
+      --warn: #d9a441;
+      --info: #4e93b8;
+      --purple: #a879c4;
+      --fs-xs: clamp(13px, 0.7vw + 11px, 14px);
+      --fs-sm: clamp(15px, 0.8vw + 12px, 16px);
+      --fs-body: clamp(17px, 1vw + 13px, 19px);
+      --fs-lead: clamp(19px, 1.3vw + 14px, 22px);
+      --fs-h3: clamp(20px, 1.6vw + 14px, 26px);
+      --fs-h2: clamp(26px, 2.4vw + 16px, 36px);
+      --fs-h1: clamp(34px, 5vw + 18px, 58px);
+      --fs-display: clamp(44px, 7vw + 20px, 84px);
+      --lh-body: 1.65;
+      --lh-heading: 1.18;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Public Sans', sans-serif; }
+    #root { min-height: 100vh; }
+    a { color: inherit; }
+    h2, h3 { font-family: 'Public Sans', sans-serif; font-weight: 600; }
+    p, li { line-height: var(--lh-body); }
+    @media (max-width: 768px) {
+      .slide-content { padding: 16px !important; }
+      .slide-content > div { padding: 20px 16px !important; }
+      .top-bar { padding: 0 12px !important; }
+      .top-bar span { font-size: var(--fs-xs) !important; }
+      .bottom-bar { gap: 8px !important; }
+      .bottom-bar button, .bottom-bar a { padding: 10px 16px !important; font-size: var(--fs-xs) !important; }
+      svg { max-width: 100%; height: auto; }
+      .side-cards { grid-template-columns: 1fr !important; }
+    }
+    @media (max-width: 480px) {
+      .top-bar > div:first-child span:nth-child(4) { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const colors = {
+      bg: '#15120f', bgCard: '#1e1a15', bgLight: '#29231d',
+      accent: '#4e93b8', accentAlt: '#7ab8d6',
+      text: '#f4eee3', textDim: '#d2c8b8', textMuted: '#a89a83',
+      border: '#3c332a',
+      success: '#6fae5c', danger: '#e0563a', warn: '#d9a441', info: '#4e93b8', purple: '#a879c4'
+    };
+
+    const PREV_ACT = { href: 'atto3-le-storie.html', label: 'Atto 3' };
+    const NEXT_ACT = { href: 'atto5-perche-lo-regalo.html', label: 'Atto 5' };
+    const ACT_LABEL = 'Atto 4';
+    const ACT_TITLE = 'La macchina completa';
+
+    const BgTexture = () => (
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, opacity: 0.05, backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")" }} />
+    );
+
+    const Box = ({ type = 'info', title, children }) => {
+      const cfg = { info: { c: colors.info, i: 'ℹ️' }, warn: { c: colors.warn, i: '⚠️' }, danger: { c: colors.danger, i: '🛑' }, tip: { c: colors.purple, i: '💡' }, success: { c: colors.success, i: '✓' } };
+      const { c, i } = cfg[type];
+      return (
+        <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `4px solid ${c}`, borderRadius: '0 4px 4px 0', padding: '18px 22px', margin: '16px 0' }}>
+          {title && <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', fontWeight: '600', fontSize: 'var(--fs-body)', color: c }}>{i} {title}</div>}
+          <div style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>{children}</div>
+        </div>
+      );
+    };
+
+    const Glow = ({ children, color = colors.accent }) => (
+      <div style={{ position: 'relative', padding: '2px', borderRadius: '12px', background: `linear-gradient(135deg, ${color}40, transparent, ${color}20)` }}>
+        <div style={{ background: colors.bgCard, borderRadius: '10px', padding: '24px' }}>{children}</div>
+      </div>
+    );
+
+    const SideCard = ({ icon, title, borderColor, children }) => (
+      <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '12px', padding: '22px', borderTop: `3px solid ${borderColor}` }}>
+        <div style={{ fontSize: '26px', marginBottom: '12px' }}>{icon}</div>
+        <div style={{ color: colors.text, fontWeight: '600', fontFamily: 'Fraunces, serif', marginBottom: '8px', fontSize: 'var(--fs-h3)' }}>{title}</div>
+        <div style={{ color: colors.textDim, fontSize: 'var(--fs-body)', lineHeight: 'var(--lh-body)' }}>{children}</div>
+      </div>
+    );
+
+    // ---------- Diagramma 4.2: il ciclo completo ----------
+    const boxStyle = { fill: colors.bgLight, stroke: colors.border, strokeWidth: 2, rx: 8 };
+    const labelStyle = { textAnchor: 'middle', fill: colors.text, fontSize: '12', fontWeight: 'bold' };
+    const subLabelStyle = { textAnchor: 'middle', fill: colors.textMuted, fontSize: '9' };
+    const monoLabelStyle = { textAnchor: 'middle', fill: colors.accentAlt, fontSize: '11', fontFamily: "'IBM Plex Mono', monospace", fontWeight: '600' };
+
+    const MachineDiagram = () => (
+      <svg viewBox="0 0 920 380" style={{ width: '100%', background: colors.bg, borderRadius: '8px' }}>
+        <defs>
+          <marker id="arrowPurple" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill={colors.purple} />
+          </marker>
+        </defs>
+
+        {/* Riga 1: il lavoro */}
+        <text x="10" y="70" fill={colors.textMuted} fontSize="10" letterSpacing="1" fontFamily="'IBM Plex Mono', monospace">IL LAVORO</text>
+
+        <rect x="10" y="90" width="90" height="50" {...boxStyle} />
+        <text x="55" y="120" {...labelStyle}>Tu</text>
+
+        <rect x="150" y="90" width="110" height="50" {...boxStyle} stroke={colors.accent} />
+        <text x="205" y="112" {...labelStyle}>Lead</text>
+        <text x="205" y="128" {...subLabelStyle}>pianifica</text>
+
+        <rect x="320" y="30" width="170" height="44" {...boxStyle} />
+        <text x="405" y="48" {...labelStyle}>deep-reasoner</text>
+        <text x="405" y="64" {...subLabelStyle}>ragionamento</text>
+
+        <rect x="320" y="88" width="170" height="44" {...boxStyle} />
+        <text x="405" y="106" {...labelStyle}>fast-worker</text>
+        <text x="405" y="122" {...subLabelStyle}>meccanico</text>
+
+        <rect x="320" y="146" width="170" height="44" {...boxStyle} />
+        <text x="405" y="164" {...labelStyle}>specialisti</text>
+        <text x="405" y="180" {...subLabelStyle}>per dominio</text>
+
+        <rect x="560" y="90" width="140" height="50" {...boxStyle} stroke={colors.warn} />
+        <text x="630" y="112" {...labelStyle}>Gate</text>
+        <text x="630" y="128" {...subLabelStyle}>reviewer</text>
+
+        <rect x="760" y="90" width="150" height="50" {...boxStyle} stroke={colors.success} />
+        <text x="835" y="120" {...labelStyle}>Risultato</text>
+
+        {/* connessioni riga 1 */}
+        <line x1="100" y1="115" x2="150" y2="115" stroke={colors.textMuted} strokeWidth="2" />
+        <line x1="260" y1="105" x2="320" y2="52" stroke={colors.textMuted} strokeWidth="2" />
+        <line x1="260" y1="115" x2="320" y2="110" stroke={colors.textMuted} strokeWidth="2" />
+        <line x1="260" y1="125" x2="320" y2="168" stroke={colors.textMuted} strokeWidth="2" />
+        <line x1="490" y1="52" x2="560" y2="105" stroke={colors.textMuted} strokeWidth="2" />
+        <line x1="490" y1="110" x2="560" y2="115" stroke={colors.textMuted} strokeWidth="2" />
+        <line x1="490" y1="168" x2="560" y2="125" stroke={colors.textMuted} strokeWidth="2" />
+        <line x1="700" y1="115" x2="760" y2="115" stroke={colors.textMuted} strokeWidth="2" />
+
+        {/* Riga 2: il ciclo della conoscenza */}
+        <text x="10" y="280" fill={colors.textMuted} fontSize="10" letterSpacing="1" fontFamily="'IBM Plex Mono', monospace">IL CICLO DELLA CONOSCENZA</text>
+
+        <rect x="10" y="300" width="100" height="50" {...boxStyle} />
+        <text x="60" y="330" {...labelStyle}>Sessione</text>
+
+        <rect x="150" y="300" width="120" height="50" {...boxStyle} stroke={colors.info} />
+        <text x="210" y="330" {...monoLabelStyle}>/kb-ingest</text>
+
+        <rect x="310" y="300" width="100" height="50" {...boxStyle} stroke={colors.info} />
+        <text x="360" y="330" {...labelStyle}>Wiki</text>
+
+        <rect x="450" y="300" width="170" height="50" {...boxStyle} stroke={colors.warn} />
+        <text x="535" y="322" {...monoLabelStyle}>/kb-promote</text>
+        <text x="535" y="338" {...subLabelStyle}>l'esame</text>
+
+        <rect x="660" y="300" width="130" height="50" {...boxStyle} stroke={colors.accent} />
+        <text x="725" y="330" {...labelStyle}>KB stabile</text>
+
+        {/* connessioni riga 2 */}
+        <line x1="110" y1="325" x2="150" y2="325" stroke={colors.textMuted} strokeWidth="2" />
+        <line x1="270" y1="325" x2="310" y2="325" stroke={colors.textMuted} strokeWidth="2" />
+        <line x1="410" y1="325" x2="450" y2="325" stroke={colors.textMuted} strokeWidth="2" />
+        <line x1="620" y1="325" x2="660" y2="325" stroke={colors.textMuted} strokeWidth="2" />
+
+        {/* il cerchio si chiude: la KB torna a nutrire il lavoro futuro */}
+        <path d="M725,300 L725,20 L205,20 L205,90" fill="none" stroke={colors.purple} strokeWidth="2" strokeDasharray="6,4" markerEnd="url(#arrowPurple)" />
+        <text x="465" y="14" textAnchor="middle" fill={colors.purple} fontSize="10" fontFamily="'IBM Plex Mono', monospace">riletta dagli agenti nelle sessioni future</text>
+      </svg>
+    );
+
+    // ---------- Diagramma 4.3: 10 corsie parallele ----------
+    const LanesDiagram = () => {
+      const laneCount = 10;
+      const laneW = 62, gap = 8, startX = 74, topY = 20, laneH = 90;
+      const centers = Array.from({ length: laneCount }, (_, i) => startX + i * (laneW + gap) + laneW / 2);
+      const boxX = 250, boxY = 170, boxW = 400, boxH = 60;
+      return (
+        <svg viewBox="0 0 900 250" style={{ width: '100%', background: colors.bg, borderRadius: '8px' }}>
+          {centers.map((cx, i) => (
+            <g key={i}>
+              <rect x={cx - laneW / 2} y={topY} width={laneW} height={laneH} fill={colors.bgLight} stroke={colors.info} strokeWidth="1.5" rx="6" />
+              <text x={cx} y={topY + 22} textAnchor="middle" fill={colors.textMuted} fontSize="9" fontFamily="'IBM Plex Mono', monospace">agente {i + 1}</text>
+              <text x={cx} y={topY + 55} textAnchor="middle" fontSize="18">📖</text>
+              <line x1={cx} y1={topY + laneH} x2={boxX + boxW / 2} y2={boxY} stroke={colors.textMuted} strokeWidth="1" opacity="0.6" />
+            </g>
+          ))}
+          <rect x={boxX} y={boxY} width={boxW} height={boxH} fill={colors.bgLight} stroke={colors.accent} strokeWidth="2" rx="8" />
+          <text x={boxX + boxW / 2} y={boxY + 26} textAnchor="middle" fill={colors.text} fontSize="13" fontWeight="bold">15 progetti, 3 mesi di lavoro</text>
+          <text x={boxX + boxW / 2} y={boxY + 46} textAnchor="middle" fill={colors.textDim} fontSize="11">ricostruiti in circa un'ora</text>
+        </svg>
+      );
+    };
+
+    const slides = [
+      // 4.1 - Titolo atto
+      () => (
+        <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '70vh' }}>
+          <div style={{ fontSize: 'clamp(40px, 8vw, 56px)', marginBottom: '20px' }}>⚙️</div>
+          <div style={{ fontSize: 'var(--fs-xs)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '16px', fontFamily: "'IBM Plex Mono', monospace" }}>Atto 4</div>
+          <h1 style={{ fontSize: 'var(--fs-h1)', fontFamily: 'Fraunces, serif', fontWeight: '600', lineHeight: 'var(--lh-heading)', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '20px' }}>La macchina completa</h1>
+          <p style={{ fontSize: 'var(--fs-lead)', color: colors.textDim, maxWidth: '560px', lineHeight: 'var(--lh-body)' }}>Come tutti i pezzi — persone, agenti, memoria — lavorano insieme, dal primo prompt alla KB stabile.</p>
+        </div>
+      ),
+
+      // 4.2 - Quadro d'insieme
+      () => (
+        <div style={{ padding: '30px' }}>
+          <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '22px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🔄</span> Come gira la macchina, dall'inizio alla fine
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
+              In alto scorre il lavoro di tutti i giorni: voi chiedete, il direttore (lead) pianifica e delega in parallelo a chi ragiona a fondo, a chi esegue il meccanico e agli specialisti di dominio, poi tutto confluisce nel controllo del gate reviewer prima del risultato finale. In basso scorre un secondo ciclo, quello della conoscenza: ogni sessione può essere ingerita nella wiki, esaminata, e promossa alla KB stabile — che a sua volta viene riletta dagli agenti nelle sessioni future, chiudendo il cerchio.
+            </p>
+          </Glow>
+          <div style={{ margin: '20px 0' }}>
+            <MachineDiagram />
+          </div>
+          <Box type="tip">
+            Le due metà si alimentano a vicenda: il lavoro produce conoscenza, la conoscenza migliora il lavoro successivo.
+          </Box>
+        </div>
+      ),
+
+      // 4.3 - Orchestrazione parallela, esempio vero
+      () => (
+        <div style={{ padding: '30px' }}>
+          <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '22px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🛤️</span> 10 corsie parallele, un'ora, 15 progetti
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
+              È il censimento retroattivo raccontato nell'Atto 3, visto qui dal lato dell'organizzazione: invece di leggere i log di 15 progetti uno alla volta, sono stati lanciati <strong style={{ color: colors.text }}>10 agenti di lettura in parallelo</strong>, uno per progetto, ognuno sui propri registri di sessione. Nessuno aspetta il turno di un altro.
+            </p>
+          </Glow>
+          <div style={{ margin: '20px 0' }}>
+            <LanesDiagram />
+          </div>
+          <Box type="tip" title="Secondo esempio: la release v0.2">
+            Anche il collaudo della v0.2 (Atto 3) era orchestrazione in azione: il lead scriveva i documenti mentre il fast-worker faceva in parallelo il lavoro meccanico, e solo alla fine il reviewer ha controllato tutto insieme — lavoro diviso per competenza, non per turno.
+          </Box>
+        </div>
+      ),
+
+      // 4.4 - Chi legge cosa
+      () => (
+        <div style={{ padding: '30px' }}>
+          <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '22px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>📑</span> Chi legge cosa — anche per gli agenti
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
+              La stessa metafora dell'Atto 2 vale per gli agenti, non solo per voi: la wiki è il quaderno di appunti, la KB è il libro di testo. Ma qui il libro lo consulta anche chi lavora — non solo chi legge alla fine.
+            </p>
+          </Glow>
+          <div className="side-cards" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', margin: '22px 0' }}>
+            <SideCard icon="📓" title="Wiki — stato fresco" borderColor={colors.info}>
+              Consultata quando serve sapere <strong style={{ color: colors.text }}>a che punto è un progetto</strong> o <strong style={{ color: colors.text }}>quali trappole ha già incontrato</strong>. Esempio di domanda: "a che punto è X? quali gotcha ha?"
+            </SideCard>
+            <SideCard icon="📚" title="KB — verità consolidata" borderColor={colors.purple}>
+              Consultata quando serve <strong style={{ color: colors.text }}>lo standard che vale per tutti i progetti</strong>. Esempio di domanda: "come si fa il deploy? qual è lo standard per il login?"
+            </SideCard>
+          </div>
+          <Box type="tip">
+            Qui il libro lo leggono anche gli agenti, non solo gli umani.
+          </Box>
+        </div>
+      ),
+
+      // 4.5 - Le skill
+      () => (
+        <div style={{ padding: '30px' }}>
+          <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '22px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🧩</span> Le skill: istruzioni che si attivano da sole
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
+              Non sono comandi da ricordare a memoria. Ogni skill ha una descrizione: quando il contesto della conversazione la riconosce, la skill si attiva da sola, senza che nessuno debba invocarla esplicitamente.
+            </p>
+          </Glow>
+          <ul style={{ color: colors.textDim, lineHeight: '1.9', paddingLeft: '22px', fontSize: 'var(--fs-body)', marginTop: '18px' }}>
+            <li><strong style={{ color: colors.text }}>debugging-sistematico</strong> — prima la causa radice, poi il fix</li>
+            <li><strong style={{ color: colors.text }}>verifica-prima-di-completare</strong> — nessun "fatto" senza evidenza</li>
+            <li><strong style={{ color: colors.text }}>brainstorming-design</strong> — allineamento prima del codice</li>
+            <li><strong style={{ color: colors.text }}>i 5 comandi /kb-*</strong> — tutta la pipeline sessione → wiki → KB</li>
+          </ul>
+          <Box type="info">
+            Nel mio sistema completo ce ne sono più di 20, tra proprie e di comunità; le 6 metodologiche più mature sono nel toolkit pubblico.
+          </Box>
+        </div>
+      ),
+
+      // 4.6 - Il valore per la comunità
+      () => (
+        <div style={{ padding: '30px' }}>
+          <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '22px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>📦</span> Cosa c'è nel repo pubblico — e cosa resta privato
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
+              Tutta la macchina che avete visto in questo atto non è teoria: è quello che finisce nel repo pubblico.
+            </p>
+          </Glow>
+          <ul style={{ color: colors.textDim, lineHeight: '1.9', paddingLeft: '22px', fontSize: 'var(--fs-body)', marginTop: '18px' }}>
+            <li><strong style={{ color: colors.text }}>Cosa contiene il repo pubblico</strong> — la pipeline wiki → KB, 12 agenti, 30 pattern pagati in produzione, 6 skill</li>
+            <li><strong style={{ color: colors.text }}>Cosa resta privato</strong> — la wiki con i progetti reali</li>
+          </ul>
+          <Box type="tip">
+            E allora perché regalarlo? La risposta è nel prossimo atto.
+          </Box>
+        </div>
+      ),
+    ];
+
+    function App() {
+      const [current, setCurrent] = useState(0);
+      const total = slides.length;
+
+      const next = () => setCurrent(c => Math.min(c + 1, total - 1));
+      const prev = () => setCurrent(c => Math.max(c - 1, 0));
+
+      useEffect(() => {
+        const handler = e => {
+          if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+          if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+          if (e.key === 'Escape') window.location.href = 'index.html';
+          if (e.key >= '1' && e.key <= '9') { const idx = parseInt(e.key) - 1; if (idx < total) setCurrent(idx); }
+        };
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
+      }, []);
+
+      return (
+        <div style={{ minHeight: '100vh', background: colors.bg, position: 'relative' }}>
+          <BgTexture />
+          <div className="top-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '54px', background: colors.bgCard + 'e0', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px', zIndex: 100 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <a href="index.html" style={{ color: colors.textMuted, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← Indice</a>
+              <span style={{ color: colors.border }}>|</span>
+              <span style={{ color: colors.accent, fontWeight: '600', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)' }}>{ACT_LABEL}</span>
+              <span style={{ color: colors.textDim }}>{ACT_TITLE}</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', fontFamily: "'IBM Plex Mono', monospace" }}>{current + 1} / {total}</span>
+              <div style={{ width: '100px', height: '6px', background: colors.bgLight, borderRadius: '3px' }}>
+                <div style={{ height: '100%', width: `${((current + 1) / total) * 100}%`, background: colors.accent, borderRadius: '3px', transition: 'width 0.3s' }} />
+              </div>
+            </div>
+          </div>
+          <div style={{ paddingTop: '54px', paddingBottom: '76px', minHeight: 'calc(100vh - 130px)', position: 'relative', zIndex: 1 }}>
+            <div className="slide-content" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+              {slides[current]()}
+            </div>
+          </div>
+          <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, minHeight: '64px', background: colors.bgCard + 'e0', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', zIndex: 100, flexWrap: 'wrap', padding: '8px 20px' }}>
+            {current === 0 && PREV_ACT && (
+              <a href={PREV_ACT.href} style={{ padding: '10px 24px', minHeight: '44px', display: 'inline-flex', alignItems: 'center', background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '6px', color: colors.textDim, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← {PREV_ACT.label}</a>
+            )}
+            <button onClick={prev} disabled={current === 0} style={{ padding: '10px 24px', minHeight: '44px', background: current === 0 ? colors.bgLight : colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '6px', color: current === 0 ? colors.textMuted : colors.text, cursor: current === 0 ? 'not-allowed' : 'pointer', fontSize: 'var(--fs-sm)' }}>← Indietro</button>
+            <button onClick={next} disabled={current === total - 1} style={{ padding: '10px 24px', minHeight: '44px', background: current === total - 1 ? colors.bgLight : `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, border: 'none', borderRadius: '6px', color: current === total - 1 ? colors.textMuted : colors.bg, cursor: current === total - 1 ? 'not-allowed' : 'pointer', fontSize: 'var(--fs-sm)', fontWeight: '600' }}>Avanti →</button>
+            {current === total - 1 && NEXT_ACT && (
+              <a href={NEXT_ACT.href} style={{ padding: '10px 24px', minHeight: '44px', display: 'inline-flex', alignItems: 'center', background: colors.success, border: 'none', borderRadius: '6px', color: colors.bg, textDecoration: 'none', fontSize: 'var(--fs-sm)', fontWeight: '600' }}>{NEXT_ACT.label} →</a>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

@@ -75,7 +75,7 @@
     };
 
     const PREV_ACT = { href: 'atto2-larchitettura.html', label: 'Atto 2' };
-    const NEXT_ACT = { href: 'atto4-perche-lo-regalo.html', label: 'Atto 4' };
+    const NEXT_ACT = { href: 'atto4-la-macchina.html', label: 'Atto 4' };
     const ACT_LABEL = 'Atto 3';
     const ACT_TITLE = 'Le tre storie';
 
@@ -126,13 +126,13 @@
       return (
         <div>
           <div className="bug-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-            <div>
+            <div style={{ minWidth: 0 }}>
               <div style={{ color: colors.success, fontWeight: '600', marginBottom: '10px', fontSize: 'var(--fs-sm)' }}>✓ Quello che doveva esserci</div>
               <div style={codeBoxStyle}>
                 <pre style={preStyle}>{'---\nname: reviewer\ndescription: Code review, debug e QA\n---'}</pre>
               </div>
             </div>
-            <div>
+            <div style={{ minWidth: 0 }}>
               <div style={{ color: colors.danger, fontWeight: '600', marginBottom: '10px', fontSize: 'var(--fs-sm)' }}>✗ Quello che c'era davvero</div>
               <div style={codeBoxStyle}>
                 <pre style={preStyle}>
@@ -259,11 +259,35 @@
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>Storia 3</div>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '28px' }}>⚖️</span> 26 errori, incluso uno mio
+            <span style={{ fontSize: '28px' }}>🎭</span> Il direttore che sbagliava, e chi l'ha corretto
           </h2>
           <Glow>
             <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
-              Il primo vero collaudo del sistema: dovevo rilasciare una nuova versione del progetto, con 12 agenti da controllare e sistemare. Il direttore (io, il lead) ha pianificato e delegato il lavoro meccanico a uno specialista. Poi, prima di dire "fatto", ho fatto passare tutto dal controllore (reviewer) — per la prima volta sul serio, non per finta.
+              Il primo vero collaudo del sistema di orchestrazione è arrivato con il rilascio della versione v0.2 del toolkit. Il direttore che pianifica e delega — il lead, cioè Claude stesso — aveva scritto un documento che spiegava come funziona il sistema multi-agente. Dentro c'era una frase sbagliata, presentata con sicurezza come se fosse un limite tecnico del sistema.
+            </p>
+          </Glow>
+          <Box type="danger">
+            «Un subagent non può delegare ad altri subagent» — scritto come un limite tecnico. Non lo era.
+          </Box>
+          <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
+            A smentirla è stato il controllore (reviewer) — che è esso stesso un subagent — nel modo più elegante possibile: ha fatto notare di avere lui stesso, tra i propri strumenti, quello di delega. <em>"Falso: io posso delegare. Eccone la prova: guardate i miei strumenti."</em>
+          </p>
+          <Box type="tip">
+            La regola è stata riscritta: non un limite tecnico, ma una scelta di progetto — tenere la delega piatta evita di moltiplicare i costi e di far perdere il controllo al direttore. Corretta in tutti i punti dove compariva, e la correzione è documentata pubblicamente.
+          </Box>
+        </div>
+      ),
+
+      // 3.8 - Storia 3 il caso reale
+      () => (
+        <div style={{ padding: '30px' }}>
+          <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>Storia 3 · il caso reale</div>
+          <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>📋</span> Il collaudo della versione v0.2
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
+              Ecco il caso concreto in cui è successo tutto questo: il rilascio v0.2 del toolkit, passato per intero dal controllore (reviewer) prima di essere pubblicato.
             </p>
           </Glow>
           <div className="stat-row" style={{ display: 'flex', gap: '18px', justifyContent: 'center', margin: '26px 0', flexWrap: 'wrap' }}>
@@ -271,16 +295,19 @@
             <StatBlock value="4" label="Bloccanti" color={colors.warn} />
             <StatBlock value="1" label="Era mio" color={colors.danger} />
           </div>
-          <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
-            Un errore di fatto scritto proprio da me, il direttore, in un documento che pensavo corretto.
-          </p>
-          <Box type="tip">
-            L'ho corretto e l'ho scritto pubblicamente, senza nasconderlo.
+          <ul style={{ color: colors.textDim, lineHeight: '1.9', paddingLeft: '22px', fontSize: 'var(--fs-body)' }}>
+            <li>Path personali residui nei file</li>
+            <li>Una porta SSH dimenticata in una skill</li>
+            <li>Il claim falso sulla delega tra subagent</li>
+            <li>La descrizione di un agente che prometteva competenze (PostgreSQL/Firestore) mai implementate nel corpo del file</li>
+          </ul>
+          <Box type="success">
+            Tutti corretti prima di pubblicare. Il controllo (gate) non è burocrazia — ha impedito 4 figuracce pubbliche.
           </Box>
         </div>
       ),
 
-      // 3.8 - Storia 3 lezione
+      // 3.9 - Storia 3 lezione
       () => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>Storia 3 · lezione</div>

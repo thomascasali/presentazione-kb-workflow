@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Atto 4 - Perché lo regalo</title>
+  <title>Atto 5 - Perché lo regalo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -68,8 +68,8 @@
       success: '#6fae5c', danger: '#e0563a', warn: '#d9a441', info: '#4e93b8', purple: '#a879c4'
     };
 
-    const PREV_ACT = { href: 'atto3-le-storie.html', label: 'Atto 3' };
-    const ACT_LABEL = 'Atto 4';
+    const PREV_ACT = { href: 'atto4-la-macchina.html', label: 'Atto 4' };
+    const ACT_LABEL = 'Atto 5';
     const ACT_TITLE = 'Perché lo regalo';
     const REPO_URL = 'https://github.com/thomascasali/claude-kb-workflow';
 
@@ -124,17 +124,17 @@
     };
 
     const slides = [
-      // 4.1 - Titolo atto
+      // 5.1 - Titolo atto
       () => (
         <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '70vh' }}>
           <div style={{ fontSize: 'clamp(40px, 8vw, 56px)', marginBottom: '20px' }}>🎁</div>
-          <div style={{ fontSize: 'var(--fs-xs)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '16px', fontFamily: "'IBM Plex Mono', monospace" }}>Atto 4</div>
+          <div style={{ fontSize: 'var(--fs-xs)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '16px', fontFamily: "'IBM Plex Mono', monospace" }}>Atto 5</div>
           <h1 style={{ fontSize: 'var(--fs-h1)', fontFamily: 'Fraunces, serif', fontWeight: '600', lineHeight: 'var(--lh-heading)', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '20px' }}>Perché lo regalo</h1>
           <p style={{ fontSize: 'var(--fs-lead)', color: colors.textDim, maxWidth: '560px', lineHeight: 'var(--lh-body)' }}>E cosa c'entra tutto questo con voi.</p>
         </div>
       ),
 
-      // 4.2 - Mappa e territorio
+      // 5.2 - Mappa e territorio
       () => (
         <div style={{ padding: '30px' }}>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '22px', display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -156,7 +156,7 @@
         </div>
       ),
 
-      // 4.3 - Le 3 lezioni trasferibili
+      // 5.3 - Le 3 lezioni trasferibili
       () => (
         <div style={{ padding: '30px' }}>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '26px', display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -170,7 +170,7 @@
         </div>
       ),
 
-      // 4.4 - Provare il toolkit gratis
+      // 5.4 - Provare il toolkit gratis
       () => (
         <div style={{ padding: '30px' }}>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '22px', display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -178,7 +178,7 @@
           </h2>
           <Glow>
             <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
-              Il repo è gratuito, in italiano, e si installa in circa 5 minuti su qualsiasi macchina con Claude Code. Non serve essere sviluppatori esperti: bastano un terminale e la voglia di provare.
+              Il repo è gratuito e si installa in circa 5 minuti su qualsiasi macchina con Claude Code. La documentazione è bilingue: l'inglese è la porta d'ingresso per il mondo, l'italiano resta la lingua nativa del progetto — costruito anche per voi. Non serve essere sviluppatori esperti: bastano un terminale e la voglia di provare.
             </p>
           </Glow>
           <Box type="info">
@@ -187,7 +187,7 @@
         </div>
       ),
 
-      // 4.5 - Chiusura
+      // 5.5 - Chiusura
       () => (
         <div style={{ padding: '30px', textAlign: 'center' }}>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>

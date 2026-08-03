@@ -9,22 +9,22 @@
 - NESSUN bundler, NESSUN npm, NESSUN framework aggiuntivo. Solo file HTML standalone, apribili anche da `file://`.
 
 ## Architettura
-- `index.html`: dashboard con le 4 card degli atti (HTML/CSS puro, nessun React)
-- `atto1-il-problema.html`, `atto2-larchitettura.html`, `atto3-le-storie.html`, `atto4-perche-lo-regalo.html`: un file HTML per atto
+- `index.html`: dashboard con le 5 card degli atti (HTML/CSS puro, nessun React)
+- `atto1-il-problema.html`, `atto2-larchitettura.html`, `atto3-le-storie.html`, `atto4-la-macchina.html`, `atto5-perche-lo-regalo.html`: un file HTML per atto
 - Ogni file atto è completamente standalone (include React, Babel, CSS inline)
 - I componenti React sono definiti dentro un tag `<script type="text/babel">` nel file HTML
 
 ## Design System
-Tema scuro con questi colori (definiti come oggetto `colors` in ogni file atto):
+Tema scuro "Quaderno di campo" (carta scura, accenti caldi) con questi colori (definiti come oggetto `colors` in ogni file atto):
 ```js
 const colors = {
-  bg: '#0a0e17', bgCard: '#111827', bgLight: '#1e293b',
+  bg: '#15120f', bgCard: '#1e1a15', bgLight: '#29231d',
   accent: '...',      // varia per atto, vedi tabella sotto
   accentAlt: '...',   // variante più chiara dello stesso accent
-  text: '#f1f5f9', textDim: '#94a3b8', textMuted: '#64748b',
-  border: '#334155',
-  success: '#22c55e', danger: '#ef4444', warn: '#f59e0b',
-  info: '#0ea5e9', purple: '#a78bfa'
+  text: '#f4eee3', textDim: '#d2c8b8', textMuted: '#a89a83',
+  border: '#3c332a',
+  success: '#6fae5c', danger: '#e0563a', warn: '#d9a441',
+  info: '#4e93b8', purple: '#a879c4'
 };
 ```
 
@@ -32,10 +32,11 @@ const colors = {
 
 | Atto | Titolo | Accent | Accent-alt | Icona |
 |------|--------|--------|------------|-------|
-| 1 | Il problema | `#3b82f6` (blu) | `#38bdf8` | 🧠 |
-| 2 | L'architettura | `#10b981` (verde) | `#34d399` | 🏗️ |
-| 3 | Le tre storie | `#ef4444` (rosso) | `#f87171` | 📖 |
-| 4 | Perché lo regalo | `#8b5cf6` (viola) | `#a78bfa` | 🎁 |
+| 1 | Il problema | `#d9a441` (oro) | `#f0c169` | 🧠 |
+| 2 | L'architettura | `#4fa88d` (verde) | `#7fcbb3` | 🏗️ |
+| 3 | Le tre storie | `#d1603d` (terracotta) | `#e88f6c` | 📖 |
+| 4 | La macchina completa | `#4e93b8` (blu-info) | `#7ab8d6` | ⚙️ |
+| 5 | Perché lo regalo | `#a879c4` (viola) | `#c9a3de` | 🎁 |
 
 ## Componenti Riutilizzabili (da definire in ogni file atto)
 - `Box({ type, title, children })`: callout `info` / `warn` / `danger` / `tip` / `success`
@@ -51,7 +52,7 @@ Ogni atto segue questa struttura:
 3. Slide simulatore/i interattivo/i (Atto 2 ne ha 2, Atto 3 ha il componente "spot the bug")
 4. Slide di chiusura atto con collegamento all'atto successivo
 
-Conteggio slide: Atto 1 = 5, Atto 2 = 6, Atto 3 = 8, Atto 4 = 5 → **24 slide totali**, 3 simulatori interattivi.
+Conteggio slide: Atto 1 = 5, Atto 2 = 6, Atto 3 = 9, Atto 4 = 6, Atto 5 = 5 → **31 slide totali**, 3 simulatori interattivi.
 
 ## Simulatori interattivi
 
@@ -65,19 +66,20 @@ Conteggio slide: Atto 1 = 5, Atto 2 = 6, Atto 3 = 8, Atto 4 = 5 → **24 slide t
 - Media query a `max-width: 768px` in ogni file: padding ridotto, font più piccoli, grid a 1 colonna dove serve (`.bug-grid`, `.stat-row`)
 - Container principale: `maxWidth: '1200px'`, con padding laterale responsive
 
-## Navigazione (uguale in tutti e 4 gli atti)
+## Navigazione (uguale in tutti e 5 gli atti)
 - Freccia destra / Spazio: slide successiva
 - Freccia sinistra: slide precedente
 - ESC: torna a `index.html`
 - Tasti 1-9: salto diretto alla slide N (se esiste)
 - Barra superiore fissa (`top-bar`): link indice, nome atto, contatore slide, progress bar
-- Barra inferiore fissa (`bottom-bar`): bottoni indietro/avanti + link all'atto precedente (solo sulla prima slide) e all'atto successivo (solo sull'ultima slide, sull'Atto 4 diventa "Torna all'indice")
+- Barra inferiore fissa (`bottom-bar`): bottoni indietro/avanti + link all'atto precedente (solo sulla prima slide) e all'atto successivo (solo sull'ultima slide, sull'Atto 5 diventa "Torna all'indice")
 
 ## Vincoli di contenuto (da rispettare in ogni modifica futura)
 - Mai IP, porte o path di server/macchine privati
 - Mai nomi di persone terze (solo "il prof", "io", "voi studenti")
 - Mai nomi (né sigle né abbreviazioni) di progetti non pubblici: citabili solo i prodotti pubblici elencati qui sotto
 - I nomi di prodotti pubblici del prof (fivbeach.com, maraffaonline.it, tornei.app, beacharena.it, palabvu.it, aibvc.app, clubseries.app, centrosportivo.online, vollytics.com, beachvolleysociety.com) sono citabili e vanno resi cliccabili con `target="_blank"`
+- Sono citabili anche le app mobile pubblicate negli store: FiChess, TeamToDo (oltre alle versioni mobile di BeachArena, ClubSeries, MaraffaOnline, già citabili come prodotti web) — niente link cliccabile per queste, sono app da store, non siti
 - Il repo `https://github.com/thomascasali/claude-kb-workflow` diventa pubblico l'11 agosto 2026: fino ad allora il link nella slide finale va mantenuto con l'etichetta "pubblico dall'11/08/2026"
 
 ## Link GitHub Pages
