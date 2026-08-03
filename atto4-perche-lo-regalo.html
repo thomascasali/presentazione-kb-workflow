@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atto 4 - Perché lo regalo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0a0e17; color: #f1f5f9; font-family: 'Inter', sans-serif; }
+    #root { min-height: 100vh; }
+    a { color: inherit; }
+    @media (max-width: 768px) {
+      .slide-content { padding: 16px !important; }
+      .slide-content h1 { font-size: 28px !important; }
+      .slide-content h2 { font-size: 20px !important; }
+      .slide-content h3 { font-size: 16px !important; }
+      .top-bar { padding: 0 12px !important; }
+      .top-bar span { font-size: 11px !important; }
+      .bottom-bar { gap: 8px !important; }
+      .bottom-bar button, .bottom-bar a { padding: 8px 16px !important; font-size: 12px !important; }
+      svg { max-width: 100%; height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect, useMemo } = React;
+
+    const colors = {
+      bg: '#0a0e17', bgCard: '#111827', bgLight: '#1e293b',
+      accent: '#8b5cf6', accentAlt: '#a78bfa',
+      text: '#f1f5f9', textDim: '#94a3b8', textMuted: '#64748b',
+      border: '#334155',
+      success: '#22c55e', danger: '#ef4444', warn: '#f59e0b', info: '#0ea5e9', purple: '#a78bfa'
+    };
+
+    const PREV_ACT = { href: 'atto3-le-storie.html', label: 'Atto 3' };
+    const ACT_LABEL = 'Atto 4';
+    const ACT_TITLE = 'Perché lo regalo';
+    const REPO_URL = 'https://github.com/thomascasali/claude-kb-workflow';
+
+    const Box = ({ type = 'info', title, children }) => {
+      const cfg = { info: { c: colors.info, i: 'ℹ️' }, warn: { c: colors.warn, i: '⚠️' }, danger: { c: colors.danger, i: '🛑' }, tip: { c: colors.purple, i: '💡' }, success: { c: colors.success, i: '✓' } };
+      const { c, i } = cfg[type];
+      return (
+        <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `4px solid ${c}`, borderRadius: '0 8px 8px 0', padding: '14px 18px', margin: '14px 0' }}>
+          {title && <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', fontWeight: '600', color: c }}>{i} {title}</div>}
+          <div style={{ color: colors.textDim, lineHeight: '1.6', fontSize: 'clamp(13px, 1.6vw, 15px)' }}>{children}</div>
+        </div>
+      );
+    };
+
+    const Glow = ({ children, color = colors.accent }) => (
+      <div style={{ position: 'relative', padding: '2px', borderRadius: '12px', background: `linear-gradient(135deg, ${color}40, transparent, ${color}20)` }}>
+        <div style={{ background: colors.bgCard, borderRadius: '10px', padding: '20px' }}>{children}</div>
+      </div>
+    );
+
+    const AdvantageCard = ({ icon, title, children }) => (
+      <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '12px', padding: '18px', borderTop: `3px solid ${colors.accent}` }}>
+        <div style={{ fontSize: '26px', marginBottom: '10px' }}>{icon}</div>
+        <div style={{ color: colors.text, fontWeight: '600', marginBottom: '6px', fontSize: '14px' }}>{title}</div>
+        <div style={{ color: colors.textDim, fontSize: '13px', lineHeight: '1.6' }}>{children}</div>
+      </div>
+    );
+
+    // Placeholder QR — pattern a scacchiera stilizzato, NON un QR reale/funzionante
+    const QRPlaceholder = () => {
+      const cells = useMemo(() => {
+        let seed = 42;
+        const rand = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+        const grid = [];
+        for (let y = 0; y < 12; y++) {
+          for (let x = 0; x < 12; x++) {
+            const isFinder = (x < 3 && y < 3) || (x > 8 && y < 3) || (x < 3 && y > 8);
+            grid.push({ x, y, on: isFinder ? (x === 0 || x === 2 || y === 0 || y === 2 || (x >= 9 && (x === 9 || x === 11)) || (x < 3 && y > 8 && (y === 9 || y === 11)) || (x === 1 && y === 1) || (x === 10 && y === 1) || (x === 1 && y === 10)) : rand() > 0.5 });
+          }
+        }
+        return grid;
+      }, []);
+      return (
+        <svg viewBox="0 0 120 120" style={{ width: '140px', height: '140px', background: '#fff', borderRadius: '8px' }}>
+          {cells.map((c, i) => c.on && <rect key={i} x={c.x * 10} y={c.y * 10} width="10" height="10" fill="#0a0e17" />)}
+        </svg>
+      );
+    };
+
+    const slides = [
+      // 4.1 - Titolo atto
+      () => (
+        <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '70vh' }}>
+          <div style={{ fontSize: 'clamp(40px, 8vw, 56px)', marginBottom: '20px' }}>🎁</div>
+          <div style={{ fontSize: '12px', color: colors.accent, textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '16px' }}>Atto 4</div>
+          <h1 style={{ fontSize: 'clamp(28px, 6vw, 46px)', fontWeight: '700', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '16px' }}>Perché lo regalo</h1>
+          <p style={{ fontSize: 'clamp(15px, 2.4vw, 19px)', color: colors.textDim, maxWidth: '560px', lineHeight: '1.6' }}>E cosa c'entra tutto questo con voi.</p>
+        </div>
+      ),
+
+      // 4.2 - Mappa e territorio
+      () => (
+        <div style={{ padding: '30px' }}>
+          <h2 style={{ color: colors.accent, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🗺️</span> Perché pubblicare tutto questo gratis?
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: '1.7', fontSize: 'clamp(14px, 1.8vw, 16px)' }}>
+              Me lo chiedono spesso: perché regalare un sistema che ti sei costruito con mesi di lavoro? La risposta a cui sono arrivato:
+            </p>
+          </Glow>
+          <Box type="tip">
+            <div style={{ fontSize: 'clamp(15px, 2vw, 18px)', fontWeight: '700', color: colors.text }}>Pubblico la mappa, tengo il territorio. Il metodo si copia comunque; l'esperienza per costruirlo, no.</div>
+          </Box>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginTop: '20px' }}>
+            <AdvantageCard icon="📜" title="Curriculum">Contenuti firmati col mio nome, una storia riconoscibile (prof + 15 prodotti reali in produzione).</AdvantageCard>
+            <AdvantageCard icon="🎓" title="Materiale per voi">Questa stessa presentazione nasce da lì.</AdvantageCard>
+            <AdvantageCard icon="🌍" title="Revisione gratuita dal mondo">Chiunque può trovare errori nel sistema e segnalarli, migliorandolo senza che io paghi per una consulenza.</AdvantageCard>
+          </div>
+        </div>
+      ),
+
+      // 4.3 - Le 3 lezioni trasferibili
+      () => (
+        <div style={{ padding: '30px' }}>
+          <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🔑</span> Cosa c'entra con voi, davvero
+          </h2>
+          <ol style={{ color: colors.textDim, lineHeight: '2.4', paddingLeft: '20px', fontSize: 'clamp(13px, 1.6vw, 15px)' }}>
+            <li><strong style={{ color: colors.text }}>Documentate quello che imparate, o lo ripagherete</strong> — vale per l'AI e vale per voi (un quaderno di laboratorio ben tenuto è lo stesso principio della KB)</li>
+            <li><strong style={{ color: colors.text }}>L'evidenza prima del "fatto"</strong> — mai dichiarare finito qualcosa senza averlo verificato davvero, non "a occhio"</li>
+            <li><strong style={{ color: colors.text }}>I fallimenti silenziosi si cercano attivamente</strong> — un sistema che non dà errori non è automaticamente un sistema che funziona; chiedetevi sempre "cosa sta succedendo davvero, qui dentro?"</li>
+          </ol>
+        </div>
+      ),
+
+      // 4.4 - Provare il toolkit gratis
+      () => (
+        <div style={{ padding: '30px' }}>
+          <h2 style={{ color: colors.accent, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🚀</span> Come provarlo voi
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: '1.7', fontSize: 'clamp(14px, 1.8vw, 16px)' }}>
+              Il repo è gratuito, in italiano, e si installa in circa 5 minuti su qualsiasi macchina con Claude Code. Non serve essere sviluppatori esperti: bastano un terminale e la voglia di provare.
+            </p>
+          </Glow>
+          <Box type="info">
+            Repo pubblico dall'11 agosto 2026 — link nella slide finale.
+          </Box>
+        </div>
+      ),
+
+      // 4.5 - Chiusura
+      () => (
+        <div style={{ padding: '30px', textAlign: 'center' }}>
+          <h2 style={{ color: colors.accent, marginBottom: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🎤</span> Le domande migliori diventano issue
+          </h2>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', justifyContent: 'center', alignItems: 'center', marginBottom: '28px' }}>
+            <div>
+              <QRPlaceholder />
+              <div style={{ color: colors.textMuted, fontSize: '11px', marginTop: '8px' }}>QR code — da generare quando il repo è pubblico</div>
+            </div>
+            <a href={REPO_URL} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: '10px', background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '12px', padding: '20px 28px', textDecoration: 'none' }}>
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', color: colors.text, fontSize: 'clamp(13px, 1.8vw, 16px)' }}>github.com/thomascasali/claude-kb-workflow</span>
+              <span style={{ display: 'inline-block', padding: '4px 12px', background: colors.accent, color: '#fff', borderRadius: '20px', fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>Pubblico dall'11/08/2026</span>
+            </a>
+          </div>
+          <Box type="tip">
+            <div style={{ fontSize: 'clamp(16px, 2.4vw, 22px)', fontWeight: '700', color: colors.text, lineHeight: '1.5' }}>
+              L'AI non vi ruberà il lavoro. Ma qualcuno che sa farle ricordare le cose... forse sì. Tanto vale essere voi.
+            </div>
+          </Box>
+          <p style={{ color: colors.textMuted, fontSize: 'clamp(12px, 1.5vw, 14px)', marginTop: '18px' }}>
+            Le domande migliori che mi farete oggi diventeranno issue sul repo — con il vostro nome.
+          </p>
+        </div>
+      ),
+    ];
+
+    function App() {
+      const [current, setCurrent] = useState(0);
+      const total = slides.length;
+
+      const next = () => setCurrent(c => Math.min(c + 1, total - 1));
+      const prev = () => setCurrent(c => Math.max(c - 1, 0));
+
+      useEffect(() => {
+        const handler = e => {
+          if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+          if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+          if (e.key === 'Escape') window.location.href = 'index.html';
+          if (e.key >= '1' && e.key <= '9') { const idx = parseInt(e.key) - 1; if (idx < total) setCurrent(idx); }
+        };
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
+      }, []);
+
+      return (
+        <div style={{ minHeight: '100vh', background: colors.bg }}>
+          <div className="top-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '50px', background: colors.bgCard + 'e0', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px', zIndex: 100 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <a href="index.html" style={{ color: colors.textMuted, textDecoration: 'none', fontSize: '13px' }}>← Indice</a>
+              <span style={{ color: colors.border }}>|</span>
+              <span style={{ color: colors.accent, fontWeight: '600' }}>{ACT_LABEL}</span>
+              <span style={{ color: colors.textDim }}>{ACT_TITLE}</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ color: colors.textMuted, fontSize: '13px' }}>{current + 1} / {total}</span>
+              <div style={{ width: '100px', height: '4px', background: colors.bgLight, borderRadius: '2px' }}>
+                <div style={{ height: '100%', width: `${((current + 1) / total) * 100}%`, background: colors.accent, borderRadius: '2px', transition: 'width 0.3s' }} />
+              </div>
+            </div>
+          </div>
+          <div style={{ paddingTop: '50px', paddingBottom: '70px', minHeight: 'calc(100vh - 120px)' }}>
+            <div className="slide-content" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+              {slides[current]()}
+            </div>
+          </div>
+          <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, height: '60px', background: colors.bgCard + 'e0', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', zIndex: 100, flexWrap: 'wrap' }}>
+            {current === 0 && PREV_ACT && (
+              <a href={PREV_ACT.href} style={{ padding: '10px 24px', background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '8px', color: colors.textDim, textDecoration: 'none', fontSize: '14px' }}>← {PREV_ACT.label}</a>
+            )}
+            <button onClick={prev} disabled={current === 0} style={{ padding: '10px 24px', background: current === 0 ? colors.bgLight : colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '8px', color: current === 0 ? colors.textMuted : colors.text, cursor: current === 0 ? 'not-allowed' : 'pointer', fontSize: '14px' }}>← Indietro</button>
+            <button onClick={next} disabled={current === total - 1} style={{ padding: '10px 24px', background: current === total - 1 ? colors.bgLight : `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, border: 'none', borderRadius: '8px', color: current === total - 1 ? colors.textMuted : '#fff', cursor: current === total - 1 ? 'not-allowed' : 'pointer', fontSize: '14px', fontWeight: '600' }}>Avanti →</button>
+            {current === total - 1 && (
+              <a href="index.html" style={{ padding: '10px 24px', background: `linear-gradient(135deg, ${colors.success}, #16a34a)`, border: 'none', borderRadius: '8px', color: '#fff', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>🏠 Torna all'indice</a>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

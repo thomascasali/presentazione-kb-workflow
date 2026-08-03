@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atto 1 - Il problema</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0a0e17; color: #f1f5f9; font-family: 'Inter', sans-serif; }
+    #root { min-height: 100vh; }
+    a { color: inherit; }
+    @media (max-width: 768px) {
+      .slide-content { padding: 16px !important; }
+      .slide-content h1 { font-size: 28px !important; }
+      .slide-content h2 { font-size: 20px !important; }
+      .slide-content h3 { font-size: 16px !important; }
+      .top-bar { padding: 0 12px !important; }
+      .top-bar span { font-size: 11px !important; }
+      .bottom-bar { gap: 8px !important; }
+      .bottom-bar button, .bottom-bar a { padding: 8px 16px !important; font-size: 12px !important; }
+      svg { max-width: 100%; height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const colors = {
+      bg: '#0a0e17', bgCard: '#111827', bgLight: '#1e293b',
+      accent: '#3b82f6', accentAlt: '#38bdf8',
+      text: '#f1f5f9', textDim: '#94a3b8', textMuted: '#64748b',
+      border: '#334155',
+      success: '#22c55e', danger: '#ef4444', warn: '#f59e0b', info: '#0ea5e9', purple: '#a78bfa'
+    };
+
+    const PREV_ACT = null;
+    const NEXT_ACT = { href: 'atto2-larchitettura.html', label: 'Atto 2' };
+    const ACT_LABEL = 'Atto 1';
+    const ACT_TITLE = 'Il problema';
+
+    const Box = ({ type = 'info', title, children }) => {
+      const cfg = { info: { c: colors.info, i: 'ℹ️' }, warn: { c: colors.warn, i: '⚠️' }, danger: { c: colors.danger, i: '🛑' }, tip: { c: colors.purple, i: '💡' }, success: { c: colors.success, i: '✓' } };
+      const { c, i } = cfg[type];
+      return (
+        <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `4px solid ${c}`, borderRadius: '0 8px 8px 0', padding: '14px 18px', margin: '14px 0' }}>
+          {title && <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', fontWeight: '600', color: c }}>{i} {title}</div>}
+          <div style={{ color: colors.textDim, lineHeight: '1.6', fontSize: 'clamp(13px, 1.6vw, 15px)' }}>{children}</div>
+        </div>
+      );
+    };
+
+    const Glow = ({ children, color = colors.accent }) => (
+      <div style={{ position: 'relative', padding: '2px', borderRadius: '12px', background: `linear-gradient(135deg, ${color}40, transparent, ${color}20)` }}>
+        <div style={{ background: colors.bgCard, borderRadius: '10px', padding: '20px' }}>{children}</div>
+      </div>
+    );
+
+    // Card cliccabile verso un prodotto reale
+    const ProductBadge = ({ name, url }) => (
+      <a href={url} target="_blank" rel="noopener noreferrer" style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '10px',
+        padding: '12px 16px', textDecoration: 'none', color: colors.text,
+        fontFamily: 'JetBrains Mono, monospace', fontSize: 'clamp(12px, 1.4vw, 14px)',
+        transition: 'all 0.2s'
+      }}
+        onMouseEnter={e => { e.currentTarget.style.borderColor = colors.accent; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+        onMouseLeave={e => { e.currentTarget.style.borderColor = colors.border; e.currentTarget.style.transform = 'translateY(0)'; }}>
+        <span>{name}</span>
+        <span style={{ color: colors.accent }}>↗</span>
+      </a>
+    );
+
+    const slides = [
+      // 1.1 - Titolo atto
+      () => (
+        <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '70vh' }}>
+          <div style={{ fontSize: 'clamp(40px, 8vw, 56px)', marginBottom: '20px' }}>🧠</div>
+          <div style={{ fontSize: '12px', color: colors.accent, textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '16px' }}>Atto 1</div>
+          <h1 style={{ fontSize: 'clamp(28px, 6vw, 46px)', fontWeight: '700', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '16px' }}>Il problema</h1>
+          <p style={{ fontSize: 'clamp(15px, 2.4vw, 19px)', color: colors.textDim, maxWidth: '560px', lineHeight: '1.6' }}>L'AI più potente del mondo ha un problema: l'amnesia.</p>
+        </div>
+      ),
+
+      // 1.2 - L'amnesia
+      () => (
+        <div style={{ padding: '30px' }}>
+          <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>💭</span> Chiudete la chat. Cosa resta?
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: '1.7', fontSize: 'clamp(14px, 1.8vw, 16px)' }}>
+              Avete mai usato ChatGPT o Claude per un progetto — un compito, una tesina, un hobby? Il giorno dopo riaprite la chat e... non si ricorda niente di quello che avete fatto insieme.
+            </p>
+          </Glow>
+          <Box type="danger" title="Il problema in una frase">
+            <strong style={{ color: colors.text }}>L'AI più potente del mondo ricomincia da zero ogni volta. Come un collega geniale con l'amnesia: bravissimo nella singola conversazione, inutile nel tempo.</strong>
+          </Box>
+          <ul style={{ color: colors.textDim, lineHeight: '2.2', paddingLeft: '20px', fontSize: 'clamp(13px, 1.6vw, 15px)', marginTop: '16px' }}>
+            <li>Risolve un bug complesso oggi — domani non se lo ricorda più</li>
+            <li>Impara le tue preferenze in una sessione — la prossima riparte da zero</li>
+            <li>Trova la causa di un problema — se ricapita tra 3 mesi, la ricerca ricomincia daccapo</li>
+          </ul>
+        </div>
+      ),
+
+      // 1.3 - Chi ve lo racconta
+      () => (
+        <div style={{ padding: '30px' }}>
+          <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>👨‍🏫</span> Il vostro prof di giorno, sviluppatore la sera
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: '1.7', fontSize: 'clamp(14px, 1.8vw, 16px)' }}>
+              Quello che non sapete: la sera mando avanti <strong style={{ color: colors.text }}>15+ siti e app veri</strong>, con utenti veri che li usano ADESSO. Non è teoria da slide — è il mio problema quotidiano. Se ogni sessione di lavoro con l'AI riparte da zero, quella tassa la pago 15 volte.
+            </p>
+          </Glow>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px', margin: '20px 0' }}>
+            <ProductBadge name="fivbeach.com" url="https://fivbeach.com" />
+            <ProductBadge name="maraffaonline.it" url="https://maraffaonline.it" />
+            <ProductBadge name="tornei.app" url="https://tornei.app" />
+            <ProductBadge name="beacharena.it" url="https://beacharena.it" />
+            <ProductBadge name="palabvu.it" url="https://palabvu.it" />
+            <ProductBadge name="aibvc.app" url="https://aibvc.app" />
+            <ProductBadge name="clubseries.app" url="https://clubseries.app" />
+            <ProductBadge name="centrosportivo.online" url="https://centrosportivo.online" />
+            <ProductBadge name="vollytics.com" url="https://vollytics.com" />
+            <ProductBadge name="beachvolleysociety.com" url="https://beachvolleysociety.com" />
+          </div>
+          <p style={{ color: colors.textMuted, fontSize: 'clamp(12px, 1.5vw, 14px)', textAlign: 'center' }}>Provateli dal telefono ora, se volete — sono online davvero.</p>
+        </div>
+      ),
+
+      // 1.4 - Il problema in numeri
+      () => (
+        <div style={{ padding: '30px' }}>
+          <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>⏱️</span> Rifare gli stessi errori costa
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: '1.7', fontSize: 'clamp(14px, 1.8vw, 16px)' }}>
+              Immaginate: risolvete oggi un bug ostico, ci mettete due ore a capire la causa. Tra tre mesi lo rincontrate identico — in un altro progetto, o nello stesso. Ve lo ricordate? La risposta onesta è no. E allora ripartite da capo: altre due ore.
+            </p>
+          </Glow>
+          <Box type="warn" title="Tenete a mente questa scena">
+            Ci torniamo più avanti — ma con un finale vero, non ipotetico.
+          </Box>
+        </div>
+      ),
+
+      // 1.5 - L'idea non è mia
+      () => (
+        <div style={{ padding: '30px' }}>
+          <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>💡</span> Un'idea rubata bene
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: '1.7', fontSize: 'clamp(14px, 1.8vw, 16px)' }}>
+              Non ho inventato niente da zero. L'idea di base viene da <strong style={{ color: colors.text }}>Andrej Karpathy</strong>: co-fondatore di OpenAI, ex direttore AI di Tesla — una delle voci più seguite al mondo sull'intelligenza artificiale. Nell'<strong style={{ color: colors.text }}>aprile 2026</strong> ha reso popolare un pattern semplice: <strong style={{ color: colors.accent }}>LLM Wiki</strong> — l'AI si tiene una wiki di quello che impara lavorando, sessione dopo sessione, invece di dimenticare tutto.
+            </p>
+          </Glow>
+          <Box type="tip" title="Il mio contributo">
+            Io l'ho preso e ci ho aggiunto il pezzo che mancava: il cancello. Ne parliamo nell'Atto 2.
+          </Box>
+        </div>
+      ),
+    ];
+
+    function App() {
+      const [current, setCurrent] = useState(0);
+      const total = slides.length;
+
+      const next = () => setCurrent(c => Math.min(c + 1, total - 1));
+      const prev = () => setCurrent(c => Math.max(c - 1, 0));
+
+      useEffect(() => {
+        const handler = e => {
+          if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+          if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+          if (e.key === 'Escape') window.location.href = 'index.html';
+          if (e.key >= '1' && e.key <= '9') { const idx = parseInt(e.key) - 1; if (idx < total) setCurrent(idx); }
+        };
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
+      }, []);
+
+      return (
+        <div style={{ minHeight: '100vh', background: colors.bg }}>
+          <div className="top-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '50px', background: colors.bgCard + 'e0', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px', zIndex: 100 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <a href="index.html" style={{ color: colors.textMuted, textDecoration: 'none', fontSize: '13px' }}>← Indice</a>
+              <span style={{ color: colors.border }}>|</span>
+              <span style={{ color: colors.accent, fontWeight: '600' }}>{ACT_LABEL}</span>
+              <span style={{ color: colors.textDim }}>{ACT_TITLE}</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ color: colors.textMuted, fontSize: '13px' }}>{current + 1} / {total}</span>
+              <div style={{ width: '100px', height: '4px', background: colors.bgLight, borderRadius: '2px' }}>
+                <div style={{ height: '100%', width: `${((current + 1) / total) * 100}%`, background: colors.accent, borderRadius: '2px', transition: 'width 0.3s' }} />
+              </div>
+            </div>
+          </div>
+          <div style={{ paddingTop: '50px', paddingBottom: '70px', minHeight: 'calc(100vh - 120px)' }}>
+            <div className="slide-content" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+              {slides[current]()}
+            </div>
+          </div>
+          <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, height: '60px', background: colors.bgCard + 'e0', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', zIndex: 100, flexWrap: 'wrap' }}>
+            <button onClick={prev} disabled={current === 0} style={{ padding: '10px 24px', background: current === 0 ? colors.bgLight : colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '8px', color: current === 0 ? colors.textMuted : colors.text, cursor: current === 0 ? 'not-allowed' : 'pointer', fontSize: '14px' }}>← Indietro</button>
+            <button onClick={next} disabled={current === total - 1} style={{ padding: '10px 24px', background: current === total - 1 ? colors.bgLight : `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, border: 'none', borderRadius: '8px', color: current === total - 1 ? colors.textMuted : '#fff', cursor: current === total - 1 ? 'not-allowed' : 'pointer', fontSize: '14px', fontWeight: '600' }}>Avanti →</button>
+            {current === total - 1 && NEXT_ACT && (
+              <a href={NEXT_ACT.href} style={{ padding: '10px 24px', background: `linear-gradient(135deg, ${colors.success}, #16a34a)`, border: 'none', borderRadius: '8px', color: '#fff', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>{NEXT_ACT.label} →</a>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

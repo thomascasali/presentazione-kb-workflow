@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atto 2 - L'architettura</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0a0e17; color: #f1f5f9; font-family: 'Inter', sans-serif; }
+    #root { min-height: 100vh; }
+    a { color: inherit; }
+    @media (max-width: 768px) {
+      .slide-content { padding: 16px !important; }
+      .slide-content h1 { font-size: 28px !important; }
+      .slide-content h2 { font-size: 20px !important; }
+      .slide-content h3 { font-size: 16px !important; }
+      .top-bar { padding: 0 12px !important; }
+      .top-bar span { font-size: 11px !important; }
+      .bottom-bar { gap: 8px !important; }
+      .bottom-bar button, .bottom-bar a { padding: 8px 16px !important; font-size: 12px !important; }
+      svg { max-width: 100%; height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    const colors = {
+      bg: '#0a0e17', bgCard: '#111827', bgLight: '#1e293b',
+      accent: '#10b981', accentAlt: '#34d399',
+      text: '#f1f5f9', textDim: '#94a3b8', textMuted: '#64748b',
+      border: '#334155',
+      success: '#22c55e', danger: '#ef4444', warn: '#f59e0b', info: '#0ea5e9', purple: '#a78bfa'
+    };
+
+    const PREV_ACT = { href: 'atto1-il-problema.html', label: 'Atto 1' };
+    const NEXT_ACT = { href: 'atto3-le-storie.html', label: 'Atto 3' };
+    const ACT_LABEL = 'Atto 2';
+    const ACT_TITLE = "L'architettura";
+
+    const Box = ({ type = 'info', title, children }) => {
+      const cfg = { info: { c: colors.info, i: 'ℹ️' }, warn: { c: colors.warn, i: '⚠️' }, danger: { c: colors.danger, i: '🛑' }, tip: { c: colors.purple, i: '💡' }, success: { c: colors.success, i: '✓' } };
+      const { c, i } = cfg[type];
+      return (
+        <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `4px solid ${c}`, borderRadius: '0 8px 8px 0', padding: '14px 18px', margin: '14px 0' }}>
+          {title && <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', fontWeight: '600', color: c }}>{i} {title}</div>}
+          <div style={{ color: colors.textDim, lineHeight: '1.6', fontSize: 'clamp(13px, 1.6vw, 15px)' }}>{children}</div>
+        </div>
+      );
+    };
+
+    const Glow = ({ children, color = colors.accent }) => (
+      <div style={{ position: 'relative', padding: '2px', borderRadius: '12px', background: `linear-gradient(135deg, ${color}40, transparent, ${color}20)` }}>
+        <div style={{ background: colors.bgCard, borderRadius: '10px', padding: '20px' }}>{children}</div>
+      </div>
+    );
+
+    // ---------- Simulatore 1: il viaggio di un fatto ----------
+    const FactJourneySimulator = () => {
+      const [verified, setVerified] = useState(false);
+      const [seenTwice, setSeenTwice] = useState(false);
+      const [dot, setDot] = useState(null);
+      const [running, setRunning] = useState(false);
+      const intervalRef = useRef(null);
+
+      useEffect(() => () => { if (intervalRef.current) clearInterval(intervalRef.current); }, []);
+
+      const travel = () => {
+        if (running) return;
+        setRunning(true);
+        const canPass = verified && seenTwice;
+        let pos = 95;
+        setDot({ x: pos, blocked: false, promoted: false });
+        intervalRef.current = setInterval(() => {
+          pos += 6;
+          if (!canPass && pos >= 450) {
+            setDot({ x: 452, blocked: true, promoted: false });
+            clearInterval(intervalRef.current);
+            setRunning(false);
+            return;
+          }
+          if (pos > 555) {
+            setDot({ x: 555, blocked: false, promoted: true });
+            clearInterval(intervalRef.current);
+            setRunning(false);
+            return;
+          }
+          setDot({ x: pos, blocked: false, promoted: false });
+        }, 28);
+      };
+
+      const resetDot = () => { if (intervalRef.current) clearInterval(intervalRef.current); setDot(null); setRunning(false); };
+
+      return (
+        <div style={{ background: colors.bgCard, borderRadius: '12px', padding: '20px', border: `1px solid ${colors.border}` }}>
+          <h3 style={{ color: colors.accent, marginBottom: '12px' }}>🧭 Simulatore: il viaggio di un fatto</h3>
+          <p style={{ color: colors.textDim, fontSize: 'clamp(12px, 1.5vw, 14px)', marginBottom: '16px' }}>Provate voi: un fatto passa alla KB solo se supera il controllo.</p>
+          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', marginBottom: '16px' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', color: colors.text, fontSize: '13px', cursor: 'pointer' }}>
+              <input type="checkbox" checked={verified} onChange={e => { setVerified(e.target.checked); resetDot(); }} />
+              Verificato in produzione
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', color: colors.text, fontSize: '13px', cursor: 'pointer' }}>
+              <input type="checkbox" checked={seenTwice} onChange={e => { setSeenTwice(e.target.checked); resetDot(); }} />
+              Visto almeno 2 volte
+            </label>
+          </div>
+          <svg viewBox="0 0 640 170" style={{ width: '100%', background: colors.bg, borderRadius: '8px' }}>
+            <rect x="20" y="40" width="150" height="100" fill={colors.bgLight} stroke={colors.border} strokeWidth="2" rx="8" />
+            <text x="95" y="75" textAnchor="middle" fill={colors.textDim} fontSize="11" fontWeight="bold">Sessioni sporche</text>
+            <text x="95" y="105" textAnchor="middle" fontSize="26">📝</text>
+
+            <rect x="245" y="40" width="150" height="100" fill={colors.bgLight} stroke={colors.info} strokeWidth="2" rx="8" />
+            <text x="320" y="75" textAnchor="middle" fill={colors.info} fontSize="11" fontWeight="bold">Wiki viva</text>
+            <text x="320" y="105" textAnchor="middle" fontSize="26">📓</text>
+
+            <line x1="170" y1="90" x2="245" y2="90" stroke={colors.textMuted} strokeWidth="2" />
+
+            <g>
+              <line x1="452" y1="30" x2="452" y2="150" stroke={dot && dot.blocked ? colors.danger : colors.warn} strokeWidth="3" strokeDasharray="6,4" />
+              <text x="452" y="20" textAnchor="middle" fill={dot && dot.blocked ? colors.danger : colors.warn} fontSize="18">🔒</text>
+              <text x="452" y="164" textAnchor="middle" fill={colors.textMuted} fontSize="9">cancello</text>
+            </g>
+
+            <rect x="480" y="40" width="150" height="100" fill={colors.bgLight} stroke={colors.accent} strokeWidth="2" rx="8" />
+            <text x="555" y="75" textAnchor="middle" fill={colors.accent} fontSize="11" fontWeight="bold">KB stabile</text>
+            <text x="555" y="105" textAnchor="middle" fontSize="26">📚</text>
+
+            <line x1="395" y1="90" x2="440" y2="90" stroke={colors.textMuted} strokeWidth="2" />
+
+            {dot && (
+              <>
+                <circle cx={dot.x} cy="90" r="9" fill={dot.blocked ? colors.danger : dot.promoted ? colors.success : colors.accentAlt} stroke="#fff" strokeWidth="2" />
+                <text x={dot.x} y="94" textAnchor="middle" fill="#fff" fontSize="9">●</text>
+                {dot.blocked && <text x={dot.x} y="115" textAnchor="middle" fill={colors.danger} fontSize="16">❌</text>}
+              </>
+            )}
+          </svg>
+          <div style={{ display: 'flex', gap: '12px', marginTop: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <button onClick={travel} disabled={running} style={{ padding: '10px 20px', background: running ? colors.bgLight : colors.accent, border: 'none', borderRadius: '6px', color: running ? colors.textMuted : '#fff', cursor: running ? 'not-allowed' : 'pointer', fontSize: '13px', fontWeight: '600' }}>▶ Fai viaggiare questo fatto</button>
+            {dot && dot.blocked && <span style={{ color: colors.danger, fontWeight: '600', fontSize: '13px' }}>⛔ Bloccato al cancello: mancano i requisiti</span>}
+            {dot && dot.promoted && <span style={{ color: colors.success, fontWeight: '600', fontSize: '13px' }}>✓ Promosso alla KB stabile</span>}
+          </div>
+        </div>
+      );
+    };
+
+    // ---------- Simulatore 2: l'orchestra in azione ----------
+    const ROLES = [
+      { id: 'direttore', name: 'Direttore', icon: '🎼', desc: 'Pianifica, decide chi fa cosa. Non suona lui stesso gli strumenti.', example: 'Decide se una nuova feature serve uno specialista backend o frontend, e in che ordine.' },
+      { id: 'backend', name: 'Backend', icon: '⚙️', desc: 'Specialista: suona la propria parte lato server.', example: 'Implementare un nuovo endpoint per gestire le prenotazioni.' },
+      { id: 'frontend', name: 'Frontend', icon: '🎨', desc: 'Specialista: suona la propria parte lato interfaccia.', example: 'Costruire la pagina che mostra il calendario delle prenotazioni.' },
+      { id: 'database', name: 'Database', icon: '🗄️', desc: 'Specialista: schema, indici, query.', example: 'Ottimizzare una query che è diventata lenta con troppi dati.' },
+      { id: 'deploy', name: 'Deploy', icon: '🚀', desc: 'Specialista: pipeline, rilasci, infrastruttura.', example: 'Pubblicare la nuova versione sul server senza interrompere il servizio.' },
+      { id: 'controllore', name: 'Controllore', icon: '🔍', desc: 'Il collaudatore che riascolta tutto prima del concerto e può dire al direttore "qui hai sbagliato".', example: 'Verificare che il lavoro del backend funzioni davvero prima di dire "fatto".' },
+    ];
+
+    const SEQUENCE_STEPS = [
+      { actor: 'direttore', text: 'Il Direttore pianifica e assegna il lavoro allo specialista Backend.' },
+      { actor: 'backend', text: 'Lo specialista Backend esegue il lavoro.' },
+      { actor: 'controllore', text: 'Il Controllore verifica... ✗ Trovati errori. Il lavoro torna allo specialista.', bad: true },
+      { actor: 'backend', text: 'Lo specialista Backend corregge gli errori.' },
+      { actor: 'controllore', text: 'Il Controllore verifica di nuovo... ✓ Tutto ok.', good: true },
+      { actor: null, text: '🏁 Finito — solo ora il lavoro può essere dichiarato completo.', good: true },
+    ];
+
+    const OrchestraSimulator = () => {
+      const [selected, setSelected] = useState(null);
+      const [stepIdx, setStepIdx] = useState(-1);
+      const [running, setRunning] = useState(false);
+      const timeoutRef = useRef(null);
+
+      useEffect(() => () => { if (timeoutRef.current) clearTimeout(timeoutRef.current); }, []);
+
+      const runSequence = () => {
+        if (running) return;
+        setRunning(true);
+        setSelected(null);
+        let i = 0;
+        const tick = () => {
+          setStepIdx(i);
+          i++;
+          if (i < SEQUENCE_STEPS.length) {
+            timeoutRef.current = setTimeout(tick, 1400);
+          } else {
+            setRunning(false);
+          }
+        };
+        tick();
+      };
+
+      const currentStep = stepIdx >= 0 ? SEQUENCE_STEPS[stepIdx] : null;
+
+      return (
+        <div style={{ background: colors.bgCard, borderRadius: '12px', padding: '20px', border: `1px solid ${colors.border}` }}>
+          <h3 style={{ color: colors.accent, marginBottom: '12px' }}>🎻 Simulatore: l'orchestra in azione</h3>
+          <p style={{ color: colors.textDim, fontSize: 'clamp(12px, 1.5vw, 14px)', marginBottom: '16px' }}>Cliccate un ruolo per capire cosa fa, poi provate il flusso completo di un lavoro.</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: '10px' }}>
+            {ROLES.map(r => {
+              const active = currentStep && currentStep.actor === r.id;
+              const isBad = active && currentStep.bad;
+              const isGood = active && currentStep.good;
+              return (
+                <button key={r.id} onClick={() => setSelected(r.id === selected ? null : r.id)} style={{
+                  padding: '14px 8px', background: selected === r.id ? colors.bgLight : colors.bg,
+                  border: `2px solid ${isBad ? colors.danger : isGood ? colors.success : active ? colors.accent : (selected === r.id ? colors.accent : colors.border)}`,
+                  borderRadius: '10px', cursor: 'pointer', textAlign: 'center', transition: 'all 0.3s',
+                  boxShadow: active ? `0 0 16px ${isBad ? colors.danger : isGood ? colors.success : colors.accent}80` : 'none'
+                }}>
+                  <div style={{ fontSize: '24px', marginBottom: '4px' }}>{r.icon}</div>
+                  <div style={{ fontSize: '11px', color: colors.text, fontWeight: '600' }}>{r.name}</div>
+                </button>
+              );
+            })}
+          </div>
+          {selected && !running && (
+            <div style={{ marginTop: '14px', padding: '12px 16px', background: colors.bgLight, borderRadius: '8px', borderLeft: `3px solid ${colors.accent}` }}>
+              <div style={{ color: colors.text, fontWeight: '600', fontSize: '13px', marginBottom: '4px' }}>{ROLES.find(r => r.id === selected).desc}</div>
+              <div style={{ color: colors.textDim, fontSize: '12px' }}>Esempio: {ROLES.find(r => r.id === selected).example}</div>
+            </div>
+          )}
+          <div style={{ marginTop: '18px', display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <button onClick={runSequence} disabled={running} style={{ padding: '10px 20px', background: running ? colors.bgLight : colors.accent, border: 'none', borderRadius: '6px', color: running ? colors.textMuted : '#fff', cursor: running ? 'not-allowed' : 'pointer', fontSize: '13px', fontWeight: '600' }}>▶ Fai passare un lavoro nel flusso completo</button>
+          </div>
+          {currentStep && (
+            <div style={{ marginTop: '14px', padding: '12px 16px', borderRadius: '8px', background: (currentStep.bad ? colors.danger : currentStep.good ? colors.success : colors.info) + '20', color: currentStep.bad ? colors.danger : currentStep.good ? colors.success : colors.text, fontWeight: '600', fontSize: '13px' }}>
+              {currentStep.text}
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    const slides = [
+      // 2.1 - Titolo atto
+      () => (
+        <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '70vh' }}>
+          <div style={{ fontSize: 'clamp(40px, 8vw, 56px)', marginBottom: '20px' }}>🏗️</div>
+          <div style={{ fontSize: '12px', color: colors.accent, textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '16px' }}>Atto 2</div>
+          <h1 style={{ fontSize: 'clamp(28px, 6vw, 46px)', fontWeight: '700', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '16px' }}>L'architettura</h1>
+          <p style={{ fontSize: 'clamp(15px, 2.4vw, 19px)', color: colors.textDim, maxWidth: '560px', lineHeight: '1.6' }}>Tre livelli, un cancello che decide cosa merita di restare.</p>
+        </div>
+      ),
+
+      // 2.2 - I tre livelli
+      () => (
+        <div style={{ padding: '30px' }}>
+          <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>📚</span> Dal quaderno di appunti al libro di testo
+          </h2>
+          <Box type="tip">
+            <strong style={{ color: colors.text }}>La wiki è il quaderno degli appunti, la KB è il libro di testo. Sul quaderno scrivi tutto; sul libro finisce solo ciò che ha superato l'esame.</strong>
+          </Box>
+          <ol style={{ color: colors.textDim, lineHeight: '2.2', paddingLeft: '20px', fontSize: 'clamp(13px, 1.6vw, 15px)', marginTop: '18px' }}>
+            <li><strong style={{ color: colors.text }}>Sessioni sporche</strong> — ogni sessione di lavoro con l'AI, grezza, non filtrata</li>
+            <li><strong style={{ color: colors.info }}>Wiki viva</strong> — memoria di lavoro: appunti organizzati ma ancora provvisori</li>
+            <li><strong style={{ color: colors.accent }}>KB stabile</strong> — solo ciò che è stato verificato in produzione e rivisto almeno 2 volte</li>
+          </ol>
+        </div>
+      ),
+
+      // 2.3 - Simulatore: il viaggio di un fatto
+      () => (
+        <div style={{ padding: '30px' }}>
+          <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🧭</span> Il viaggio di un fatto
+          </h2>
+          <FactJourneySimulator />
+        </div>
+      ),
+
+      // 2.4 - Il cancello di promozione: perché
+      () => (
+        <div style={{ padding: '30px' }}>
+          <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🔒</span> Perché non mettere tutto subito nel libro di testo?
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: '1.7', fontSize: 'clamp(14px, 1.8vw, 16px)' }}>
+              Sembra più comodo salvare tutto subito come "verità". Ma se lo fai, dopo un po' non ti fidi più di niente nella KB — non sai più cosa è stato controllato davvero e cosa è solo un tentativo.
+            </p>
+          </Glow>
+          <Box type="danger">
+            <strong style={{ color: colors.text }}>Un libro di testo pieno di appunti non verificati non è più un libro di testo: è rumore.</strong>
+          </Box>
+          <Box type="success" title="La regola del cancello — entrambi richiesti">
+            ✅ Verificato in produzione &nbsp;+&nbsp; ✅ Visto almeno 2 volte
+          </Box>
+        </div>
+      ),
+
+      // 2.5 - L'orchestra, non il solista
+      () => (
+        <div style={{ padding: '30px' }}>
+          <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🎼</span> Chi lavora davvero, dietro le quinte
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: '1.7', fontSize: 'clamp(14px, 1.8vw, 16px)' }}>L'AI non lavora da sola: è organizzata come un'orchestra.</p>
+          </Glow>
+          <ul style={{ color: colors.textDim, lineHeight: '2.2', paddingLeft: '20px', fontSize: 'clamp(13px, 1.6vw, 15px)', marginTop: '16px' }}>
+            <li><strong style={{ color: colors.text }}>Il direttore (lead)</strong> — pianifica, decide chi fa cosa. Non suona lui stesso gli strumenti.</li>
+            <li><strong style={{ color: colors.text }}>Gli specialisti</strong> — musicisti esperti: chi lavora sul backend, chi sul frontend, chi sul database, chi sul deploy... ognuno suona la propria parte.</li>
+            <li><strong style={{ color: colors.text }}>Il controllore (reviewer)</strong> — il collaudatore che riascolta tutto prima del concerto e può dire al direttore "qui hai sbagliato".</li>
+          </ul>
+          <Box type="tip">
+            <strong style={{ color: colors.text }}>La regola d'oro: nessun lavoro è finito finché qualcuno che PUÒ contraddirti non l'ha verificato.</strong>
+          </Box>
+        </div>
+      ),
+
+      // 2.6 - Simulatore: l'orchestra in azione
+      () => (
+        <div style={{ padding: '30px' }}>
+          <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🎻</span> L'orchestra in azione
+          </h2>
+          <OrchestraSimulator />
+        </div>
+      ),
+    ];
+
+    function App() {
+      const [current, setCurrent] = useState(0);
+      const total = slides.length;
+
+      const next = () => setCurrent(c => Math.min(c + 1, total - 1));
+      const prev = () => setCurrent(c => Math.max(c - 1, 0));
+
+      useEffect(() => {
+        const handler = e => {
+          if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+          if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+          if (e.key === 'Escape') window.location.href = 'index.html';
+          if (e.key >= '1' && e.key <= '9') { const idx = parseInt(e.key) - 1; if (idx < total) setCurrent(idx); }
+        };
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
+      }, []);
+
+      return (
+        <div style={{ minHeight: '100vh', background: colors.bg }}>
+          <div className="top-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '50px', background: colors.bgCard + 'e0', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px', zIndex: 100 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <a href="index.html" style={{ color: colors.textMuted, textDecoration: 'none', fontSize: '13px' }}>← Indice</a>
+              <span style={{ color: colors.border }}>|</span>
+              <span style={{ color: colors.accent, fontWeight: '600' }}>{ACT_LABEL}</span>
+              <span style={{ color: colors.textDim }}>{ACT_TITLE}</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ color: colors.textMuted, fontSize: '13px' }}>{current + 1} / {total}</span>
+              <div style={{ width: '100px', height: '4px', background: colors.bgLight, borderRadius: '2px' }}>
+                <div style={{ height: '100%', width: `${((current + 1) / total) * 100}%`, background: colors.accent, borderRadius: '2px', transition: 'width 0.3s' }} />
+              </div>
+            </div>
+          </div>
+          <div style={{ paddingTop: '50px', paddingBottom: '70px', minHeight: 'calc(100vh - 120px)' }}>
+            <div className="slide-content" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+              {slides[current]()}
+            </div>
+          </div>
+          <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, height: '60px', background: colors.bgCard + 'e0', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', zIndex: 100, flexWrap: 'wrap' }}>
+            {current === 0 && PREV_ACT && (
+              <a href={PREV_ACT.href} style={{ padding: '10px 24px', background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '8px', color: colors.textDim, textDecoration: 'none', fontSize: '14px' }}>← {PREV_ACT.label}</a>
+            )}
+            <button onClick={prev} disabled={current === 0} style={{ padding: '10px 24px', background: current === 0 ? colors.bgLight : colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '8px', color: current === 0 ? colors.textMuted : colors.text, cursor: current === 0 ? 'not-allowed' : 'pointer', fontSize: '14px' }}>← Indietro</button>
+            <button onClick={next} disabled={current === total - 1} style={{ padding: '10px 24px', background: current === total - 1 ? colors.bgLight : `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, border: 'none', borderRadius: '8px', color: current === total - 1 ? colors.textMuted : '#fff', cursor: current === total - 1 ? 'not-allowed' : 'pointer', fontSize: '14px', fontWeight: '600' }}>Avanti →</button>
+            {current === total - 1 && NEXT_ACT && (
+              <a href={NEXT_ACT.href} style={{ padding: '10px 24px', background: `linear-gradient(135deg, ${colors.success}, #16a34a)`, border: 'none', borderRadius: '8px', color: '#fff', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>{NEXT_ACT.label} →</a>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

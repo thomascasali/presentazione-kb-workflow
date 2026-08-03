@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atto 3 - Le tre storie</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0a0e17; color: #f1f5f9; font-family: 'Inter', sans-serif; }
+    #root { min-height: 100vh; }
+    a { color: inherit; }
+    @keyframes pulseBug {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    @media (max-width: 768px) {
+      .slide-content { padding: 16px !important; }
+      .slide-content h1 { font-size: 28px !important; }
+      .slide-content h2 { font-size: 20px !important; }
+      .slide-content h3 { font-size: 16px !important; }
+      .top-bar { padding: 0 12px !important; }
+      .top-bar span { font-size: 11px !important; }
+      .bottom-bar { gap: 8px !important; }
+      .bottom-bar button, .bottom-bar a { padding: 8px 16px !important; font-size: 12px !important; }
+      svg { max-width: 100%; height: auto; }
+      .bug-grid { grid-template-columns: 1fr !important; }
+      .stat-row { flex-direction: column !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const colors = {
+      bg: '#0a0e17', bgCard: '#111827', bgLight: '#1e293b',
+      accent: '#ef4444', accentAlt: '#f87171',
+      text: '#f1f5f9', textDim: '#94a3b8', textMuted: '#64748b',
+      border: '#334155',
+      success: '#22c55e', danger: '#ef4444', warn: '#f59e0b', info: '#0ea5e9', purple: '#a78bfa'
+    };
+
+    const PREV_ACT = { href: 'atto2-larchitettura.html', label: 'Atto 2' };
+    const NEXT_ACT = { href: 'atto4-perche-lo-regalo.html', label: 'Atto 4' };
+    const ACT_LABEL = 'Atto 3';
+    const ACT_TITLE = 'Le tre storie';
+
+    const Box = ({ type = 'info', title, children }) => {
+      const cfg = { info: { c: colors.info, i: 'ℹ️' }, warn: { c: colors.warn, i: '⚠️' }, danger: { c: colors.danger, i: '🛑' }, tip: { c: colors.purple, i: '💡' }, success: { c: colors.success, i: '✓' } };
+      const { c, i } = cfg[type];
+      return (
+        <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `4px solid ${c}`, borderRadius: '0 8px 8px 0', padding: '14px 18px', margin: '14px 0' }}>
+          {title && <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', fontWeight: '600', color: c }}>{i} {title}</div>}
+          <div style={{ color: colors.textDim, lineHeight: '1.6', fontSize: 'clamp(13px, 1.6vw, 15px)' }}>{children}</div>
+        </div>
+      );
+    };
+
+    const Glow = ({ children, color = colors.accent }) => (
+      <div style={{ position: 'relative', padding: '2px', borderRadius: '12px', background: `linear-gradient(135deg, ${color}40, transparent, ${color}20)` }}>
+        <div style={{ background: colors.bgCard, borderRadius: '10px', padding: '20px' }}>{children}</div>
+      </div>
+    );
+
+    const StatBlock = ({ value, label, color }) => (
+      <div style={{ textAlign: 'center', padding: '18px 24px', background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '12px', minWidth: '120px' }}>
+        <div style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: '700', color: color || colors.accent, fontFamily: 'Space Grotesk, sans-serif' }}>{value}</div>
+        <div style={{ fontSize: '12px', color: colors.textMuted, textTransform: 'uppercase', letterSpacing: '1px', marginTop: '4px' }}>{label}</div>
+      </div>
+    );
+
+    // ---------- Componente "spot the bug" ----------
+    const codeBoxStyle = { background: '#0d1117', borderRadius: '8px', border: `1px solid ${colors.border}`, overflow: 'hidden' };
+    const preStyle = { margin: 0, padding: '14px', fontFamily: 'JetBrains Mono, monospace', fontSize: 'clamp(12px, 1.6vw, 14px)', lineHeight: '1.7', color: colors.text, overflowX: 'auto' };
+
+    const SpotTheBug = () => {
+      const [revealed, setRevealed] = useState(false);
+
+      const backslashStyle = {
+        color: revealed ? '#fff' : colors.text,
+        background: revealed ? colors.danger : 'transparent',
+        fontWeight: revealed ? '700' : '400',
+        padding: revealed ? '0 2px' : '0',
+        borderRadius: '3px',
+        animation: revealed ? 'pulseBug 0.9s infinite' : 'none'
+      };
+
+      return (
+        <div>
+          <div className="bug-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+            <div>
+              <div style={{ color: colors.success, fontWeight: '600', marginBottom: '8px', fontSize: '13px' }}>✓ Quello che doveva esserci</div>
+              <div style={codeBoxStyle}>
+                <pre style={preStyle}>{'---\nname: reviewer\ndescription: Code review, debug e QA\n---'}</pre>
+              </div>
+            </div>
+            <div>
+              <div style={{ color: colors.danger, fontWeight: '600', marginBottom: '8px', fontSize: '13px' }}>✗ Quello che c'era davvero</div>
+              <div style={codeBoxStyle}>
+                <pre style={preStyle}>
+                  <span style={backslashStyle}>{'\\'}</span>{'---\n'}
+                  {'name: reviewer\ndescription: Code review, debug e QA\n'}
+                  <span style={backslashStyle}>{'\\'}</span>{'---'}
+                </pre>
+              </div>
+            </div>
+          </div>
+          <div style={{ textAlign: 'center', margin: '20px 0' }}>
+            <button onClick={() => setRevealed(true)} style={{ padding: '10px 24px', background: revealed ? colors.bgLight : colors.danger, border: 'none', borderRadius: '6px', color: revealed ? colors.textMuted : '#fff', cursor: revealed ? 'default' : 'pointer', fontSize: '13px', fontWeight: '600' }}>🔍 Trova la differenza</button>
+          </div>
+          {revealed && (
+            <Box type="danger" title="Il bug">
+              Dove dovevano esserci 3 caratteri (<strong style={{ color: colors.text }}>---</strong>) ce n'erano 4: <strong style={{ color: colors.text }}>{'\\---'}</strong>, con un <strong style={{ color: colors.text }}>{'\\'}</strong> di troppo davanti — sia nella riga di apertura sia in quella di chiusura. Un editor di testo aveva "protetto" il markdown senza che nessuno se ne accorgesse.
+            </Box>
+          )}
+          <p style={{ color: colors.textDim, fontSize: 'clamp(13px, 1.6vw, 15px)', lineHeight: '1.7', marginTop: '14px' }}>
+            Quel file definisce un agente per Claude Code. Senza quelle tre righe scritte esattamente così (frontmatter YAML valido), il file è invisibile per il sistema — non dà nessun errore, semplicemente non viene mai usato. 2 agenti avevano questo problema; altri 8 non avevano nemmeno provato ad avere quelle righe.
+          </p>
+        </div>
+      );
+    };
+
+    const slides = [
+      // 3.1 - Titolo atto
+      () => (
+        <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '70vh' }}>
+          <div style={{ fontSize: 'clamp(40px, 8vw, 56px)', marginBottom: '20px' }}>📖</div>
+          <div style={{ fontSize: '12px', color: colors.accent, textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '16px' }}>Atto 3</div>
+          <h1 style={{ fontSize: 'clamp(28px, 6vw, 46px)', fontWeight: '700', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '16px' }}>Le tre storie</h1>
+          <p style={{ fontSize: 'clamp(15px, 2.4vw, 19px)', color: colors.textDim, maxWidth: '560px', lineHeight: '1.6' }}>Tre volte in cui il sistema ha fallito, ed è servito a qualcosa.</p>
+        </div>
+      ),
+
+      // 3.2 - Storia 1 parte 1
+      () => (
+        <div style={{ padding: '30px' }}>
+          <div style={{ color: colors.textMuted, fontSize: '12px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>Storia 1 · parte 1</div>
+          <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>👻</span> Per mesi ho creduto di avere 10 assistenti specializzati
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: '1.7', fontSize: 'clamp(14px, 1.8vw, 16px)' }}>
+              Avevo costruito un pool di sotto-agenti specializzati: uno per il backend, uno per il frontend, uno per il database, uno per il deploy... dieci ruoli diversi, ognuno con le sue istruzioni. Per mesi ho lavorato convinto che il sistema li usasse davvero.
+            </p>
+          </Glow>
+          <Box type="warn">
+            <div style={{ fontSize: 'clamp(18px, 2.6vw, 24px)', fontWeight: '700', color: colors.text, textAlign: 'center', padding: '8px 0' }}>Sapete quanti ne funzionavano DAVVERO? <span style={{ color: colors.danger }}>Zero.</span></div>
+          </Box>
+        </div>
+      ),
+
+      // 3.3 - Storia 1 causa
+      () => (
+        <div style={{ padding: '30px' }}>
+          <div style={{ color: colors.textMuted, fontSize: '12px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>Storia 1 · parte 2</div>
+          <h2 style={{ color: colors.accent, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🔎</span> Colpa di 4 caratteri
+          </h2>
+          <SpotTheBug />
+          <Box type="danger">
+            <strong style={{ color: colors.text }}>I sistemi falliscono in silenzio. "Sembra funzionare" e "funziona" sono due cose diverse.</strong>
+          </Box>
+        </div>
+      ),
+
+      // 3.4 - Storia 1 lezione
+      () => (
+        <div style={{ padding: '30px' }}>
+          <div style={{ color: colors.textMuted, fontSize: '12px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>Storia 1 · lezione</div>
+          <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🧪</span> Come lo controllate voi, in laboratorio?
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: '1.7', fontSize: 'clamp(14px, 1.8vw, 16px)' }}>
+              Vi è mai capitato in laboratorio di pensare che uno script o una configurazione funzionasse solo perché non dava errori — e poi scoprire che non stava facendo niente di quello che pensavate?
+            </p>
+          </Glow>
+          <ul style={{ color: colors.textDim, lineHeight: '2.2', paddingLeft: '20px', fontSize: 'clamp(13px, 1.6vw, 15px)', marginTop: '16px' }}>
+            <li>Nessun errore ≠ funziona come deve</li>
+            <li>I sistemi automatici vanno controllati attivamente, non solo "lasciati andare"</li>
+            <li>Un controllo di salute (health-check) va fatto SUBITO dopo ogni modifica, non mesi dopo</li>
+          </ul>
+        </div>
+      ),
+
+      // 3.5 - Storia 2
+      () => (
+        <div style={{ padding: '30px' }}>
+          <div style={{ color: colors.textMuted, fontSize: '12px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>Storia 2</div>
+          <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🕵️</span> Ho recuperato 3 mesi di lavoro perduto in un'ora
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: '1.7', fontSize: 'clamp(14px, 1.8vw, 16px)' }}>
+              Ricordate il bug ipotetico dell'Atto 1? Ecco la versione vera. Avevo lavorato per mesi su tanti progetti diversi senza tenere una traccia centrale — pensavo di aver perso il filo di cosa avevo fatto e imparato. Ma ogni sessione di lavoro con l'AI lascia un registro completo (i "log" della conversazione, i transcript). Ho lanciato <strong style={{ color: colors.text }}>10 agenti in parallelo</strong>, ognuno a leggere e riassumere un pezzo di quei registri, e in circa un'ora ho ricostruito un censimento di <strong style={{ color: colors.text }}>15 progetti</strong> che credevo di dover rifare da zero.
+            </p>
+          </Glow>
+          <Box type="success">
+            <strong style={{ color: colors.text }}>I dati che credete persi spesso non lo sono. Bisogna sapere dove il sistema tiene le tracce.</strong>
+          </Box>
+        </div>
+      ),
+
+      // 3.6 - Storia 2 lezione
+      () => (
+        <div style={{ padding: '30px' }}>
+          <div style={{ color: colors.textMuted, fontSize: '12px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>Storia 2 · lezione</div>
+          <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🗂️</span> Dove tengono le tracce i VOSTRI sistemi?
+          </h2>
+          <ul style={{ color: colors.textDim, lineHeight: '2.2', paddingLeft: '20px', fontSize: 'clamp(13px, 1.6vw, 15px)' }}>
+            <li>Prima di rifare qualcosa da zero, chiedetevi: "esiste già un log o una traccia di questo?"</li>
+            <li>I log non sono solo per il debug — sono memoria che potete rileggere</li>
+            <li>Parallelizzare la ricerca (10 letture insieme invece che una alla volta) fa risparmiare ore, non minuti</li>
+          </ul>
+        </div>
+      ),
+
+      // 3.7 - Storia 3
+      () => (
+        <div style={{ padding: '30px' }}>
+          <div style={{ color: colors.textMuted, fontSize: '12px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>Storia 3</div>
+          <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>⚖️</span> 26 errori, incluso uno mio
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: '1.7', fontSize: 'clamp(14px, 1.8vw, 16px)' }}>
+              Il primo vero collaudo del sistema: dovevo rilasciare una nuova versione del progetto, con 12 agenti da controllare e sistemare. Il direttore (io, il lead) ha pianificato e delegato il lavoro meccanico a uno specialista. Poi, prima di dire "fatto", ho fatto passare tutto dal controllore (reviewer) — per la prima volta sul serio, non per finta.
+            </p>
+          </Glow>
+          <div className="stat-row" style={{ display: 'flex', gap: '16px', justifyContent: 'center', margin: '24px 0', flexWrap: 'wrap' }}>
+            <StatBlock value="26" label="Errori trovati" color={colors.accent} />
+            <StatBlock value="4" label="Bloccanti" color={colors.warn} />
+            <StatBlock value="1" label="Era mio" color={colors.danger} />
+          </div>
+          <p style={{ color: colors.textDim, lineHeight: '1.7', fontSize: 'clamp(13px, 1.6vw, 15px)' }}>
+            Un errore di fatto scritto proprio da me, il direttore, in un documento che pensavo corretto.
+          </p>
+          <Box type="tip">
+            L'ho corretto e l'ho scritto pubblicamente, senza nasconderlo.
+          </Box>
+        </div>
+      ),
+
+      // 3.8 - Storia 3 lezione
+      () => (
+        <div style={{ padding: '30px' }}>
+          <div style={{ color: colors.textMuted, fontSize: '12px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>Storia 3 · lezione</div>
+          <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🙋</span> Fatevi controllare da chi PUÒ dirvi che sbagliate
+          </h2>
+          <ul style={{ color: colors.textDim, lineHeight: '2.2', paddingLeft: '20px', fontSize: 'clamp(13px, 1.6vw, 15px)' }}>
+            <li>Nessun lavoro è finito solo perché lo dice chi l'ha fatto</li>
+            <li>Il controllo vale di più se chi controlla può davvero contraddirti (non un sì-uomo)</li>
+            <li>Sbagliare in pubblico e correggersi vale più che sembrare infallibili — vale per un sistema AI e vale per una verifica di laboratorio con la vostra firma sopra</li>
+          </ul>
+        </div>
+      ),
+    ];
+
+    function App() {
+      const [current, setCurrent] = useState(0);
+      const total = slides.length;
+
+      const next = () => setCurrent(c => Math.min(c + 1, total - 1));
+      const prev = () => setCurrent(c => Math.max(c - 1, 0));
+
+      useEffect(() => {
+        const handler = e => {
+          if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+          if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+          if (e.key === 'Escape') window.location.href = 'index.html';
+          if (e.key >= '1' && e.key <= '9') { const idx = parseInt(e.key) - 1; if (idx < total) setCurrent(idx); }
+        };
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
+      }, []);
+
+      return (
+        <div style={{ minHeight: '100vh', background: colors.bg }}>
+          <div className="top-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '50px', background: colors.bgCard + 'e0', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px', zIndex: 100 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <a href="index.html" style={{ color: colors.textMuted, textDecoration: 'none', fontSize: '13px' }}>← Indice</a>
+              <span style={{ color: colors.border }}>|</span>
+              <span style={{ color: colors.accent, fontWeight: '600' }}>{ACT_LABEL}</span>
+              <span style={{ color: colors.textDim }}>{ACT_TITLE}</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ color: colors.textMuted, fontSize: '13px' }}>{current + 1} / {total}</span>
+              <div style={{ width: '100px', height: '4px', background: colors.bgLight, borderRadius: '2px' }}>
+                <div style={{ height: '100%', width: `${((current + 1) / total) * 100}%`, background: colors.accent, borderRadius: '2px', transition: 'width 0.3s' }} />
+              </div>
+            </div>
+          </div>
+          <div style={{ paddingTop: '50px', paddingBottom: '70px', minHeight: 'calc(100vh - 120px)' }}>
+            <div className="slide-content" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+              {slides[current]()}
+            </div>
+          </div>
+          <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, height: '60px', background: colors.bgCard + 'e0', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', zIndex: 100, flexWrap: 'wrap' }}>
+            {current === 0 && PREV_ACT && (
+              <a href={PREV_ACT.href} style={{ padding: '10px 24px', background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '8px', color: colors.textDim, textDecoration: 'none', fontSize: '14px' }}>← {PREV_ACT.label}</a>
+            )}
+            <button onClick={prev} disabled={current === 0} style={{ padding: '10px 24px', background: current === 0 ? colors.bgLight : colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '8px', color: current === 0 ? colors.textMuted : colors.text, cursor: current === 0 ? 'not-allowed' : 'pointer', fontSize: '14px' }}>← Indietro</button>
+            <button onClick={next} disabled={current === total - 1} style={{ padding: '10px 24px', background: current === total - 1 ? colors.bgLight : `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, border: 'none', borderRadius: '8px', color: current === total - 1 ? colors.textMuted : '#fff', cursor: current === total - 1 ? 'not-allowed' : 'pointer', fontSize: '14px', fontWeight: '600' }}>Avanti →</button>
+            {current === total - 1 && NEXT_ACT && (
+              <a href={NEXT_ACT.href} style={{ padding: '10px 24px', background: `linear-gradient(135deg, ${colors.success}, #16a34a)`, border: 'none', borderRadius: '8px', color: '#fff', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>{NEXT_ACT.label} →</a>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

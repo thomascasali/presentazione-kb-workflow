@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dare una memoria all'AI — Presentazione studenti ITTS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0a0e17;
+      --bg-card: #111827;
+      --bg-light: #1e293b;
+      --accent: #3b82f6;
+      --accent-alt: #8b5cf6;
+      --text: #f1f5f9;
+      --text-dim: #94a3b8;
+      --text-muted: #64748b;
+      --border: #334155;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, sans-serif;
+      min-height: 100vh;
+    }
+    .bg-grid {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image:
+        linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+    }
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+      padding-top: 40px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: var(--accent);
+      color: var(--bg);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(30px, 5.5vw, 52px);
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent-alt));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .subtitle {
+      font-size: clamp(14px, 2vw, 18px);
+      color: var(--text-dim);
+      max-width: 680px;
+      margin: 0 auto 30px;
+      line-height: 1.6;
+    }
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-value { font-size: 28px; font-weight: 700; color: var(--accent); }
+    .stat-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      margin-bottom: 60px;
+    }
+    .module-card {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      text-decoration: none;
+      display: block;
+    }
+    .module-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--module-color), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .module-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--module-color);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 60px var(--module-color-glow);
+    }
+    .module-card:hover::before { opacity: 1; }
+    .module-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .module-icon {
+      width: 56px;
+      height: 56px;
+      background: var(--module-color);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+    .module-meta { flex: 1; }
+    .module-number {
+      font-size: 11px;
+      color: var(--module-color);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 4px;
+    }
+    .module-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .module-description {
+      color: var(--text-dim);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .module-topics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .topic-tag {
+      padding: 4px 10px;
+      background: var(--bg-light);
+      border-radius: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .module-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .module-slides {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .module-slides svg { width: 16px; height: 16px; stroke: var(--text-muted); }
+    .module-arrow {
+      width: 32px;
+      height: 32px;
+      background: var(--bg-light);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+    .module-card:hover .module-arrow { background: var(--module-color); }
+    .module-arrow svg { width: 18px; height: 18px; stroke: var(--text-dim); transition: stroke 0.3s; }
+    .module-card:hover .module-arrow svg { stroke: var(--bg); }
+    .module-card[data-atto="1"] { --module-color: #3b82f6; --module-color-glow: rgba(59, 130, 246, 0.15); }
+    .module-card[data-atto="2"] { --module-color: #10b981; --module-color-glow: rgba(16, 185, 129, 0.15); }
+    .module-card[data-atto="3"] { --module-color: #ef4444; --module-color-glow: rgba(239, 68, 68, 0.15); }
+    .module-card[data-atto="4"] { --module-color: #8b5cf6; --module-color-glow: rgba(139, 92, 246, 0.15); }
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+    }
+    .footer-brand { font-size: 14px; color: var(--text-muted); margin-bottom: 8px; }
+    .footer-school { font-size: 16px; color: var(--text-dim); font-weight: 500; }
+    @media (max-width: 768px) {
+      .modules-grid { grid-template-columns: 1fr; }
+      .stats { gap: 20px; }
+      .stat-value { font-size: 22px; }
+      .stat-label { font-size: 10px; }
+      .container { padding: 20px 12px; }
+      header { margin-bottom: 30px; padding-top: 20px; }
+      .subtitle { margin-bottom: 20px; }
+      .badge { font-size: 10px; padding: 5px 12px; }
+      .module-card { padding: 20px; }
+      .module-icon { width: 48px; height: 48px; font-size: 24px; }
+      .module-title { font-size: 18px; }
+      .module-description { font-size: 13px; }
+      footer { padding: 30px 0; }
+    }
+    @media (max-width: 480px) {
+      .stats { flex-direction: column; gap: 12px; }
+      .stat { display: flex; align-items: center; gap: 8px; }
+      .stat-value { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="container">
+    <header>
+      <div class="badge">Presentazione studenti · ITTS</div>
+      <h1>Dare una memoria all'AI</h1>
+      <p class="subtitle">Come ho costruito un sistema di conoscenza per Claude Code — quattro atti, tre storie vere, e perché tutto questo vi riguarda anche se non scrivete codice per lavoro.</p>
+      <div class="stats">
+        <div class="stat"><div class="stat-value">4</div><div class="stat-label">Atti</div></div>
+        <div class="stat"><div class="stat-value">24</div><div class="stat-label">Slide</div></div>
+        <div class="stat"><div class="stat-value">3</div><div class="stat-label">Simulatori</div></div>
+      </div>
+    </header>
+    <div class="modules-grid">
+      <a href="atto1-il-problema.html" class="module-card" data-atto="1">
+        <div class="module-header">
+          <div class="module-icon">🧠</div>
+          <div class="module-meta">
+            <div class="module-number">Atto 1</div>
+            <h2 class="module-title">Il problema</h2>
+          </div>
+        </div>
+        <p class="module-description">L'AI più potente del mondo ricomincia da zero ogni volta. Cosa significa lavorarci ogni sera su 15+ progetti reali, e da dove viene l'idea per risolverlo.</p>
+        <div class="module-topics">
+          <span class="topic-tag">Amnesia dell'AI</span>
+          <span class="topic-tag">Prodotti reali</span>
+          <span class="topic-tag">Karpathy</span>
+        </div>
+        <div class="module-footer">
+          <div class="module-slides"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>5 slide</div>
+          <div class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </a>
+      <a href="atto2-larchitettura.html" class="module-card" data-atto="2">
+        <div class="module-header">
+          <div class="module-icon">🏗️</div>
+          <div class="module-meta">
+            <div class="module-number">Atto 2</div>
+            <h2 class="module-title">L'architettura</h2>
+          </div>
+        </div>
+        <p class="module-description">Tre livelli, un cancello che decide cosa merita di restare. Il viaggio di un fatto dalla sessione alla KB stabile, e l'orchestra di agenti al lavoro.</p>
+        <div class="module-topics">
+          <span class="topic-tag">Cancello di promozione</span>
+          <span class="topic-tag">Orchestra</span>
+          <span class="topic-tag">2 simulatori</span>
+        </div>
+        <div class="module-footer">
+          <div class="module-slides"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>6 slide</div>
+          <div class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </a>
+      <a href="atto3-le-storie.html" class="module-card" data-atto="3">
+        <div class="module-header">
+          <div class="module-icon">📖</div>
+          <div class="module-meta">
+            <div class="module-number">Atto 3</div>
+            <h2 class="module-title">Le tre storie</h2>
+          </div>
+        </div>
+        <p class="module-description">Tre volte in cui il sistema ha fallito, ed è servito a qualcosa: 10 agenti fantasma, 3 mesi di lavoro recuperati in un'ora, e 26 errori — incluso uno mio.</p>
+        <div class="module-topics">
+          <span class="topic-tag">Spot the bug</span>
+          <span class="topic-tag">26 errori</span>
+          <span class="topic-tag">Il cuore della lezione</span>
+        </div>
+        <div class="module-footer">
+          <div class="module-slides"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>8 slide</div>
+          <div class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </a>
+      <a href="atto4-perche-lo-regalo.html" class="module-card" data-atto="4">
+        <div class="module-header">
+          <div class="module-icon">🎁</div>
+          <div class="module-meta">
+            <div class="module-number">Atto 4</div>
+            <h2 class="module-title">Perché lo regalo</h2>
+          </div>
+        </div>
+        <p class="module-description">Pubblico la mappa, tengo il territorio. Le 3 lezioni trasferibili, come provare il toolkit gratis, e come le vostre domande di oggi diventano issue.</p>
+        <div class="module-topics">
+          <span class="topic-tag">Repo pubblico</span>
+          <span class="topic-tag">Lezioni trasferibili</span>
+          <span class="topic-tag">Provalo tu</span>
+        </div>
+        <div class="module-footer">
+          <div class="module-slides"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>5 slide</div>
+          <div class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </a>
+    </div>
+    <footer>
+      <div class="footer-brand">Presentazione realizzata con Claude Code — nessun bug reso invisibile</div>
+      <div class="footer-school">ITTS · Indirizzo Informatica</div>
+    </footer>
+  </div>
+</body>
+</html>
