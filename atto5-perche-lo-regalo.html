@@ -170,7 +170,7 @@
         </div>
       ),
 
-      // 5.4 - Provare il toolkit gratis
+      // 5.4 - Provare il toolkit gratis: i 3 passi
       () => (
         <div style={{ padding: '30px' }}>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '22px', display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -181,13 +181,53 @@
               Il repo è gratuito e si installa in circa 5 minuti su qualsiasi macchina con Claude Code. La documentazione è bilingue: l'inglese è la porta d'ingresso per il mondo, l'italiano resta la lingua nativa del progetto — costruito anche per voi. Non serve essere sviluppatori esperti: bastano un terminale e la voglia di provare.
             </p>
           </Glow>
+          <div style={{ display: 'grid', gap: '12px', marginTop: '20px' }}>
+            {[
+              { n: '1', cmd: 'git clone <repo>', desc: 'scaricate il toolkit sul vostro computer', isCmd: true },
+              { n: '2', cmd: './scripts/install.sh', desc: 'lo script registra agenti e skill nella vostra installazione di Claude Code', isCmd: true },
+              { n: '3', cmd: 'Riavviate Claude Code', desc: 'la nuova configurazione viene caricata', isCmd: false },
+            ].map(s => (
+              <div key={s.n} style={{ display: 'flex', alignItems: 'center', gap: '16px', background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '10px', padding: '14px 18px' }}>
+                <div style={{ flexShrink: 0, width: '30px', height: '30px', borderRadius: '50%', background: colors.accent, color: colors.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700', fontSize: 'var(--fs-sm)' }}>{s.n}</div>
+                <div style={{ minWidth: 0 }}>
+                  {s.isCmd
+                    ? <code style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.accentAlt, fontSize: 'var(--fs-sm)', wordBreak: 'break-all' }}>{s.cmd}</code>
+                    : <div style={{ color: colors.text, fontWeight: '600', fontSize: 'var(--fs-sm)' }}>{s.cmd}</div>}
+                  <div style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginTop: '2px' }}>{s.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <Box type="tip" title="Cosa succede dopo">
+            Gli agenti specializzati sono già registrati e pronti — non serve configurarli uno per uno. Le skill si attivano da sole quando il contesto della conversazione le riconosce, come avete visto nell'Atto 4.
+          </Box>
+        </div>
+      ),
+
+      // 5.5 - Il primo comando da provare
+      () => (
+        <div style={{ padding: '30px' }}>
+          <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '22px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🎬</span> Il primo comando da provare
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
+              Non serve un progetto complicato per iniziare: basta una sessione vera di lavoro con l'AI, anche breve. Finita quella sessione, provate questo:
+            </p>
+          </Glow>
+          <div style={{ background: colors.bg, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '16px 20px', margin: '18px 0', fontFamily: "'IBM Plex Mono', monospace" }}>
+            <span style={{ color: colors.textMuted }}>$ </span><span style={{ color: colors.accentAlt, fontSize: 'var(--fs-body)' }}>/kb-ingest nome-progetto</span>
+          </div>
+          <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
+            Quel comando legge la sessione appena chiusa e ne estrae quello che vale la pena ricordare, salvandolo nella wiki — il primo mattone del ciclo sessione → wiki → KB che avete visto nell'Atto 2. È il modo più veloce per capire, con mano, cosa significa dare una memoria all'AI.
+          </p>
           <Box type="info">
             Repo pubblico dall'11 agosto 2026 — link nella slide finale.
           </Box>
         </div>
       ),
 
-      // 5.5 - Chiusura
+      // 5.6 - Chiusura
       () => (
         <div style={{ padding: '30px', textAlign: 'center' }}>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>

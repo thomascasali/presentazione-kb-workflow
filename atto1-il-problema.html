@@ -115,7 +115,7 @@
     );
 
     // Card non cliccabile per app mobile pubblicate negli store (nessun url certo da linkare)
-    const AppBadge = ({ name, note }) => (
+    const AppBadge = ({ name }) => (
       <div style={{
         display: 'flex', alignItems: 'center', gap: '10px',
         background: colors.bgLight, border: `1px solid ${colors.border}`, borderRadius: '4px',
@@ -125,7 +125,6 @@
       }}>
         <span style={{ flexShrink: 0 }}>📱</span>
         <span style={{ whiteSpace: 'nowrap' }}>{name}</span>
-        {note && <span style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginLeft: 'auto', textAlign: 'right', lineHeight: '1.3' }}>{note}</span>}
       </div>
     );
 
@@ -140,11 +139,11 @@
         </div>
       ),
 
-      // 1.2 - L'amnesia
+      // 1.2 - L'amnesia (parte 1: cos'è la finestra di contesto)
       () => (
         <div style={{ padding: '30px' }}>
           <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '28px' }}>💭</span> Chiudete la chat. Cosa resta?
+            <span style={{ fontSize: '28px' }}>💭</span> Dentro la sessione, l'AI ricorda tutto
           </h2>
           <Glow>
             <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
@@ -157,6 +156,15 @@
           <Box type="danger" title="Il problema vero">
             <strong style={{ color: colors.text }}>L'AI non è smemorata dentro la sessione — è la conoscenza che non sopravvive alla sessione.</strong>
           </Box>
+        </div>
+      ),
+
+      // 1.3 - L'amnesia (parte 2: cosa succede quando la sessione si chiude)
+      () => (
+        <div style={{ padding: '30px' }}>
+          <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🚪</span> Poi si chiude la sessione — e con lei tutto
+          </h2>
           <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
             Quella conoscenza vive <strong style={{ color: colors.text }}>solo</strong> dentro quella chat. Aprite una sessione nuova e non è recuperabile — non c'è verso di "chiedere in giro". Non è smemoratezza: è il design del sistema.
           </p>
@@ -183,11 +191,11 @@
         </div>
       ),
 
-      // 1.3 - Chi ve lo racconta
+      // 1.4 - Chi ve lo racconta
       () => (
         <div style={{ padding: '30px' }}>
           <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '28px' }}>👨‍🏫</span> Il vostro prof di giorno, sviluppatore nei ritagli di tempo
+            <span style={{ fontSize: '28px' }}>👨‍🏫</span> Prof di giorno, sviluppatore nei ritagli di tempo
           </h2>
           <Glow>
             <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
@@ -208,18 +216,17 @@
           </div>
           <div style={{ fontSize: 'var(--fs-sm)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '1px', fontWeight: '600', margin: '24px 0 12px' }}>Il fiore all'occhiello: app pubblicate negli store</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px', marginBottom: '12px' }}>
-            <AppBadge name="FiChess" note="App Store + Play Store" />
+            <AppBadge name="FiChess" />
             <AppBadge name="TeamToDo" />
             <AppBadge name="BeachArena" />
             <AppBadge name="ClubSeries" />
-            <AppBadge name="MaraffaOnline" />
           </div>
-          <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', textAlign: 'center', marginBottom: '8px' }}>App vere, negli store veri — scaricabili anche da voi.</p>
+          <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', textAlign: 'center', marginBottom: '8px' }}>Tutte su App Store e Play Store — app vere, scaricabili anche da voi.</p>
           <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', textAlign: 'center' }}>Provateli dal telefono ora, se volete — sono online davvero.</p>
         </div>
       ),
 
-      // 1.4 - Il problema in numeri
+      // 1.5 - Il problema in numeri
       () => (
         <div style={{ padding: '30px' }}>
           <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -236,7 +243,7 @@
         </div>
       ),
 
-      // 1.5 - L'idea non è mia
+      // 1.6 - L'idea non è mia
       () => (
         <div style={{ padding: '30px' }}>
           <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>

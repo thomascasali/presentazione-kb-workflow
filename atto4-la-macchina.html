@@ -309,7 +309,41 @@
         </div>
       ),
 
-      // 4.6 - Il valore per la comunità
+      // 4.6 - Le skill, in pratica
+      () => (
+        <div style={{ padding: '30px' }}>
+          <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '22px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🎯</span> Le skill, in pratica: tre esempi veri
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
+              Ogni skill segue lo stesso schema: un innesco (quando la riconosco), un comportamento (cosa fa), un risultato. Ecco tre esempi concreti, incluso uno che è successo proprio mentre costruivo questa presentazione.
+            </p>
+          </Glow>
+          <div style={{ display: 'grid', gap: '16px', marginTop: '20px' }}>
+            <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '10px', padding: '18px 22px', borderLeft: `4px solid ${colors.accent}` }}>
+              <div style={{ color: colors.text, fontWeight: '700', marginBottom: '8px', fontSize: 'var(--fs-body)' }}>🎨 /ui-ux-pro-max</div>
+              <div style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: '1.9' }}>
+                <strong style={{ color: colors.textMuted }}>Quando dico</strong> "progetta l'interfaccia" o "scegli i colori" → <strong style={{ color: colors.textMuted }}>cosa fa</strong> interroga un database locale di stili, palette e abbinamenti di font → <strong style={{ color: colors.textMuted }}>risultato</strong> <em style={{ color: colors.text }}>è la skill che ha scelto font e palette di QUESTA presentazione</em> — un meta-esempio, perché ci state guardando dentro proprio ora.
+              </div>
+            </div>
+            <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '10px', padding: '18px 22px', borderLeft: `4px solid ${colors.warn}` }}>
+              <div style={{ color: colors.text, fontWeight: '700', marginBottom: '8px', fontSize: 'var(--fs-body)' }}>🔎 debugging-sistematico</div>
+              <div style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: '1.9' }}>
+                <strong style={{ color: colors.textMuted }}>Quando dico</strong> "c'è un bug" o segnalo un errore → <strong style={{ color: colors.textMuted }}>cosa fa</strong> si attiva da sola, senza che io la invochi, e impone di trovare la causa radice prima di proporre un fix → <strong style={{ color: colors.textMuted }}>risultato</strong> niente cerotti su un sintomo: si corregge la causa, non l'effetto.
+              </div>
+            </div>
+            <div style={{ background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '10px', padding: '18px 22px', borderLeft: `4px solid ${colors.success}` }}>
+              <div style={{ color: colors.text, fontWeight: '700', marginBottom: '8px', fontSize: 'var(--fs-body)' }}>✅ verifica-prima-di-completare</div>
+              <div style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: '1.9' }}>
+                <strong style={{ color: colors.textMuted }}>Quando dico</strong> "fatto", "risolto" o "funziona" → <strong style={{ color: colors.textMuted }}>cosa fa</strong> vieta di dichiararlo senza aver prima eseguito una verifica reale e letto l'output → <strong style={{ color: colors.textMuted }}>risultato</strong> nessun "fatto" campato in aria.
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
+
+      // 4.7 - Il valore per la comunità
       () => (
         <div style={{ padding: '30px' }}>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '22px', display: 'flex', alignItems: 'center', gap: '12px' }}>

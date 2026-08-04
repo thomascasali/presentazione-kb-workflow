@@ -8,15 +8,15 @@ Presentazione interattiva su come funziona `claude-kb-workflow`, rivolta a chi s
 
 | Atto | Titolo | Argomenti | Slide |
 |------|--------|-----------|-------|
-| 1 | Il problema | L'amnesia dell'AI, 15+ prodotti reali gestiti nei ritagli di tempo, l'idea di Karpathy | 5 |
+| 1 | Il problema | L'amnesia dell'AI, 15+ prodotti reali gestiti nei ritagli di tempo, l'idea di Karpathy | 6 |
 | 2 | L'architettura | I tre livelli, l'esame di promozione, l'orchestra di agenti | 6 |
-| 3 | Le tre storie | 10 agenti fantasma, il bug dei 4 caratteri, il recupero in un'ora, i 26 errori | 9 |
-| 4 | La macchina completa | Il workflow end-to-end, l'orchestrazione parallela, wiki e KB anche per gli agenti, le skill, cosa c'è nel repo | 6 |
-| 5 | Perché lo regalo | Mappa vs territorio, le 3 lezioni trasferibili, come provarlo | 5 |
+| 3 | Le tre storie | 10 agenti fantasma, il bug dei 4 caratteri, il recupero in un'ora, la memoria vista dall'alto, i 26 errori | 10 |
+| 4 | La macchina completa | Il workflow end-to-end, l'orchestrazione parallela, wiki e KB anche per gli agenti, le skill in pratica, cosa c'è nel repo | 7 |
+| 5 | Perché lo regalo | Mappa vs territorio, le 3 lezioni trasferibili, come provarlo | 6 |
 
 ## Caratteristiche
 
-- **31 slide** interattive in 5 atti
+- **35 slide** interattive in 5 atti
 - **3 simulatori interattivi veri** (viaggio di un fatto attraverso l'esame, orchestra in azione, spot the bug)
 - Design moderno con tema scuro, palette diversa per ogni atto
 - Navigazione da tastiera (frecce, spazio, ESC, tasti numerici 1-9)

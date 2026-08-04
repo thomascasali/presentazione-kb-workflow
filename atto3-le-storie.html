@@ -54,6 +54,7 @@
       .bottom-bar button, .bottom-bar a { padding: 10px 16px !important; font-size: var(--fs-xs) !important; }
       svg { max-width: 100%; height: auto; }
       .bug-grid { grid-template-columns: 1fr !important; }
+      .wiki-grid { grid-template-columns: 1fr !important; }
       .stat-row { flex-direction: column !important; }
     }
     @media (max-width: 480px) {
@@ -206,11 +207,11 @@
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>Storia 1 · lezione</div>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '28px' }}>🧪</span> Come lo controllate voi, in laboratorio?
+            <span style={{ fontSize: '28px' }}>🧪</span> Come controllate il vostro codice?
           </h2>
           <Glow>
             <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
-              Vi è mai capitato in laboratorio di pensare che uno script o una configurazione funzionasse solo perché non dava errori — e poi scoprire che non stava facendo niente di quello che pensavate?
+              Vi è mai capitato di pensare che un pezzo di codice o una configurazione funzionasse solo perché non dava errori — magari proprio durante una verifica in laboratorio — e poi scoprire che non stava facendo niente di quello che pensavate?
             </p>
           </Glow>
           <ul style={{ color: colors.textDim, lineHeight: '1.9', paddingLeft: '22px', fontSize: 'var(--fs-body)', marginTop: '18px' }}>
@@ -239,7 +240,36 @@
         </div>
       ),
 
-      // 3.6 - Storia 2 lezione
+      // 3.6 - La memoria vista dall'alto (la wiki reale)
+      () => (
+        <div style={{ padding: '30px' }}>
+          <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>Storia 2 · dietro le quinte</div>
+          <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '22px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🕸️</span> La memoria vista dall'alto
+          </h2>
+          <Glow>
+            <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
+              Quella wiki che ha reso possibile il recupero in un'ora non è un elenco: è una rete. Questa è la mappa reale, generata da Obsidian sulla mia wiki di lavoro.
+            </p>
+          </Glow>
+          <div className="wiki-grid" style={{ display: 'grid', gridTemplateColumns: '1.15fr 1fr', gap: '24px', alignItems: 'center', margin: '18px 0' }}>
+            <div style={{ border: `1px solid ${colors.border}`, borderRadius: '10px', overflow: 'hidden', lineHeight: 0 }}>
+              <img src="assets/wiki-graph.png" alt="Mappa a grafo della wiki di conoscenza: ogni punto è una pagina, i grappoli sono progetti, l'hub centrale è l'indice e i concetti trasversali" style={{ display: 'block', width: '100%', maxHeight: '46vh', objectFit: 'contain', margin: '0 auto' }} />
+            </div>
+            <ul style={{ color: colors.textDim, lineHeight: '1.8', paddingLeft: '20px', fontSize: 'var(--fs-sm)', margin: 0 }}>
+              <li>Ogni puntino è una pagina di conoscenza: un progetto, un concetto, una lezione, una decisione</li>
+              <li>La dimensione del puntino dice quanti collegamenti ha</li>
+              <li>I grappoli sono i progetti, con le loro lezioni intorno</li>
+              <li>Il grande hub al centro è l'indice e i concetti trasversali — es. il deploy — che collegano tutto</li>
+            </ul>
+          </div>
+          <Box type="tip">
+            <strong style={{ color: colors.text }}>Ogni sessione aggiunge puntini e fili. La conoscenza non è una lista: è una rete.</strong>
+          </Box>
+        </div>
+      ),
+
+      // 3.7 - Storia 2 lezione
       () => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>Storia 2 · lezione</div>
@@ -251,10 +281,19 @@
             <li>I log non sono solo per il debug — sono memoria che potete rileggere</li>
             <li>Parallelizzare la ricerca (10 letture insieme invece che una alla volta) fa risparmiare ore, non minuti</li>
           </ul>
+          <Box type="info" title="Anche questo lascia tracce">
+            Ogni operazione sulla wiki e sulla KB è un <strong style={{ color: colors.text }}>commit git</strong>, con una descrizione. Lo storico dei commit è un diario di bordo che racconta come la conoscenza si è evoluta nel tempo — <em>"git log come diario di bordo"</em>.
+          </Box>
+          <div style={{ background: colors.bg, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '14px 18px', marginTop: '14px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', lineHeight: '2' }}>
+            <div><span style={{ color: colors.warn }}>a3f9c1e</span> <span style={{ color: colors.textDim }}>kb: 6 project-memories nuove</span></div>
+            <div><span style={{ color: colors.warn }}>7bd21fa</span> <span style={{ color: colors.textDim }}>wiki: censimento completo dei 15 progetti</span></div>
+            <div><span style={{ color: colors.warn }}>c04e88b</span> <span style={{ color: colors.textDim }}>agents: frontmatter su 12 subagent</span></div>
+            <div><span style={{ color: colors.warn }}>158de2a</span> <span style={{ color: colors.textDim }}>wiki: aggiunta lezione — health-check dopo ogni deploy</span></div>
+          </div>
         </div>
       ),
 
-      // 3.7 - Storia 3
+      // 3.8 - Storia 3
       () => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>Storia 3</div>
@@ -278,7 +317,7 @@
         </div>
       ),
 
-      // 3.8 - Storia 3 il caso reale
+      // 3.9 - Storia 3 il caso reale
       () => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>Storia 3 · il caso reale</div>
@@ -307,7 +346,7 @@
         </div>
       ),
 
-      // 3.9 - Storia 3 lezione
+      // 3.10 - Storia 3 lezione
       () => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>Storia 3 · lezione</div>
@@ -319,6 +358,25 @@
             <li>Il controllo vale di più se chi controlla può davvero contraddirti (non un sì-uomo)</li>
             <li>Sbagliare in pubblico e correggersi vale più che sembrare infallibili — vale per un sistema AI e vale per una verifica di laboratorio con la vostra firma sopra</li>
           </ul>
+          <svg viewBox="0 0 640 190" style={{ width: '100%', background: colors.bg, borderRadius: '8px', marginTop: '20px' }}>
+            <rect x="20" y="30" width="180" height="70" fill={colors.bgLight} stroke={colors.border} strokeWidth="2" rx="8" />
+            <text x="110" y="58" textAnchor="middle" fill={colors.textDim} fontSize="12" fontWeight="bold">Chi ha fatto il lavoro</text>
+            <text x="110" y="82" textAnchor="middle" fill={colors.textMuted} fontSize="10">"È fatto."</text>
+
+            <line x1="200" y1="65" x2="255" y2="65" stroke={colors.textMuted} strokeWidth="2" />
+
+            <rect x="265" y="30" width="180" height="70" fill={colors.bgLight} stroke={colors.warn} strokeWidth="2" rx="8" />
+            <text x="355" y="58" textAnchor="middle" fill={colors.warn} fontSize="12" fontWeight="bold">Chi PUÒ contraddire</text>
+            <text x="355" y="82" textAnchor="middle" fill={colors.textMuted} fontSize="10">verifica sul serio</text>
+
+            <path d="M 445 100 C 445 150, 200 150, 155 100" fill="none" stroke={colors.danger} strokeWidth="2" strokeDasharray="6,4" />
+            <text x="300" y="145" textAnchor="middle" fill={colors.danger} fontSize="10">✗ torna indietro, si rifà</text>
+
+            <line x1="445" y1="65" x2="500" y2="65" stroke={colors.textMuted} strokeWidth="2" />
+            <rect x="510" y="30" width="110" height="70" fill={colors.bgLight} stroke={colors.success} strokeWidth="2" rx="8" />
+            <text x="565" y="58" textAnchor="middle" fill={colors.success} fontSize="12" fontWeight="bold">✓ Finito</text>
+            <text x="565" y="82" textAnchor="middle" fill={colors.textMuted} fontSize="10">davvero</text>
+          </svg>
         </div>
       ),
     ];
@@ -336,6 +394,7 @@
           if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
           if (e.key === 'Escape') window.location.href = 'index.html';
           if (e.key >= '1' && e.key <= '9') { const idx = parseInt(e.key) - 1; if (idx < total) setCurrent(idx); }
+          if (e.key === '0' && total >= 10) setCurrent(9);
         };
         window.addEventListener('keydown', handler);
         return () => window.removeEventListener('keydown', handler);
