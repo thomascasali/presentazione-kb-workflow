@@ -80,7 +80,7 @@ Conteggio slide: Atto 1 = 6, Atto 2 = 6, Atto 3 = 10, Atto 4 = 7, Atto 5 = 6 →
 - Mai nomi (né sigle né abbreviazioni) di progetti non pubblici: citabili solo i prodotti pubblici elencati qui sotto
 - I nomi di prodotti pubblici del prof (fivbeach.com, maraffaonline.it, tornei.app, beacharena.it, palabvu.it, aibvc.app, clubseries.app, centrosportivo.online, vollytics.com, beachvolleysociety.com) sono citabili e vanno resi cliccabili con `target="_blank"`
 - Sono citabili anche le app mobile pubblicate negli store: FiChess, TeamToDo (oltre alle versioni mobile di BeachArena, ClubSeries, già citabili come prodotti web) — niente link cliccabile per queste, sono app da store, non siti. Tutte su App Store + Play Store (una sola riga sotto i badge, non ripetuta per ogni app). MaraffaOnline NON è pubblicata negli store: resta citabile solo come prodotto web (maraffaonline.it)
-- Il repo `https://github.com/thomascasali/claude-kb-workflow` diventa pubblico l'11 agosto 2026: fino ad allora il link nella slide finale va mantenuto con l'etichetta "pubblico dall'11/08/2026"
+- Il repo `https://github.com/thomascasali/claude-kb-workflow` diventa pubblico l'18 agosto 2026: fino ad allora il link nella slide finale va mantenuto con l'etichetta "pubblico dal 18/08/2026"
 
 ## Link GitHub Pages
 https://thomascasali.github.io/presentazione-kb-workflow/
