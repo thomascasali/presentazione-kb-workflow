@@ -51,4 +51,4 @@ Il workflow non richiede build step: pubblica l'intera cartella così com'è, pe
 
 ## Autore
 
-Thomas Casali — [GitHub](https://github.com/thomascasali) · [LinkedIn](https://www.linkedin.com/in/thomas-casali-b038462a5/)
+Thomas Casali — [GitHub](https://github.com/thomascasali) · [LinkedIn](https://www.linkedin.com/in/thomascasali/)
