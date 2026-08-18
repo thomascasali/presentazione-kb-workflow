@@ -1,8 +1,12 @@
 # Dare una memoria all'AI — come ho costruito un sistema di conoscenza per Claude Code
 
+Presentation available in English: https://thomascasali.github.io/presentazione-kb-workflow/?lang=en
+
 ▶️ **Vedi la presentazione**: https://thomascasali.github.io/presentazione-kb-workflow/
 
 Presentazione interattiva su come funziona `claude-kb-workflow`, rivolta a chi si avvicina alla programmazione: un sistema di memoria a tre livelli (sessioni → wiki → KB stabile) per far ricordare all'AI quello che impara lavorando, invece di ripartire da zero ogni volta.
+
+Ora è bilingue italiano/inglese: un selettore di lingua in apertura sull'indice propaga la scelta a tutti e cinque gli atti (salvata in `localStorage`, sovrascrivibile con `?lang=en` o `?lang=it` in URL).
 
 ## Contenuti
 

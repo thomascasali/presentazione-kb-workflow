@@ -41,6 +41,10 @@
     a { color: inherit; }
     h2, h3 { font-family: 'Public Sans', sans-serif; font-weight: 600; }
     p, li { line-height: var(--lh-body); }
+    .lang-toggle { display: flex; font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-xs); font-weight: 600; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; flex-shrink: 0; }
+    .lang-toggle button { padding: 5px 9px; background: transparent; border: none; cursor: pointer; color: var(--text-muted); }
+    .lang-toggle button + button { border-left: 1px solid var(--border); }
+    .lang-toggle button.active { background: var(--warn); color: var(--bg); }
     @media (max-width: 768px) {
       .slide-content { padding: 16px !important; }
       .slide-content > div { padding: 20px 16px !important; }
@@ -68,9 +72,16 @@
       success: '#6fae5c', danger: '#e0563a', warn: '#d9a441', info: '#4e93b8', purple: '#a879c4'
     };
 
-    const PREV_ACT = { href: 'atto4-la-macchina.html', label: 'Atto 4' };
-    const ACT_LABEL = 'Atto 5';
-    const ACT_TITLE = 'Perché lo regalo';
+    function getLang() {
+      const params = new URLSearchParams(window.location.search);
+      const urlLang = params.get('lang');
+      if (urlLang === 'en' || urlLang === 'it') { localStorage.setItem('kbLang', urlLang); return urlLang; }
+      const stored = localStorage.getItem('kbLang');
+      if (stored === 'en' || stored === 'it') return stored;
+      return 'it';
+    }
+
+    const PREV_ACT_HREF = 'atto4-la-macchina.html';
     const REPO_URL = 'https://github.com/thomascasali/claude-kb-workflow';
 
     const BgTexture = () => (
@@ -104,68 +115,64 @@
 
     const slides = [
       // 5.1 - Titolo atto
-      () => (
+      (t) => (
         <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '70vh' }}>
           <div style={{ fontSize: 'clamp(40px, 8vw, 56px)', marginBottom: '20px' }}>🎁</div>
-          <div style={{ fontSize: 'var(--fs-xs)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '16px', fontFamily: "'IBM Plex Mono', monospace" }}>Atto 5</div>
-          <h1 style={{ fontSize: 'var(--fs-h1)', fontFamily: 'Fraunces, serif', fontWeight: '600', lineHeight: 'var(--lh-heading)', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '20px' }}>Perché lo regalo</h1>
-          <p style={{ fontSize: 'var(--fs-lead)', color: colors.textDim, maxWidth: '560px', lineHeight: 'var(--lh-body)' }}>E cosa c'entra tutto questo con voi.</p>
+          <div style={{ fontSize: 'var(--fs-xs)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '16px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.actLabel}</div>
+          <h1 style={{ fontSize: 'var(--fs-h1)', fontFamily: 'Fraunces, serif', fontWeight: '600', lineHeight: 'var(--lh-heading)', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '20px' }}>{t.actTitle}</h1>
+          <p style={{ fontSize: 'var(--fs-lead)', color: colors.textDim, maxWidth: '560px', lineHeight: 'var(--lh-body)' }}>{t.s1_lead}</p>
         </div>
       ),
 
       // 5.2 - Mappa e territorio
-      () => (
+      (t) => (
         <div style={{ padding: '30px' }}>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '22px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '28px' }}>🗺️</span> Perché pubblicare tutto questo gratis?
+            <span style={{ fontSize: '28px' }}>🗺️</span> {t.s2_h2}
           </h2>
           <Glow>
             <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
-              Me lo chiedono spesso: perché regalare un sistema che ti sei costruito con mesi di lavoro? La risposta a cui sono arrivato:
+              {t.s2_glow}
             </p>
           </Glow>
           <Box type="tip">
-            <div style={{ fontSize: 'var(--fs-h3)', fontWeight: '700', color: colors.text }}>Pubblico la mappa, tengo il territorio. Il metodo si copia comunque; l'esperienza per costruirlo, no.</div>
+            <div style={{ fontSize: 'var(--fs-h3)', fontWeight: '700', color: colors.text }}>{t.s2_box}</div>
           </Box>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '18px', marginTop: '22px' }}>
-            <AdvantageCard icon="📜" title="Curriculum">Contenuti firmati col mio nome, una storia riconoscibile (prof + 15 prodotti reali in produzione).</AdvantageCard>
-            <AdvantageCard icon="🎓" title="Materiale per voi">Questa stessa presentazione nasce da lì.</AdvantageCard>
-            <AdvantageCard icon="🌍" title="Revisione gratuita dal mondo">Chiunque può trovare errori nel sistema e segnalarli, migliorandolo senza che io paghi per una consulenza.</AdvantageCard>
+            <AdvantageCard icon="📜" title={t.s2_card1_title}>{t.s2_card1_body}</AdvantageCard>
+            <AdvantageCard icon="🎓" title={t.s2_card2_title}>{t.s2_card2_body}</AdvantageCard>
+            <AdvantageCard icon="🌍" title={t.s2_card3_title}>{t.s2_card3_body}</AdvantageCard>
           </div>
         </div>
       ),
 
       // 5.3 - Le 3 lezioni trasferibili
-      () => (
+      (t) => (
         <div style={{ padding: '30px' }}>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '26px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '28px' }}>🔑</span> Cosa c'entra con voi, davvero
+            <span style={{ fontSize: '28px' }}>🔑</span> {t.s3_h2}
           </h2>
           <ol style={{ color: colors.textDim, lineHeight: '1.9', paddingLeft: '22px', fontSize: 'var(--fs-body)' }}>
-            <li style={{ marginBottom: '14px' }}><strong style={{ color: colors.text }}>Documentate quello che imparate, o lo ripagherete</strong> — vale per l'AI e vale per voi (un quaderno di laboratorio ben tenuto è lo stesso principio della KB)</li>
-            <li style={{ marginBottom: '14px' }}><strong style={{ color: colors.text }}>L'evidenza prima del "fatto"</strong> — mai dichiarare finito qualcosa senza averlo verificato davvero, non "a occhio"</li>
-            <li><strong style={{ color: colors.text }}>I fallimenti silenziosi si cercano attivamente</strong> — un sistema che non dà errori non è automaticamente un sistema che funziona; chiedetevi sempre "cosa sta succedendo davvero, qui dentro?"</li>
+            <li style={{ marginBottom: '14px' }}><strong style={{ color: colors.text }}>{t.s3_li1_strong}</strong>{t.s3_li1_rest}</li>
+            <li style={{ marginBottom: '14px' }}><strong style={{ color: colors.text }}>{t.s3_li2_strong}</strong>{t.s3_li2_rest}</li>
+            <li><strong style={{ color: colors.text }}>{t.s3_li3_strong}</strong>{t.s3_li3_rest}</li>
           </ol>
         </div>
       ),
 
       // 5.4 - Provare il toolkit gratis: i 3 passi
-      () => (
+      (t) => (
         <div style={{ padding: '30px' }}>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '22px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '28px' }}>🚀</span> Come provarlo voi
+            <span style={{ fontSize: '28px' }}>🚀</span> {t.s4_h2}
           </h2>
           <Glow>
             <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
-              Il repo è gratuito e si installa in circa 5 minuti su qualsiasi macchina con Claude Code. La documentazione è bilingue: l'inglese serve a farsi trovare fuori dall'Italia, l'italiano resta la lingua nativa del progetto — costruito anche per voi. Non serve essere sviluppatori esperti: bastano un terminale e la voglia di provare.
+              {t.s4_glow}
             </p>
           </Glow>
           <div style={{ display: 'grid', gap: '12px', marginTop: '20px' }}>
-            {[
-              { n: '1', cmd: 'git clone <repo>', desc: 'scaricate il toolkit sul vostro computer', isCmd: true },
-              { n: '2', cmd: './scripts/install.sh', desc: 'lo script registra agenti e skill nella vostra installazione di Claude Code', isCmd: true },
-              { n: '3', cmd: 'Riavviate Claude Code', desc: 'la nuova configurazione viene caricata', isCmd: false },
-            ].map(s => (
+            {t.s4_steps.map(s => (
               <div key={s.n} style={{ display: 'flex', alignItems: 'center', gap: '16px', background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '10px', padding: '14px 18px' }}>
                 <div style={{ flexShrink: 0, width: '30px', height: '30px', borderRadius: '50%', background: colors.accent, color: colors.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700', fontSize: 'var(--fs-sm)' }}>{s.n}</div>
                 <div style={{ minWidth: 0 }}>
@@ -177,111 +184,227 @@
               </div>
             ))}
           </div>
-          <Box type="tip" title="Cosa succede dopo">
-            Gli agenti specializzati sono già registrati e pronti — non serve configurarli uno per uno. Le skill si attivano da sole quando il contesto della conversazione le riconosce, come avete visto nell'Atto 4.
+          <Box type="tip" title={t.s4_box_title}>
+            {t.s4_box_body}
           </Box>
         </div>
       ),
 
       // 5.5 - Il primo comando da provare
-      () => (
+      (t) => (
         <div style={{ padding: '30px' }}>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '22px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '28px' }}>🎬</span> Il primo comando da provare
+            <span style={{ fontSize: '28px' }}>🎬</span> {t.s5_h2}
           </h2>
           <Glow>
             <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
-              Non serve un progetto complicato per iniziare: basta una sessione vera di lavoro con l'AI, anche breve. Finita quella sessione, provate questo:
+              {t.s5_glow}
             </p>
           </Glow>
           <div style={{ background: colors.bg, border: `1px solid ${colors.border}`, borderRadius: '8px', padding: '16px 20px', margin: '18px 0', fontFamily: "'IBM Plex Mono', monospace" }}>
-            <span style={{ color: colors.textMuted }}>$ </span><span style={{ color: colors.accentAlt, fontSize: 'var(--fs-body)' }}>/kb-ingest nome-progetto</span>
+            <span style={{ color: colors.textMuted }}>$ </span><span style={{ color: colors.accentAlt, fontSize: 'var(--fs-body)' }}>{t.s5_cmd}</span>
           </div>
           <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
-            Quel comando legge la sessione appena chiusa e ne estrae quello che vale la pena ricordare, salvandolo nella wiki — il primo mattone del ciclo sessione → wiki → KB che avete visto nell'Atto 2. È il modo più veloce per capire, con mano, cosa significa dare una memoria all'AI.
+            {t.s5_para}
           </p>
           <Box type="info">
-            Repo pubblico dal 18 agosto 2026 — link nella slide finale.
+            {t.s5_box}
           </Box>
         </div>
       ),
 
       // 5.6 - Chiusura
-      () => (
+      (t) => (
         <div style={{ padding: '30px', textAlign: 'center' }}>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '28px' }}>🎤</span> Le domande migliori diventano issue
+            <span style={{ fontSize: '28px' }}>🎤</span> {t.s6_h2}
           </h2>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', justifyContent: 'center', alignItems: 'center', marginBottom: '30px' }}>
             <div>
-              <img src="assets/qr-repo.png" alt="QR code del repository claude-kb-workflow" style={{ width: 180, height: 180, borderRadius: 12, background: '#fff', padding: 8 }} />
-              <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '10px' }}>Inquadra per aprire il repo</div>
+              <img src="assets/qr-repo.png" alt={t.s6_qr_alt} style={{ width: 180, height: 180, borderRadius: 12, background: '#fff', padding: 8 }} />
+              <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '10px' }}>{t.s6_qr_caption}</div>
             </div>
             <a href={REPO_URL} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: '12px', background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '12px', padding: '22px 30px', textDecoration: 'none' }}>
               <span style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.text, fontSize: 'var(--fs-sm)' }}>github.com/thomascasali/claude-kb-workflow</span>
-              <span style={{ display: 'inline-block', padding: '5px 14px', background: colors.accent, color: colors.bg, borderRadius: '20px', fontSize: 'var(--fs-xs)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>Pubblico dal 18/08/2026</span>
+              <span style={{ display: 'inline-block', padding: '5px 14px', background: colors.accent, color: colors.bg, borderRadius: '20px', fontSize: 'var(--fs-xs)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>{t.s6_badge}</span>
             </a>
           </div>
           <Box type="tip">
             <div style={{ fontSize: 'var(--fs-h2)', fontFamily: 'Fraunces, serif', fontWeight: '700', color: colors.text, lineHeight: 'var(--lh-heading)' }}>
-              L'AI non vi ruberà il lavoro. Ma qualcuno che sa farle ricordare le cose... forse sì. Tanto vale essere voi.
+              {t.s6_closing}
             </div>
           </Box>
           <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '20px' }}>
-            Le domande migliori che mi farete oggi diventeranno issue sul repo — con il vostro nome.
+            {t.s6_footer}
           </p>
         </div>
       ),
     ];
 
+    const T = {
+      it: {
+        pageTitle: 'Atto 5 - Perché lo regalo',
+        actLabel: 'Atto 5',
+        actTitle: 'Perché lo regalo',
+        prevActLabel: 'Atto 4',
+        navIndex: 'Indice',
+        navBack: 'Indietro',
+        navNext: 'Avanti',
+        navHome: "Torna all'indice",
+        s1_lead: 'E cosa c\'entra tutto questo con voi.',
+        s2_h2: 'Perché pubblicare tutto questo gratis?',
+        s2_glow: 'Me lo chiedono spesso: perché regalare un sistema che ti sei costruito con mesi di lavoro? La risposta a cui sono arrivato:',
+        s2_box: "Pubblico la mappa, tengo il territorio. Il metodo si copia comunque; l'esperienza per costruirlo, no.",
+        s2_card1_title: 'Curriculum',
+        s2_card1_body: 'Contenuti firmati col mio nome, una storia riconoscibile (prof + 15 prodotti reali in produzione).',
+        s2_card2_title: 'Materiale per voi',
+        s2_card2_body: 'Questa stessa presentazione nasce da lì.',
+        s2_card3_title: 'Revisione gratuita dal mondo',
+        s2_card3_body: 'Chiunque può trovare errori nel sistema e segnalarli, migliorandolo senza che io paghi per una consulenza.',
+        s3_h2: "Cosa c'entra con voi, davvero",
+        s3_li1_strong: 'Documentate quello che imparate, o lo ripagherete',
+        s3_li1_rest: " — vale per l'AI e vale per voi (un quaderno di laboratorio ben tenuto è lo stesso principio della KB)",
+        s3_li2_strong: 'L\'evidenza prima del "fatto"',
+        s3_li2_rest: ' — mai dichiarare finito qualcosa senza averlo verificato davvero, non "a occhio"',
+        s3_li3_strong: 'I fallimenti silenziosi si cercano attivamente',
+        s3_li3_rest: ' — un sistema che non dà errori non è automaticamente un sistema che funziona; chiedetevi sempre "cosa sta succedendo davvero, qui dentro?"',
+        s4_h2: 'Come provarlo voi',
+        s4_glow: "Il repo è gratuito e si installa in circa 5 minuti su qualsiasi macchina con Claude Code. La documentazione è bilingue: l'inglese serve a farsi trovare fuori dall'Italia, l'italiano resta la lingua nativa del progetto — costruito anche per voi. Non serve essere sviluppatori esperti: bastano un terminale e la voglia di provare.",
+        s4_steps: [
+          { n: '1', cmd: 'git clone <repo>', desc: 'scaricate il toolkit sul vostro computer', isCmd: true },
+          { n: '2', cmd: './scripts/install.sh', desc: 'lo script registra agenti e skill nella vostra installazione di Claude Code', isCmd: true },
+          { n: '3', cmd: 'Riavviate Claude Code', desc: 'la nuova configurazione viene caricata', isCmd: false },
+        ],
+        s4_box_title: 'Cosa succede dopo',
+        s4_box_body: "Gli agenti specializzati sono già registrati e pronti — non serve configurarli uno per uno. Le skill si attivano da sole quando il contesto della conversazione le riconosce, come avete visto nell'Atto 4.",
+        s5_h2: 'Il primo comando da provare',
+        s5_glow: "Non serve un progetto complicato per iniziare: basta una sessione vera di lavoro con l'AI, anche breve. Finita quella sessione, provate questo:",
+        s5_cmd: '/kb-ingest nome-progetto',
+        s5_para: "Quel comando legge la sessione appena chiusa e ne estrae quello che vale la pena ricordare, salvandolo nella wiki — il primo mattone del ciclo sessione → wiki → KB che avete visto nell'Atto 2. È il modo più veloce per capire, con mano, cosa significa dare una memoria all'AI.",
+        s5_box: 'Repo pubblico dal 18 agosto 2026 — link nella slide finale.',
+        s6_h2: 'Le domande migliori diventano issue',
+        s6_qr_alt: 'QR code del repository claude-kb-workflow',
+        s6_qr_caption: 'Inquadra per aprire il repo',
+        s6_badge: 'Pubblico dal 18/08/2026',
+        s6_closing: "L'AI non vi ruberà il lavoro. Ma qualcuno che sa farle ricordare le cose... forse sì. Tanto vale essere voi.",
+        s6_footer: 'Le domande migliori che mi farete oggi diventeranno issue sul repo — con il vostro nome.',
+      },
+      en: {
+        pageTitle: 'Act 5 - Why I give it away',
+        actLabel: 'Act 5',
+        actTitle: 'Why I give it away',
+        prevActLabel: 'Act 4',
+        navIndex: 'Index',
+        navBack: 'Back',
+        navNext: 'Next',
+        navHome: 'Back to the index',
+        s1_lead: 'And what all this has to do with you.',
+        s2_h2: 'Why publish all of this for free?',
+        s2_glow: 'People ask me often: why give away a system you built with months of work? The answer I landed on:',
+        s2_box: "I publish the map, I keep the territory. Because the method gets copied anyway; the experience doesn't.",
+        s2_card1_title: 'Curriculum',
+        s2_card1_body: 'Content signed with my name, a recognizable story (teacher + 15 real products in production).',
+        s2_card2_title: 'Material for you',
+        s2_card2_body: 'This very presentation comes from that.',
+        s2_card3_title: 'Free review from the world',
+        s2_card3_body: 'Anyone can find errors in the system and report them, improving it without me paying for a consultant.',
+        s3_h2: 'What this has to do with you',
+        s3_li1_strong: 'Write down what you learn, or you will pay for it later',
+        s3_li1_rest: ' — it applies to the AI and it applies to you (a well-kept lab notebook follows the same idea as the KB)',
+        s3_li2_strong: 'Evidence before "done"',
+        s3_li2_rest: ' — never call something finished without actually checking it, not just eyeballing it',
+        s3_li3_strong: 'Silent failures need to be hunted actively',
+        s3_li3_rest: ' — a system that throws no errors is not automatically a system that works; keep asking yourself "what is actually happening in here?"',
+        s4_h2: 'How to try it yourself',
+        s4_glow: "The repo is free and installs in about 5 minutes on any machine running Claude Code. The documentation is bilingual: English is there to be found outside Italy, Italian stays the project's native language, built for you too. You don't need to be an experienced developer: a terminal and the will to try are enough.",
+        s4_steps: [
+          { n: '1', cmd: 'git clone <repo>', desc: 'you download the toolkit onto your computer', isCmd: true },
+          { n: '2', cmd: './scripts/install.sh', desc: 'the script registers agents and skills in your Claude Code installation', isCmd: true },
+          { n: '3', cmd: 'Restart Claude Code', desc: 'the new configuration gets loaded', isCmd: false },
+        ],
+        s4_box_title: 'What happens next',
+        s4_box_body: "The specialized agents are already registered and ready: no need to configure them one by one. The skills activate on their own when the conversation's context recognizes them, as you saw in Act 4.",
+        s5_h2: 'The first command to try',
+        s5_glow: 'You don\'t need a complicated project to start: a real working session with the AI is enough, even a short one. Once that session is done, try this:',
+        s5_cmd: '/kb-ingest project-name',
+        s5_para: 'That command reads the session you just closed and pulls out what is worth remembering, saving it to the wiki: the first building block of the session → wiki → KB cycle you saw in Act 2. It is the fastest way to understand, hands-on, what giving the AI a memory means.',
+        s5_box: 'Public repo from 18 August 2026. Link on the final slide.',
+        s6_h2: 'The best questions become issues',
+        s6_qr_alt: 'QR code for the claude-kb-workflow repository',
+        s6_qr_caption: 'Scan to open the repo',
+        s6_badge: 'Public from 18 Aug 2026',
+        s6_closing: "AI will not take your job. But someone who knows how to make it remember things... maybe. Might as well be you.",
+        s6_footer: "The best questions you ask me today will become issues on the repo, with your name on them.",
+      }
+    };
+
     function App() {
       const [current, setCurrent] = useState(0);
+      const [lang, setLang] = useState(getLang());
       const total = slides.length;
+      const t = T[lang];
 
       const next = () => setCurrent(c => Math.min(c + 1, total - 1));
       const prev = () => setCurrent(c => Math.max(c - 1, 0));
+      const switchLang = (l) => {
+        localStorage.setItem('kbLang', l);
+        setLang(l);
+        const url = new URL(window.location.href);
+        if (l === 'en') url.searchParams.set('lang', 'en'); else url.searchParams.delete('lang');
+        window.history.replaceState({}, '', url);
+      };
+      const withLang = (href) => lang === 'en' ? href + '?lang=en' : href;
+
+      useEffect(() => {
+        document.documentElement.lang = lang;
+        document.title = t.pageTitle;
+      }, [lang]);
 
       useEffect(() => {
         const handler = e => {
           if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
           if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
-          if (e.key === 'Escape') window.location.href = 'index.html';
+          if (e.key === 'Escape') window.location.href = withLang('index.html');
           if (e.key >= '1' && e.key <= '9') { const idx = parseInt(e.key) - 1; if (idx < total) setCurrent(idx); }
         };
         window.addEventListener('keydown', handler);
         return () => window.removeEventListener('keydown', handler);
-      }, []);
+      }, [lang]);
 
       return (
         <div style={{ minHeight: '100vh', background: colors.bg, position: 'relative' }}>
           <BgTexture />
           <div className="top-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '54px', background: colors.bgCard + 'e0', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px', zIndex: 100 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <a href="index.html" style={{ color: colors.textMuted, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← Indice</a>
+              <a href={withLang('index.html')} style={{ color: colors.textMuted, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← {t.navIndex}</a>
               <span style={{ color: colors.border }}>|</span>
-              <span style={{ color: colors.accent, fontWeight: '600', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)' }}>{ACT_LABEL}</span>
-              <span style={{ color: colors.textDim }}>{ACT_TITLE}</span>
+              <span style={{ color: colors.accent, fontWeight: '600', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)' }}>{t.actLabel}</span>
+              <span style={{ color: colors.textDim }}>{t.actTitle}</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <span style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', fontFamily: "'IBM Plex Mono', monospace" }}>{current + 1} / {total}</span>
               <div style={{ width: '100px', height: '6px', background: colors.bgLight, borderRadius: '3px' }}>
                 <div style={{ height: '100%', width: `${((current + 1) / total) * 100}%`, background: colors.accent, borderRadius: '3px', transition: 'width 0.3s' }} />
               </div>
+              <div className="lang-toggle">
+                <button className={lang === 'it' ? 'active' : ''} onClick={() => switchLang('it')}>IT</button>
+                <button className={lang === 'en' ? 'active' : ''} onClick={() => switchLang('en')}>EN</button>
+              </div>
             </div>
           </div>
           <div style={{ paddingTop: '54px', paddingBottom: '76px', minHeight: 'calc(100vh - 130px)', position: 'relative', zIndex: 1 }}>
             <div className="slide-content" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
-              {slides[current]()}
+              {slides[current](t)}
             </div>
           </div>
           <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, minHeight: '64px', background: colors.bgCard + 'e0', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', zIndex: 100, flexWrap: 'wrap', padding: '8px 20px' }}>
-            {current === 0 && PREV_ACT && (
-              <a href={PREV_ACT.href} style={{ padding: '10px 24px', minHeight: '44px', display: 'inline-flex', alignItems: 'center', background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '6px', color: colors.textDim, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← {PREV_ACT.label}</a>
+            {current === 0 && PREV_ACT_HREF && (
+              <a href={withLang(PREV_ACT_HREF)} style={{ padding: '10px 24px', minHeight: '44px', display: 'inline-flex', alignItems: 'center', background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '6px', color: colors.textDim, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← {t.prevActLabel}</a>
             )}
-            <button onClick={prev} disabled={current === 0} style={{ padding: '10px 24px', minHeight: '44px', background: current === 0 ? colors.bgLight : colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '6px', color: current === 0 ? colors.textMuted : colors.text, cursor: current === 0 ? 'not-allowed' : 'pointer', fontSize: 'var(--fs-sm)' }}>← Indietro</button>
-            <button onClick={next} disabled={current === total - 1} style={{ padding: '10px 24px', minHeight: '44px', background: current === total - 1 ? colors.bgLight : `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, border: 'none', borderRadius: '6px', color: current === total - 1 ? colors.textMuted : colors.bg, cursor: current === total - 1 ? 'not-allowed' : 'pointer', fontSize: 'var(--fs-sm)', fontWeight: '600' }}>Avanti →</button>
+            <button onClick={prev} disabled={current === 0} style={{ padding: '10px 24px', minHeight: '44px', background: current === 0 ? colors.bgLight : colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '6px', color: current === 0 ? colors.textMuted : colors.text, cursor: current === 0 ? 'not-allowed' : 'pointer', fontSize: 'var(--fs-sm)' }}>← {t.navBack}</button>
+            <button onClick={next} disabled={current === total - 1} style={{ padding: '10px 24px', minHeight: '44px', background: current === total - 1 ? colors.bgLight : `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, border: 'none', borderRadius: '6px', color: current === total - 1 ? colors.textMuted : colors.bg, cursor: current === total - 1 ? 'not-allowed' : 'pointer', fontSize: 'var(--fs-sm)', fontWeight: '600' }}>{t.navNext} →</button>
             {current === total - 1 && (
-              <a href="index.html" style={{ padding: '10px 24px', minHeight: '44px', display: 'inline-flex', alignItems: 'center', background: colors.success, border: 'none', borderRadius: '6px', color: colors.bg, textDecoration: 'none', fontSize: 'var(--fs-sm)', fontWeight: '600' }}>🏠 Torna all'indice</a>
+              <a href={withLang('index.html')} style={{ padding: '10px 24px', minHeight: '44px', display: 'inline-flex', alignItems: 'center', background: colors.success, border: 'none', borderRadius: '6px', color: colors.bg, textDecoration: 'none', fontSize: 'var(--fs-sm)', fontWeight: '600' }}>🏠 {t.navHome}</a>
             )}
           </div>
         </div>

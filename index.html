@@ -65,8 +65,32 @@
     header {
       text-align: center;
       margin-bottom: 60px;
-      padding-top: 40px;
+      padding-top: 20px;
     }
+    .lang-switch {
+      display: inline-flex;
+      gap: 0;
+      margin-bottom: 28px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .lang-btn {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      letter-spacing: 1px;
+      padding: 8px 18px;
+      min-height: 40px;
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .lang-btn + .lang-btn { border-left: 1px solid var(--border); }
+    .lang-btn.active { background: var(--warn); color: var(--bg); }
+    .lang-btn:not(.active):hover { background: var(--bg-light); color: var(--text); }
     .badge {
       display: inline-block;
       padding: 6px 16px;
@@ -258,7 +282,7 @@
       .modules-grid { grid-template-columns: 1fr; }
       .stats { gap: 20px; }
       .container { padding: 20px 12px; }
-      header { margin-bottom: 30px; padding-top: 20px; }
+      header { margin-bottom: 30px; padding-top: 10px; }
       .subtitle { margin-bottom: 20px; }
       .module-card { padding: 20px; }
       .module-icon { width: 48px; height: 48px; font-size: 24px; }
@@ -274,116 +298,224 @@
   <div class="bg-texture"></div>
   <div class="container">
     <header>
-      <div class="badge">Presentazione</div>
-      <h1>Dare una memoria all'AI</h1>
-      <p class="subtitle">Come ho costruito un sistema di conoscenza per Claude Code: cinque atti, tre storie vere, e perché tutto questo vi riguarda anche se non scrivete codice per lavoro.</p>
+      <div class="lang-switch" id="langSwitch">
+        <button class="lang-btn" id="langBtnIt" data-lang="it">Italiano</button>
+        <button class="lang-btn" id="langBtnEn" data-lang="en">English</button>
+      </div>
+      <div class="badge" id="badge">Presentazione</div>
+      <h1 id="pageH1">Dare una memoria all'AI</h1>
+      <p class="subtitle" id="pageSubtitle">Come ho costruito un sistema di conoscenza per Claude Code: cinque atti, tre storie vere, e perché tutto questo vi riguarda anche se non scrivete codice per lavoro.</p>
       <div class="stats">
-        <div class="stat"><div class="stat-value">5</div><div class="stat-label">Atti</div></div>
-        <div class="stat"><div class="stat-value">35</div><div class="stat-label">Slide</div></div>
-        <div class="stat"><div class="stat-value">3</div><div class="stat-label">Simulatori</div></div>
+        <div class="stat"><div class="stat-value">5</div><div class="stat-label" id="statLabel1">Atti</div></div>
+        <div class="stat"><div class="stat-value">35</div><div class="stat-label" id="statLabel2">Slide</div></div>
+        <div class="stat"><div class="stat-value">3</div><div class="stat-label" id="statLabel3">Simulatori</div></div>
       </div>
     </header>
     <div class="modules-grid">
-      <a href="atto1-il-problema.html" class="module-card" data-atto="1">
+      <a href="atto1-il-problema.html" class="module-card" data-atto="1" id="card1">
         <div class="module-header">
           <div class="module-icon">🧠</div>
           <div class="module-meta">
-            <div class="module-number">Atto 1</div>
-            <h2 class="module-title">Il problema</h2>
+            <div class="module-number" id="card1number">Atto 1</div>
+            <h2 class="module-title" id="card1title">Il problema</h2>
           </div>
         </div>
-        <p class="module-description">L'AI più potente del mondo ricomincia da zero ogni volta. Cosa significa lavorarci nei ritagli di tempo su 15+ progetti reali, e da dove viene l'idea per risolverlo.</p>
-        <div class="module-topics">
+        <p class="module-description" id="card1desc">L'AI più potente del mondo ricomincia da zero ogni volta. Cosa significa lavorarci nei ritagli di tempo su 15+ progetti reali, e da dove viene l'idea per risolverlo.</p>
+        <div class="module-topics" id="card1tags">
           <span class="topic-tag">Amnesia dell'AI</span>
           <span class="topic-tag">Prodotti reali</span>
           <span class="topic-tag">Karpathy</span>
         </div>
         <div class="module-footer">
-          <div class="module-slides"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>6 slide</div>
+          <div class="module-slides"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg><span id="card1slides">6 slide</span></div>
           <div class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
         </div>
       </a>
-      <a href="atto2-larchitettura.html" class="module-card" data-atto="2">
+      <a href="atto2-larchitettura.html" class="module-card" data-atto="2" id="card2">
         <div class="module-header">
           <div class="module-icon">🏗️</div>
           <div class="module-meta">
-            <div class="module-number">Atto 2</div>
-            <h2 class="module-title">L'architettura</h2>
+            <div class="module-number" id="card2number">Atto 2</div>
+            <h2 class="module-title" id="card2title">L'architettura</h2>
           </div>
         </div>
-        <p class="module-description">Tre livelli, un esame che decide cosa merita di restare. Il percorso di un fatto dalla sessione alla KB stabile, e l'orchestra di agenti al lavoro.</p>
-        <div class="module-topics">
+        <p class="module-description" id="card2desc">Tre livelli, un esame che decide cosa merita di restare. Il percorso di un fatto dalla sessione alla KB stabile, e l'orchestra di agenti al lavoro.</p>
+        <div class="module-topics" id="card2tags">
           <span class="topic-tag">Esame di promozione</span>
           <span class="topic-tag">Orchestra</span>
           <span class="topic-tag">2 simulatori</span>
         </div>
         <div class="module-footer">
-          <div class="module-slides"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>6 slide</div>
+          <div class="module-slides"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg><span id="card2slides">6 slide</span></div>
           <div class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
         </div>
       </a>
-      <a href="atto3-le-storie.html" class="module-card" data-atto="3">
+      <a href="atto3-le-storie.html" class="module-card" data-atto="3" id="card3">
         <div class="module-header">
           <div class="module-icon">📖</div>
           <div class="module-meta">
-            <div class="module-number">Atto 3</div>
-            <h2 class="module-title">Le tre storie</h2>
+            <div class="module-number" id="card3number">Atto 3</div>
+            <h2 class="module-title" id="card3title">Le tre storie</h2>
           </div>
         </div>
-        <p class="module-description">Tre volte in cui il sistema ha fallito, ed è servito a qualcosa: 10 agenti fantasma, 3 mesi di lavoro recuperati in un'ora, la memoria vista dall'alto, e 26 errori trovati dal reviewer, uno scritto dall'orchestratore stesso.</p>
-        <div class="module-topics">
+        <p class="module-description" id="card3desc">Tre volte in cui il sistema ha fallito, ed è servito a qualcosa: 10 agenti fantasma, 3 mesi di lavoro recuperati in un'ora, la memoria vista dall'alto, e 26 errori trovati dal reviewer, uno scritto dall'orchestratore stesso.</p>
+        <div class="module-topics" id="card3tags">
           <span class="topic-tag">Spot the bug</span>
           <span class="topic-tag">La wiki come rete</span>
           <span class="topic-tag">26 errori</span>
         </div>
         <div class="module-footer">
-          <div class="module-slides"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>10 slide</div>
+          <div class="module-slides"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg><span id="card3slides">10 slide</span></div>
           <div class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
         </div>
       </a>
-      <a href="atto4-la-macchina.html" class="module-card" data-atto="4">
+      <a href="atto4-la-macchina.html" class="module-card" data-atto="4" id="card4">
         <div class="module-header">
           <div class="module-icon">⚙️</div>
           <div class="module-meta">
-            <div class="module-number">Atto 4</div>
-            <h2 class="module-title">La macchina completa</h2>
+            <div class="module-number" id="card4number">Atto 4</div>
+            <h2 class="module-title" id="card4title">La macchina completa</h2>
           </div>
         </div>
-        <p class="module-description">Il workflow end-to-end messo insieme: orchestrazione parallela di più agenti, wiki e KB anche per chi lavora (non solo per chi legge), le skill, e cosa trovate nel repo.</p>
-        <div class="module-topics">
+        <p class="module-description" id="card4desc">Il workflow end-to-end messo insieme: orchestrazione parallela di più agenti, wiki e KB anche per chi lavora (non solo per chi legge), le skill, e cosa trovate nel repo.</p>
+        <div class="module-topics" id="card4tags">
           <span class="topic-tag">Orchestrazione</span>
           <span class="topic-tag">Skill</span>
           <span class="topic-tag">Wiki + KB</span>
         </div>
         <div class="module-footer">
-          <div class="module-slides"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>7 slide</div>
+          <div class="module-slides"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg><span id="card4slides">7 slide</span></div>
           <div class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
         </div>
       </a>
-      <a href="atto5-perche-lo-regalo.html" class="module-card" data-atto="5">
+      <a href="atto5-perche-lo-regalo.html" class="module-card" data-atto="5" id="card5">
         <div class="module-header">
           <div class="module-icon">🎁</div>
           <div class="module-meta">
-            <div class="module-number">Atto 5</div>
-            <h2 class="module-title">Perché lo regalo</h2>
+            <div class="module-number" id="card5number">Atto 5</div>
+            <h2 class="module-title" id="card5title">Perché lo regalo</h2>
           </div>
         </div>
-        <p class="module-description">Pubblico la mappa, tengo il territorio. Le 3 lezioni trasferibili, come provare il toolkit gratis, e come le vostre domande di oggi diventano issue.</p>
-        <div class="module-topics">
+        <p class="module-description" id="card5desc">Pubblico la mappa, tengo il territorio. Le 3 lezioni trasferibili, come provare il toolkit gratis, e come le vostre domande di oggi diventano issue.</p>
+        <div class="module-topics" id="card5tags">
           <span class="topic-tag">Repo pubblico</span>
           <span class="topic-tag">Lezioni trasferibili</span>
           <span class="topic-tag">Provalo tu</span>
         </div>
         <div class="module-footer">
-          <div class="module-slides"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>6 slide</div>
+          <div class="module-slides"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg><span id="card5slides">6 slide</span></div>
           <div class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
         </div>
       </a>
     </div>
     <footer>
-      <div class="footer-brand">Presentazione realizzata con Claude Code — nessun bug reso invisibile</div>
-      <div class="footer-author">Thomas Casali · <a href="https://github.com/thomascasali/presentazione-kb-workflow" target="_blank" rel="noopener">codice sorgente su GitHub</a> · <a href="https://github.com/thomascasali/claude-kb-workflow" target="_blank" rel="noopener">il toolkit claude-kb-workflow</a></div>
+      <div class="footer-brand" id="footerBrand">Presentazione realizzata con Claude Code — nessun bug reso invisibile</div>
+      <div class="footer-author">Thomas Casali · <a href="https://github.com/thomascasali/presentazione-kb-workflow" target="_blank" rel="noopener" id="footerSourceLink">codice sorgente su GitHub</a> · <a href="https://github.com/thomascasali/claude-kb-workflow" target="_blank" rel="noopener" id="footerToolkitLink">il toolkit claude-kb-workflow</a></div>
     </footer>
   </div>
+  <script>
+    const CARD_IDS = ['card1', 'card2', 'card3', 'card4', 'card5'];
+
+    const T = {
+      it: {
+        title: "Dare una memoria all'AI — Presentazione",
+        badge: 'Presentazione',
+        h1: "Dare una memoria all'AI",
+        subtitle: "Come ho costruito un sistema di conoscenza per Claude Code: cinque atti, tre storie vere, e perché tutto questo vi riguarda anche se non scrivete codice per lavoro.",
+        statActs: 'Atti', statSlides: 'Slide', statSims: 'Simulatori',
+        langIt: 'Italiano', langEn: 'English',
+        cards: [
+          { number: 'Atto 1', title: 'Il problema', desc: "L'AI più potente del mondo ricomincia da zero ogni volta. Cosa significa lavorarci nei ritagli di tempo su 15+ progetti reali, e da dove viene l'idea per risolverlo.", tags: ["Amnesia dell'AI", 'Prodotti reali', 'Karpathy'], slides: '6 slide' },
+          { number: 'Atto 2', title: "L'architettura", desc: "Tre livelli, un esame che decide cosa merita di restare. Il percorso di un fatto dalla sessione alla KB stabile, e l'orchestra di agenti al lavoro.", tags: ['Esame di promozione', 'Orchestra', '2 simulatori'], slides: '6 slide' },
+          { number: 'Atto 3', title: 'Le tre storie', desc: "Tre volte in cui il sistema ha fallito, ed è servito a qualcosa: 10 agenti fantasma, 3 mesi di lavoro recuperati in un'ora, la memoria vista dall'alto, e 26 errori trovati dal reviewer, uno scritto dall'orchestratore stesso.", tags: ['Spot the bug', 'La wiki come rete', '26 errori'], slides: '10 slide' },
+          { number: 'Atto 4', title: 'La macchina completa', desc: "Il workflow end-to-end messo insieme: orchestrazione parallela di più agenti, wiki e KB anche per chi lavora (non solo per chi legge), le skill, e cosa trovate nel repo.", tags: ['Orchestrazione', 'Skill', 'Wiki + KB'], slides: '7 slide' },
+          { number: 'Atto 5', title: 'Perché lo regalo', desc: "Pubblico la mappa, tengo il territorio. Le 3 lezioni trasferibili, come provare il toolkit gratis, e come le vostre domande di oggi diventano issue.", tags: ['Repo pubblico', 'Lezioni trasferibili', 'Provalo tu'], slides: '6 slide' },
+        ],
+        footerBrand: 'Presentazione realizzata con Claude Code — nessun bug reso invisibile',
+        footerSource: 'codice sorgente su GitHub',
+        footerToolkit: 'il toolkit claude-kb-workflow',
+      },
+      en: {
+        title: 'Giving the AI a Memory — Presentation',
+        badge: 'Presentation',
+        h1: 'Giving the AI a memory',
+        subtitle: "How I built a knowledge system for Claude Code: five acts, three true stories, and why it matters even if you don't write code for a living.",
+        statActs: 'Acts', statSlides: 'Slides', statSims: 'Simulators',
+        langIt: 'Italiano', langEn: 'English',
+        cards: [
+          { number: 'Act 1', title: 'The problem', desc: "The most capable AI in the world starts from zero every time. What that means when you run 15+ real projects in your spare time, and where the idea to fix it comes from.", tags: ['AI amnesia', 'Real products', 'Karpathy'], slides: '6 slides' },
+          { number: 'Act 2', title: 'The architecture', desc: "Three layers, and a promotion exam that decides what's worth keeping. How a fact travels from a session to the stable KB, and the orchestra of agents at work.", tags: ['Promotion exam', 'Orchestra', '2 simulators'], slides: '6 slides' },
+          { number: 'Act 3', title: 'The three stories', desc: "Three times the system failed, and it was worth something: 10 ghost agents, 3 months of work recovered in an hour, the memory seen from above, and 26 findings from the reviewer, one written by the lead itself.", tags: ['Spot the bug', 'The wiki as a network', '26 findings'], slides: '10 slides' },
+          { number: 'Act 4', title: 'The full machine', desc: "The end-to-end workflow put together: parallel orchestration across agents, wiki and KB for whoever does the work too (not just whoever reads it later), the skills, and what's in the repo.", tags: ['Orchestration', 'Skills', 'Wiki + KB'], slides: '7 slides' },
+          { number: 'Act 5', title: 'Why I give it away', desc: "I publish the map, I keep the territory. The 3 lessons that carry over, how to try the toolkit for free, and how today's questions turn into issues.", tags: ['Public repo', 'Lessons that carry over', 'Try it yourself'], slides: '6 slides' },
+        ],
+        footerBrand: 'Built with Claude Code, no bug swept under the rug',
+        footerSource: 'source code on GitHub',
+        footerToolkit: 'the claude-kb-workflow toolkit',
+      }
+    };
+
+    function getLang() {
+      const params = new URLSearchParams(window.location.search);
+      const urlLang = params.get('lang');
+      if (urlLang === 'en' || urlLang === 'it') {
+        localStorage.setItem('kbLang', urlLang);
+        return urlLang;
+      }
+      const stored = localStorage.getItem('kbLang');
+      if (stored === 'en' || stored === 'it') return stored;
+      return 'it';
+    }
+
+    function applyLang(lang) {
+      const t = T[lang];
+      document.documentElement.lang = lang;
+      document.title = t.title;
+      document.getElementById('badge').textContent = t.badge;
+      document.getElementById('pageH1').textContent = t.h1;
+      document.getElementById('pageSubtitle').textContent = t.subtitle;
+      document.getElementById('statLabel1').textContent = t.statActs;
+      document.getElementById('statLabel2').textContent = t.statSlides;
+      document.getElementById('statLabel3').textContent = t.statSims;
+
+      CARD_IDS.forEach((id, i) => {
+        const c = t.cards[i];
+        document.getElementById(id + 'number').textContent = c.number;
+        document.getElementById(id + 'title').textContent = c.title;
+        document.getElementById(id + 'desc').textContent = c.desc;
+        document.getElementById(id + 'slides').textContent = c.slides;
+        const tagsEl = document.getElementById(id + 'tags');
+        tagsEl.innerHTML = '';
+        c.tags.forEach(tag => {
+          const span = document.createElement('span');
+          span.className = 'topic-tag';
+          span.textContent = tag;
+          tagsEl.appendChild(span);
+        });
+        const cardEl = document.getElementById(id);
+        const baseHref = cardEl.getAttribute('href').split('?')[0];
+        cardEl.setAttribute('href', lang === 'en' ? baseHref + '?lang=en' : baseHref);
+      });
+
+      document.getElementById('footerBrand').textContent = t.footerBrand;
+      document.getElementById('footerSourceLink').textContent = t.footerSource;
+      document.getElementById('footerToolkitLink').textContent = t.footerToolkit;
+
+      document.getElementById('langBtnIt').classList.toggle('active', lang === 'it');
+      document.getElementById('langBtnEn').classList.toggle('active', lang === 'en');
+    }
+
+    const currentLang = getLang();
+    applyLang(currentLang);
+
+    document.getElementById('langBtnIt').addEventListener('click', () => {
+      localStorage.setItem('kbLang', 'it');
+      applyLang('it');
+    });
+    document.getElementById('langBtnEn').addEventListener('click', () => {
+      localStorage.setItem('kbLang', 'en');
+      applyLang('en');
+    });
+  </script>
 </body>
 </html>

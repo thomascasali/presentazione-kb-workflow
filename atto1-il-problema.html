@@ -49,6 +49,10 @@
       opacity: 0.05;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
+    .lang-toggle { display: flex; font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-xs); font-weight: 600; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; flex-shrink: 0; }
+    .lang-toggle button { padding: 5px 9px; background: transparent; border: none; cursor: pointer; color: var(--text-muted); }
+    .lang-toggle button + button { border-left: 1px solid var(--border); }
+    .lang-toggle button.active { background: var(--warn); color: var(--bg); }
     @media (max-width: 768px) {
       .slide-content { padding: 16px !important; }
       .top-bar { padding: 0 10px !important; }
@@ -76,10 +80,38 @@
       success: '#6fae5c', danger: '#e0563a', warn: '#d9a441', info: '#4e93b8', purple: '#a879c4'
     };
 
+    function getLang() {
+      const params = new URLSearchParams(window.location.search);
+      const urlLang = params.get('lang');
+      if (urlLang === 'en' || urlLang === 'it') { localStorage.setItem('kbLang', urlLang); return urlLang; }
+      const stored = localStorage.getItem('kbLang');
+      if (stored === 'en' || stored === 'it') return stored;
+      return 'it';
+    }
+
+    const T = {
+      it: {
+        pageTitle: 'Atto 1 - Il problema',
+        actLabel: 'Atto 1',
+        actTitle: 'Il problema',
+        nextActLabel: 'Atto 2',
+        navIndex: 'Indice',
+        navBack: 'Indietro',
+        navNext: 'Avanti',
+      },
+      en: {
+        pageTitle: 'Act 1 - The problem',
+        actLabel: 'Act 1',
+        actTitle: 'The problem',
+        nextActLabel: 'Act 2',
+        navIndex: 'Index',
+        navBack: 'Back',
+        navNext: 'Next',
+      }
+    };
+
     const PREV_ACT = null;
-    const NEXT_ACT = { href: 'atto2-larchitettura.html', label: 'Atto 2' };
-    const ACT_LABEL = 'Atto 1';
-    const ACT_TITLE = 'Il problema';
+    const NEXT_ACT_HREF = 'atto2-larchitettura.html';
 
     const Box = ({ type = 'info', title, children }) => {
       const cfg = { info: { c: colors.info, i: 'ℹ️' }, warn: { c: colors.warn, i: '⚠️' }, danger: { c: colors.danger, i: '🛑' }, tip: { c: colors.purple, i: '💡' }, success: { c: colors.success, i: '✓' } };
@@ -130,76 +162,76 @@
 
     const slides = [
       // 1.1 - Titolo atto
-      () => (
+      (t) => (
         <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '70vh' }}>
           <div style={{ fontSize: 'var(--fs-display)', marginBottom: '20px' }}>🧠</div>
-          <div style={{ fontSize: 'var(--fs-xs)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '16px', fontFamily: "'IBM Plex Mono', monospace" }}>Atto 1</div>
-          <h1 style={{ fontSize: 'var(--fs-h1)', fontWeight: '600', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '16px' }}>Il problema</h1>
-          <p style={{ fontSize: 'var(--fs-lead)', color: colors.textDim, maxWidth: '560px', lineHeight: 'var(--lh-body)' }}>L'AI più potente del mondo ha un problema: l'amnesia.</p>
+          <div style={{ fontSize: 'var(--fs-xs)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '16px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.actLabel}</div>
+          <h1 style={{ fontSize: 'var(--fs-h1)', fontWeight: '600', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '16px' }}>{t.actTitle}</h1>
+          <p style={{ fontSize: 'var(--fs-lead)', color: colors.textDim, maxWidth: '560px', lineHeight: 'var(--lh-body)' }}>{t.s1_lead}</p>
         </div>
       ),
 
       // 1.2 - L'amnesia (parte 1: cos'è la finestra di contesto)
-      () => (
+      (t) => (
         <div style={{ padding: '30px' }}>
           <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '28px' }}>💭</span> Dentro la sessione, l'AI ricorda tutto
+            <span style={{ fontSize: '28px' }}>💭</span> {t.s2_h2}
           </h2>
           <Glow>
             <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
-              Avete mai usato ChatGPT o Claude per un progetto (un compito, una tesina, un hobby)? Dentro quella sessione l'AI ha memoria eccome: si chiama <strong style={{ color: colors.text }}>finestra di contesto</strong>. Tutto quello che vi siete detti è lì dentro, e l'AI lo usa per rispondervi: ricorda il dettaglio di dieci minuti fa tanto quanto quello dell'inizio.
+              {t.s2_body1}<strong style={{ color: colors.text }}>{t.s2_body_strong}</strong>{t.s2_body2}
             </p>
           </Glow>
           <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', lineHeight: 'var(--lh-body)', marginTop: '12px' }}>
-            (La finestra può essere più o meno grande a seconda del modello, ed esistono tecniche per gestirla — ma quando si riempie, la sessione si "compatta" e i dettagli iniziano a perdersi.)
+            {t.s2_note}
           </p>
-          <Box type="danger" title="Il problema vero">
-            <strong style={{ color: colors.text }}>L'AI non è smemorata dentro la sessione: è la conoscenza che non sopravvive alla sessione.</strong>
+          <Box type="danger" title={t.s2_box_title}>
+            <strong style={{ color: colors.text }}>{t.s2_box_body}</strong>
           </Box>
         </div>
       ),
 
       // 1.3 - L'amnesia (parte 2: cosa succede quando la sessione si chiude)
-      () => (
+      (t) => (
         <div style={{ padding: '30px' }}>
           <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '28px' }}>🚪</span> Poi si chiude la sessione — e con lei tutto
+            <span style={{ fontSize: '28px' }}>🚪</span> {t.s3_h2}
           </h2>
           <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
-            Quella conoscenza vive <strong style={{ color: colors.text }}>solo</strong> dentro quella chat. Aprite una sessione nuova e non è recuperabile — non c'è verso di "chiedere in giro". Non è smemoratezza: è il design del sistema.
+            {t.s3_body1}<strong style={{ color: colors.text }}>{t.s3_body_strong}</strong>{t.s3_body2}
           </p>
           <svg viewBox="0 0 640 150" style={{ width: '100%', background: colors.bg, borderRadius: '8px', margin: '16px 0' }}>
             <rect x="20" y="20" width="250" height="100" fill={colors.bgLight} stroke={colors.info} strokeWidth="2" rx="8" />
-            <text x="145" y="45" textAnchor="middle" fill={colors.info} fontSize="12" fontWeight="bold">Sessione A</text>
+            <text x="145" y="45" textAnchor="middle" fill={colors.info} fontSize="12" fontWeight="bold">{t.s3_svg_sessionA}</text>
             <text x="145" y="80" textAnchor="middle" fontSize="24">🧠</text>
-            <text x="145" y="105" textAnchor="middle" fill={colors.textDim} fontSize="10">contesto pieno di conoscenza</text>
+            <text x="145" y="105" textAnchor="middle" fill={colors.textDim} fontSize="10">{t.s3_svg_full}</text>
 
             <rect x="295" y="20" width="50" height="100" fill={colors.danger} opacity="0.25" rx="4" />
             <text x="320" y="65" textAnchor="middle" fontSize="22">🧱</text>
-            <text x="320" y="140" textAnchor="middle" fill={colors.danger} fontSize="10" fontWeight="bold">muro</text>
+            <text x="320" y="140" textAnchor="middle" fill={colors.danger} fontSize="10" fontWeight="bold">{t.s3_svg_wall}</text>
 
             <rect x="370" y="20" width="250" height="100" fill={colors.bg} stroke={colors.border} strokeWidth="2" strokeDasharray="6 4" rx="8" />
-            <text x="495" y="45" textAnchor="middle" fill={colors.textMuted} fontSize="12" fontWeight="bold">Sessione B</text>
+            <text x="495" y="45" textAnchor="middle" fill={colors.textMuted} fontSize="12" fontWeight="bold">{t.s3_svg_sessionB}</text>
             <text x="495" y="80" textAnchor="middle" fontSize="24">📭</text>
-            <text x="495" y="105" textAnchor="middle" fill={colors.textMuted} fontSize="10">vuota</text>
+            <text x="495" y="105" textAnchor="middle" fill={colors.textMuted} fontSize="10">{t.s3_svg_empty}</text>
           </svg>
           <ul style={{ color: colors.textDim, lineHeight: '2.2', paddingLeft: '20px', fontSize: 'var(--fs-body)', marginTop: '16px' }}>
-            <li>Risolve un bug complesso oggi; domani non se lo ricorda più</li>
-            <li>Impara le tue preferenze in una sessione, poi la prossima riparte da zero</li>
-            <li>Trova la causa di un problema: se ricapita tra 3 mesi, la ricerca ricomincia daccapo</li>
+            <li>{t.s3_li1}</li>
+            <li>{t.s3_li2}</li>
+            <li>{t.s3_li3}</li>
           </ul>
         </div>
       ),
 
       // 1.4 - Chi ve lo racconta
-      () => (
+      (t) => (
         <div style={{ padding: '30px' }}>
           <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '28px' }}>👨‍🏫</span> Prof di giorno, sviluppatore nei ritagli di tempo
+            <span style={{ fontSize: '28px' }}>👨‍🏫</span> {t.s4_h2}
           </h2>
           <Glow>
             <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
-              Quello che non sapete: nei ritagli di tempo mando avanti <strong style={{ color: colors.text }}>15+ siti e app veri</strong>, con utenti che li usano ADESSO. Non è teoria da slide — è il mio problema quotidiano. Se ogni sessione di lavoro con l'AI riparte da zero, quella tassa la pago 15 volte.
+              {t.s4_body1}<strong style={{ color: colors.text }}>{t.s4_body_strong}</strong>{t.s4_body2}
             </p>
           </Glow>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px', margin: '20px 0' }}>
@@ -212,98 +244,205 @@
             <ProductBadge name="clubseries.app" url="https://clubseries.app" />
             <ProductBadge name="centrosportivo.online" url="https://centrosportivo.online" />
           </div>
-          <div style={{ fontSize: 'var(--fs-sm)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '1px', fontWeight: '600', margin: '24px 0 12px' }}>Quattro sono app pubblicate negli store</div>
+          <div style={{ fontSize: 'var(--fs-sm)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '1px', fontWeight: '600', margin: '24px 0 12px' }}>{t.s4_appsLabel}</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px', marginBottom: '12px' }}>
             <AppBadge name="FiChess" />
             <AppBadge name="TeamToDo" />
             <AppBadge name="BeachArena" />
             <AppBadge name="ClubSeries" />
           </div>
-          <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', textAlign: 'center', marginBottom: '8px' }}>Pubblicate sugli store, scaricabili anche da voi.</p>
-          <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', textAlign: 'center' }}>Provateli dal telefono ora, se volete.</p>
+          <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', textAlign: 'center', marginBottom: '8px' }}>{t.s4_appsNote1}</p>
+          <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', textAlign: 'center' }}>{t.s4_appsNote2}</p>
         </div>
       ),
 
       // 1.5 - Il problema in numeri
-      () => (
+      (t) => (
         <div style={{ padding: '30px' }}>
           <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '28px' }}>⏱️</span> Rifare gli stessi errori costa
+            <span style={{ fontSize: '28px' }}>⏱️</span> {t.s5_h2}
           </h2>
           <Glow>
             <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
-              Immaginate: risolvete oggi un bug ostico, ci mettete due ore a capire la causa. Tra tre mesi lo rincontrate identico — in un altro progetto, o nello stesso. Ve lo ricordate? La risposta onesta è no. E allora ripartite da capo: altre due ore.
+              {t.s5_body}
             </p>
           </Glow>
-          <Box type="warn" title="Tenete a mente questa scena">
-            Ci torniamo più avanti — ma con un finale vero, non ipotetico.
+          <Box type="warn" title={t.s5_box_title}>
+            {t.s5_box_body}
           </Box>
         </div>
       ),
 
       // 1.6 - L'idea non è mia
-      () => (
+      (t) => (
         <div style={{ padding: '30px' }}>
           <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '28px' }}>💡</span> Un'idea rubata bene
+            <span style={{ fontSize: '28px' }}>💡</span> {t.s6_h2}
           </h2>
           <Glow>
             <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
-              Non ho inventato niente da zero. L'idea di base viene da <strong style={{ color: colors.text }}>Andrej Karpathy</strong>: co-fondatore di OpenAI, ex direttore AI di Tesla — una delle voci più seguite al mondo sull'intelligenza artificiale. Nell'<strong style={{ color: colors.text }}>aprile 2026</strong> ha reso popolare un pattern semplice: <strong style={{ color: colors.accent }}>LLM Wiki</strong> — l'AI si tiene una wiki di quello che impara lavorando, sessione dopo sessione, invece di dimenticare tutto.
+              {t.s6_body1}<strong style={{ color: colors.text }}>{t.s6_body_strong1}</strong>{t.s6_body2}<strong style={{ color: colors.text }}>{t.s6_body_strong2}</strong>{t.s6_body3}<strong style={{ color: colors.accent }}>{t.s6_body_strong3}</strong>{t.s6_body4}
             </p>
           </Glow>
-          <Box type="tip" title="Il mio contributo">
-            Io l'ho preso e ci ho aggiunto il pezzo che mancava: l'esame. Ne parliamo nell'Atto 2.
+          <Box type="tip" title={t.s6_box_title}>
+            {t.s6_box_body}
           </Box>
         </div>
       ),
     ];
 
+    Object.assign(T.it, {
+      s1_lead: "L'AI più potente del mondo ha un problema: l'amnesia.",
+      s2_h2: "Dentro la sessione, l'AI ricorda tutto",
+      s2_body1: "Avete mai usato ChatGPT o Claude per un progetto (un compito, una tesina, un hobby)? Dentro quella sessione l'AI ha memoria eccome: si chiama ",
+      s2_body_strong: "finestra di contesto",
+      s2_body2: ". Tutto quello che vi siete detti è lì dentro, e l'AI lo usa per rispondervi: ricorda il dettaglio di dieci minuti fa tanto quanto quello dell'inizio.",
+      s2_note: "(La finestra può essere più o meno grande a seconda del modello, ed esistono tecniche per gestirla — ma quando si riempie, la sessione si \"compatta\" e i dettagli iniziano a perdersi.)",
+      s2_box_title: "Il problema vero",
+      s2_box_body: "L'AI non è smemorata dentro la sessione: è la conoscenza che non sopravvive alla sessione.",
+      s3_h2: "Poi si chiude la sessione — e con lei tutto",
+      s3_body1: "Quella conoscenza vive ",
+      s3_body_strong: "solo",
+      s3_body2: " dentro quella chat. Aprite una sessione nuova e non è recuperabile — non c'è verso di \"chiedere in giro\". Non è smemoratezza: è il design del sistema.",
+      s3_svg_sessionA: 'Sessione A',
+      s3_svg_full: 'contesto pieno di conoscenza',
+      s3_svg_wall: 'muro',
+      s3_svg_sessionB: 'Sessione B',
+      s3_svg_empty: 'vuota',
+      s3_li1: 'Risolve un bug complesso oggi; domani non se lo ricorda più',
+      s3_li2: 'Impara le tue preferenze in una sessione, poi la prossima riparte da zero',
+      s3_li3: 'Trova la causa di un problema: se ricapita tra 3 mesi, la ricerca ricomincia daccapo',
+      s4_h2: 'Prof di giorno, sviluppatore nei ritagli di tempo',
+      s4_body1: 'Quello che non sapete: nei ritagli di tempo mando avanti ',
+      s4_body_strong: '15+ siti e app veri',
+      s4_body2: ', con utenti che li usano ADESSO. Non è teoria da slide — è il mio problema quotidiano. Se ogni sessione di lavoro con l\'AI riparte da zero, quella tassa la pago 15 volte.',
+      s4_appsLabel: 'Quattro sono app pubblicate negli store',
+      s4_appsNote1: 'Pubblicate sugli store, scaricabili anche da voi.',
+      s4_appsNote2: 'Provateli dal telefono ora, se volete.',
+      s5_h2: 'Rifare gli stessi errori costa',
+      s5_body: 'Immaginate: risolvete oggi un bug ostico, ci mettete due ore a capire la causa. Tra tre mesi lo rincontrate identico — in un altro progetto, o nello stesso. Ve lo ricordate? La risposta onesta è no. E allora ripartite da capo: altre due ore.',
+      s5_box_title: 'Tenete a mente questa scena',
+      s5_box_body: 'Ci torniamo più avanti — ma con un finale vero, non ipotetico.',
+      s6_h2: "Un'idea rubata bene",
+      s6_body1: 'Non ho inventato niente da zero. L\'idea di base viene da ',
+      s6_body_strong1: 'Andrej Karpathy',
+      s6_body2: ': co-fondatore di OpenAI, ex direttore AI di Tesla — una delle voci più seguite al mondo sull\'intelligenza artificiale. Nell\'',
+      s6_body_strong2: 'aprile 2026',
+      s6_body3: ' ha reso popolare un pattern semplice: ',
+      s6_body_strong3: 'LLM Wiki',
+      s6_body4: " — l'AI si tiene una wiki di quello che impara lavorando, sessione dopo sessione, invece di dimenticare tutto.",
+      s6_box_title: 'Il mio contributo',
+      s6_box_body: "Io l'ho preso e ci ho aggiunto il pezzo che mancava: l'esame. Ne parliamo nell'Atto 2.",
+    });
+
+    Object.assign(T.en, {
+      s1_lead: "The world's most capable AI has a problem: amnesia.",
+      s2_h2: 'Inside the session, the AI remembers everything',
+      s2_body1: 'Have you ever used ChatGPT or Claude for a project (an assignment, a thesis, a hobby)? Inside that session the AI has plenty of memory: it is called the ',
+      s2_body_strong: 'context window',
+      s2_body2: '. Everything you have said to each other is in there, and the AI uses it to answer you: it remembers a detail from ten minutes ago as well as one from the start.',
+      s2_note: '(The window is bigger or smaller depending on the model, and there are techniques to manage it, but when it fills up the session gets "compacted" and details start to fade.)',
+      s2_box_title: 'The real problem',
+      s2_box_body: "The AI doesn't forget inside a session. What doesn't survive is the knowledge, once the session ends.",
+      s3_h2: 'Then the session closes, and everything closes with it',
+      s3_body1: 'That knowledge lives ',
+      s3_body_strong: 'only',
+      s3_body2: ' inside that chat. Open a new session and none of it is recoverable, there is no way to "ask around". This is not forgetfulness: it is how the system is designed.',
+      s3_svg_sessionA: 'Session A',
+      s3_svg_full: 'context full of knowledge',
+      s3_svg_wall: 'wall',
+      s3_svg_sessionB: 'Session B',
+      s3_svg_empty: 'empty',
+      s3_li1: 'It solves a hard bug today; tomorrow it does not remember it anymore',
+      s3_li2: 'It learns your preferences in one session, then the next one starts from zero',
+      s3_li3: 'It finds the root cause of a problem: if it happens again in 3 months, the search starts over',
+      s4_h2: 'A teacher by day, a developer in the spare hours',
+      s4_body1: "What you don't know: in my spare time I run ",
+      s4_body_strong: '15+ real sites and apps',
+      s4_body2: ', with users using them RIGHT NOW. This is not slide theory, it is my daily problem. If every working session with the AI starts from zero, I pay that tax 15 times.',
+      s4_appsLabel: 'Four of them are published on the app stores',
+      s4_appsNote1: 'Published on the stores, downloadable by you too.',
+      s4_appsNote2: 'Try them from your phone now, if you like.',
+      s5_h2: 'Redoing the same mistakes costs',
+      s5_body: 'Picture this: today you solve a tricky bug, and it takes two hours to find the cause. In three months you run into it again, identical, in another project, or the same one. Do you remember it? Honestly, no. So you start over: another two hours.',
+      s5_box_title: 'Keep this scene in mind',
+      s5_box_body: "We come back to it later, but with a real ending, not a hypothetical one.",
+      s6_h2: 'A well-borrowed idea',
+      s6_body1: "I didn't invent any of this from scratch. The base idea comes from ",
+      s6_body_strong1: 'Andrej Karpathy',
+      s6_body2: ': co-founder of OpenAI, former AI director at Tesla, one of the most followed voices in the world on artificial intelligence. In ',
+      s6_body_strong2: 'April 2026',
+      s6_body3: ' he popularized a simple pattern: ',
+      s6_body_strong3: 'LLM Wiki',
+      s6_body4: ", where the AI keeps a wiki of what it learns while working, session after session, instead of forgetting everything.",
+      s6_box_title: 'My contribution',
+      s6_box_body: 'I took it and added the missing piece: the exam. We cover it in Act 2.',
+    });
+
     function App() {
       const [current, setCurrent] = useState(0);
+      const [lang, setLang] = useState(getLang());
       const total = slides.length;
+      const t = T[lang];
 
       const next = () => setCurrent(c => Math.min(c + 1, total - 1));
       const prev = () => setCurrent(c => Math.max(c - 1, 0));
+      const switchLang = (l) => {
+        localStorage.setItem('kbLang', l);
+        setLang(l);
+        const url = new URL(window.location.href);
+        if (l === 'en') url.searchParams.set('lang', 'en'); else url.searchParams.delete('lang');
+        window.history.replaceState({}, '', url);
+      };
+      const withLang = (href) => lang === 'en' ? href + '?lang=en' : href;
+
+      useEffect(() => {
+        document.documentElement.lang = lang;
+        document.title = t.pageTitle;
+      }, [lang]);
 
       useEffect(() => {
         const handler = e => {
           if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
           if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
-          if (e.key === 'Escape') window.location.href = 'index.html';
+          if (e.key === 'Escape') window.location.href = withLang('index.html');
           if (e.key >= '1' && e.key <= '9') { const idx = parseInt(e.key) - 1; if (idx < total) setCurrent(idx); }
         };
         window.addEventListener('keydown', handler);
         return () => window.removeEventListener('keydown', handler);
-      }, []);
+      }, [lang]);
 
       return (
         <div style={{ minHeight: '100vh', background: colors.bg, position: 'relative' }}>
           <div className="bg-texture"></div>
           <div className="top-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '54px', background: colors.bgCard + 'e0', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px', zIndex: 100 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <a href="index.html" style={{ color: colors.textMuted, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← Indice</a>
+              <a href={withLang('index.html')} style={{ color: colors.textMuted, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← {t.navIndex}</a>
               <span style={{ color: colors.border }}>|</span>
-              <span style={{ color: colors.accent, fontWeight: '600', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)' }}>{ACT_LABEL}</span>
-              <span style={{ color: colors.textDim, fontSize: 'var(--fs-sm)' }}>{ACT_TITLE}</span>
+              <span style={{ color: colors.accent, fontWeight: '600', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)' }}>{t.actLabel}</span>
+              <span style={{ color: colors.textDim, fontSize: 'var(--fs-sm)' }}>{t.actTitle}</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <span style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', fontFamily: "'IBM Plex Mono', monospace" }}>{current + 1} / {total}</span>
               <div style={{ width: '100px', height: '6px', background: colors.bgLight, borderRadius: '3px', overflow: 'hidden' }}>
                 <div style={{ height: '100%', width: `${((current + 1) / total) * 100}%`, background: colors.accent, borderRadius: '3px', transition: 'width 0.3s' }} />
               </div>
+              <div className="lang-toggle">
+                <button className={lang === 'it' ? 'active' : ''} onClick={() => switchLang('it')}>IT</button>
+                <button className={lang === 'en' ? 'active' : ''} onClick={() => switchLang('en')}>EN</button>
+              </div>
             </div>
           </div>
           <div style={{ position: 'relative', zIndex: 1, paddingTop: '54px', paddingBottom: '76px', minHeight: 'calc(100vh - 130px)' }}>
             <div className="slide-content" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
-              {slides[current]()}
+              {slides[current](t)}
             </div>
           </div>
           <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, minHeight: '64px', background: colors.bgCard + 'e0', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', zIndex: 100, flexWrap: 'wrap', padding: '8px 20px' }}>
-            <button onClick={prev} disabled={current === 0} style={{ padding: '10px 24px', minHeight: '44px', background: current === 0 ? colors.bgLight : colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '6px', color: current === 0 ? colors.textMuted : colors.text, cursor: current === 0 ? 'not-allowed' : 'pointer', fontSize: 'var(--fs-sm)' }}>← Indietro</button>
-            <button onClick={next} disabled={current === total - 1} style={{ padding: '10px 24px', minHeight: '44px', background: current === total - 1 ? colors.bgLight : `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, border: 'none', borderRadius: '6px', color: current === total - 1 ? colors.textMuted : colors.bg, cursor: current === total - 1 ? 'not-allowed' : 'pointer', fontSize: 'var(--fs-sm)', fontWeight: '600' }}>Avanti →</button>
-            {current === total - 1 && NEXT_ACT && (
-              <a href={NEXT_ACT.href} style={{ padding: '10px 24px', minHeight: '44px', display: 'inline-flex', alignItems: 'center', background: `linear-gradient(135deg, ${colors.success}, ${colors.success}cc)`, border: 'none', borderRadius: '6px', color: colors.bg, textDecoration: 'none', fontSize: 'var(--fs-sm)', fontWeight: '600' }}>{NEXT_ACT.label} →</a>
+            <button onClick={prev} disabled={current === 0} style={{ padding: '10px 24px', minHeight: '44px', background: current === 0 ? colors.bgLight : colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '6px', color: current === 0 ? colors.textMuted : colors.text, cursor: current === 0 ? 'not-allowed' : 'pointer', fontSize: 'var(--fs-sm)' }}>← {t.navBack}</button>
+            <button onClick={next} disabled={current === total - 1} style={{ padding: '10px 24px', minHeight: '44px', background: current === total - 1 ? colors.bgLight : `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, border: 'none', borderRadius: '6px', color: current === total - 1 ? colors.textMuted : colors.bg, cursor: current === total - 1 ? 'not-allowed' : 'pointer', fontSize: 'var(--fs-sm)', fontWeight: '600' }}>{t.navNext} →</button>
+            {current === total - 1 && NEXT_ACT_HREF && (
+              <a href={withLang(NEXT_ACT_HREF)} style={{ padding: '10px 24px', minHeight: '44px', display: 'inline-flex', alignItems: 'center', background: `linear-gradient(135deg, ${colors.success}, ${colors.success}cc)`, border: 'none', borderRadius: '6px', color: colors.bg, textDecoration: 'none', fontSize: 'var(--fs-sm)', fontWeight: '600' }}>{t.nextActLabel} →</a>
             )}
           </div>
         </div>
