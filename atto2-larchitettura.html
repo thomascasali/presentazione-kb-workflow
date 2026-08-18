@@ -138,7 +138,7 @@
 
       return (
         <div style={{ background: colors.bgCard, borderRadius: '10px', padding: '20px', border: `1px solid ${colors.border}` }}>
-          <h3 style={{ color: colors.accent, marginBottom: '12px' }}>🧭 Simulatore: il viaggio di un fatto</h3>
+          <h3 style={{ color: colors.accent, marginBottom: '12px' }}>🧭 Simulatore: il percorso di un fatto</h3>
           <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>Provate voi: un fatto passa alla KB solo se supera il controllo.</p>
           <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', marginBottom: '16px' }}>
             <label style={{ display: 'flex', alignItems: 'center', gap: '10px', color: colors.text, fontSize: 'var(--fs-sm)', cursor: 'pointer', minHeight: '44px' }}>
@@ -182,7 +182,7 @@
             )}
           </svg>
           <div style={{ display: 'flex', gap: '12px', marginTop: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
-            <button onClick={travel} disabled={running} style={{ padding: '12px 20px', minHeight: '44px', background: running ? colors.bgLight : colors.accent, border: 'none', borderRadius: '6px', color: running ? colors.textMuted : colors.bg, cursor: running ? 'not-allowed' : 'pointer', fontSize: 'var(--fs-sm)', fontWeight: '600' }}>▶ Fai viaggiare questo fatto</button>
+            <button onClick={travel} disabled={running} style={{ padding: '12px 20px', minHeight: '44px', background: running ? colors.bgLight : colors.accent, border: 'none', borderRadius: '6px', color: running ? colors.textMuted : colors.bg, cursor: running ? 'not-allowed' : 'pointer', fontSize: 'var(--fs-sm)', fontWeight: '600' }}>▶ Manda avanti questo fatto</button>
             {dot && dot.blocked && <span style={{ color: colors.danger, fontWeight: '600', fontSize: 'var(--fs-sm)' }}>⛔ Bocciato all'esame: mancano i requisiti</span>}
             {dot && dot.promoted && <span style={{ color: colors.success, fontWeight: '600', fontSize: 'var(--fs-sm)' }}>✓ Promosso alla KB stabile</span>}
           </div>
@@ -335,7 +335,7 @@
       () => (
         <div style={{ padding: '30px' }}>
           <h2 style={{ color: colors.accent, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '28px' }}>🧭</span> Il viaggio di un fatto
+            <span style={{ fontSize: '28px' }}>🧭</span> Il percorso di un fatto
           </h2>
           <FactJourneySimulator />
         </div>

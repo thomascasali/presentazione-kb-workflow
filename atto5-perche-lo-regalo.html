@@ -58,7 +58,7 @@
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    const { useState, useEffect, useMemo } = React;
+    const { useState, useEffect } = React;
 
     const colors = {
       bg: '#15120f', bgCard: '#1e1a15', bgLight: '#29231d',
@@ -101,27 +101,6 @@
         <div style={{ color: colors.textDim, fontSize: 'var(--fs-body)', lineHeight: 'var(--lh-body)' }}>{children}</div>
       </div>
     );
-
-    // Placeholder QR — pattern a scacchiera stilizzato, NON un QR reale/funzionante
-    const QRPlaceholder = () => {
-      const cells = useMemo(() => {
-        let seed = 42;
-        const rand = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
-        const grid = [];
-        for (let y = 0; y < 12; y++) {
-          for (let x = 0; x < 12; x++) {
-            const isFinder = (x < 3 && y < 3) || (x > 8 && y < 3) || (x < 3 && y > 8);
-            grid.push({ x, y, on: isFinder ? (x === 0 || x === 2 || y === 0 || y === 2 || (x >= 9 && (x === 9 || x === 11)) || (x < 3 && y > 8 && (y === 9 || y === 11)) || (x === 1 && y === 1) || (x === 10 && y === 1) || (x === 1 && y === 10)) : rand() > 0.5 });
-          }
-        }
-        return grid;
-      }, []);
-      return (
-        <svg viewBox="0 0 120 120" style={{ width: '140px', height: '140px', background: colors.text, borderRadius: '8px' }}>
-          {cells.map((c, i) => c.on && <rect key={i} x={c.x * 10} y={c.y * 10} width="10" height="10" fill={colors.bg} />)}
-        </svg>
-      );
-    };
 
     const slides = [
       // 5.1 - Titolo atto
@@ -178,7 +157,7 @@
           </h2>
           <Glow>
             <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
-              Il repo è gratuito e si installa in circa 5 minuti su qualsiasi macchina con Claude Code. La documentazione è bilingue: l'inglese è la porta d'ingresso per il mondo, l'italiano resta la lingua nativa del progetto — costruito anche per voi. Non serve essere sviluppatori esperti: bastano un terminale e la voglia di provare.
+              Il repo è gratuito e si installa in circa 5 minuti su qualsiasi macchina con Claude Code. La documentazione è bilingue: l'inglese serve a farsi trovare fuori dall'Italia, l'italiano resta la lingua nativa del progetto — costruito anche per voi. Non serve essere sviluppatori esperti: bastano un terminale e la voglia di provare.
             </p>
           </Glow>
           <div style={{ display: 'grid', gap: '12px', marginTop: '20px' }}>
@@ -235,8 +214,8 @@
           </h2>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', justifyContent: 'center', alignItems: 'center', marginBottom: '30px' }}>
             <div>
-              <QRPlaceholder />
-              <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '10px' }}>QR code — da generare quando il repo è pubblico</div>
+              <img src="assets/qr-repo.png" alt="QR code del repository claude-kb-workflow" style={{ width: 180, height: 180, borderRadius: 12, background: '#fff', padding: 8 }} />
+              <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '10px' }}>Inquadra per aprire il repo</div>
             </div>
             <a href={REPO_URL} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: '12px', background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '12px', padding: '22px 30px', textDecoration: 'none' }}>
               <span style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.text, fontSize: 'var(--fs-sm)' }}>github.com/thomascasali/claude-kb-workflow</span>

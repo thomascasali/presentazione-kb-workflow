@@ -249,7 +249,7 @@
           </h2>
           <Glow>
             <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
-              Quella wiki che ha reso possibile il recupero in un'ora non è un elenco: è una rete. Questa è la mappa reale, generata da Obsidian sulla mia wiki di lavoro.
+              Questa è la mappa generata da Obsidian sulla mia wiki di lavoro.
             </p>
           </Glow>
           <div className="wiki-grid" style={{ display: 'grid', gridTemplateColumns: '1.15fr 1fr', gap: '24px', alignItems: 'center', margin: '18px 0' }}>
@@ -260,7 +260,7 @@
               <li>Ogni puntino è una pagina di conoscenza: un progetto, un concetto, una lezione, una decisione</li>
               <li>La dimensione del puntino dice quanti collegamenti ha</li>
               <li>I grappoli sono i progetti, con le loro lezioni intorno</li>
-              <li>Il grande hub al centro è l'indice e i concetti trasversali — es. il deploy — che collegano tutto</li>
+              <li>Il grande hub al centro è l'indice e i concetti trasversali (il deploy, per dire) che collegano tutto</li>
             </ul>
           </div>
           <Box type="tip">
@@ -290,6 +290,7 @@
             <div><span style={{ color: colors.warn }}>c04e88b</span> <span style={{ color: colors.textDim }}>agents: frontmatter su 12 subagent</span></div>
             <div><span style={{ color: colors.warn }}>158de2a</span> <span style={{ color: colors.textDim }}>wiki: aggiunta lezione — health-check dopo ogni deploy</span></div>
           </div>
+          <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', marginTop: '8px', textAlign: 'right' }}>(esempio ricostruito)</div>
         </div>
       ),
 
@@ -302,14 +303,14 @@
           </h2>
           <Glow>
             <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
-              Il primo vero collaudo del sistema di orchestrazione è arrivato con il rilascio della versione v0.2 del toolkit. Il direttore che pianifica e delega — il lead, cioè Claude stesso — aveva scritto un documento che spiegava come funziona il sistema multi-agente. Dentro c'era una frase sbagliata, presentata con sicurezza come se fosse un limite tecnico del sistema.
+              Il primo vero collaudo del sistema di orchestrazione è arrivato con il rilascio della versione v0.2 del toolkit. Il direttore che pianifica e delega (il lead, cioè Claude stesso) aveva scritto un documento che spiegava come funziona il sistema multi-agente. Dentro c'era una frase sbagliata, presentata con sicurezza come se fosse un limite tecnico del sistema.
             </p>
           </Glow>
           <Box type="danger">
             «Un subagent non può delegare ad altri subagent» — scritto come un limite tecnico. Non lo era.
           </Box>
           <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>
-            A smentirla è stato il controllore (reviewer) — che è esso stesso un subagent — nel modo più elegante possibile: ha fatto notare di avere lui stesso, tra i propri strumenti, quello di delega. <em>"Falso: io posso delegare. Eccone la prova: guardate i miei strumenti."</em>
+            A smentirla è stato il controllore (reviewer), che è esso stesso un subagent, nel modo più elegante possibile: ha fatto notare di avere lui stesso, tra i propri strumenti, quello di delega. <em>"Falso: io posso delegare. Eccone la prova: guardate i miei strumenti."</em>
           </p>
           <Box type="tip">
             La regola è stata riscritta: non un limite tecnico, ma una scelta di progetto — tenere la delega piatta evita di moltiplicare i costi e di far perdere il controllo al direttore. Corretta in tutti i punti dove compariva, e la correzione è documentata pubblicamente.
@@ -332,7 +333,7 @@
           <div className="stat-row" style={{ display: 'flex', gap: '18px', justifyContent: 'center', margin: '26px 0', flexWrap: 'wrap' }}>
             <StatBlock value="26" label="Errori trovati" color={colors.accent} />
             <StatBlock value="4" label="Bloccanti" color={colors.warn} />
-            <StatBlock value="1" label="Era mio" color={colors.danger} />
+            <StatBlock value="1" label="Scritto dal lead" color={colors.danger} />
           </div>
           <ul style={{ color: colors.textDim, lineHeight: '1.9', paddingLeft: '22px', fontSize: 'var(--fs-body)' }}>
             <li>Path personali residui nei file</li>
@@ -341,7 +342,7 @@
             <li>La descrizione di un agente che prometteva competenze (PostgreSQL/Firestore) mai implementate nel corpo del file</li>
           </ul>
           <Box type="success">
-            Tutti corretti prima di pubblicare. Il controllo (gate) non è burocrazia — ha impedito 4 figuracce pubbliche.
+            Tutti corretti prima di pubblicare: il controllo del reviewer ha impedito 4 figuracce pubbliche.
           </Box>
         </div>
       ),
