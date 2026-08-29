@@ -214,7 +214,7 @@
       ),
 
       // 5.6 - Chiusura
-      (t) => (
+      (t, lang) => (
         <div style={{ padding: '30px', textAlign: 'center' }}>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
             <span style={{ fontSize: '28px' }}>🎤</span> {t.s6_h2}
@@ -236,6 +236,9 @@
           </Box>
           <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '20px' }}>
             {t.s6_footer}
+          </p>
+          <p style={{ marginTop: '18px' }}>
+            <a href={lang === 'en' ? 'appendice-sotto-il-cofano.html?lang=en' : 'appendice-sotto-il-cofano.html'} style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', textDecoration: 'none', borderBottom: `1px solid ${colors.border}` }}>{t.s6_appendix_link}</a>
           </p>
         </div>
       ),
@@ -288,6 +291,7 @@
         s6_badge: 'Pubblico dal 18/08/2026',
         s6_closing: "L'AI non vi ruberà il lavoro. Ma qualcuno che sa farle ricordare le cose... forse sì. Tanto vale essere voi.",
         s6_footer: 'Le domande migliori che mi farete oggi diventeranno issue sul repo — con il vostro nome.',
+        s6_appendix_link: "Vuoi vedere com'è fatto? → Appendice",
       },
       en: {
         pageTitle: 'Act 5 - Why I give it away',
@@ -335,6 +339,7 @@
         s6_badge: 'Public from 18 Aug 2026',
         s6_closing: "AI will not take your job. But someone who knows how to make it remember things... maybe. Might as well be you.",
         s6_footer: "The best questions you ask me today will become issues on the repo, with your name on them.",
+        s6_appendix_link: 'Want to see the actual files? → Appendix',
       }
     };
 
@@ -394,7 +399,7 @@
           </div>
           <div style={{ paddingTop: '54px', paddingBottom: '76px', minHeight: 'calc(100vh - 130px)', position: 'relative', zIndex: 1 }}>
             <div className="slide-content" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
-              {slides[current](t)}
+              {slides[current](t, lang)}
             </div>
           </div>
           <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, minHeight: '64px', background: colors.bgCard + 'e0', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', zIndex: 100, flexWrap: 'wrap', padding: '8px 20px' }}>

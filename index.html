@@ -265,6 +265,7 @@
     .module-card[data-atto="3"] { --module-color: #d1603d; --module-color-glow: rgba(209, 96, 61, 0.18); }
     .module-card[data-atto="4"] { --module-color: #4e93b8; --module-color-glow: rgba(78, 147, 184, 0.18); }
     .module-card[data-atto="5"] { --module-color: #a879c4; --module-color-glow: rgba(168, 121, 196, 0.18); }
+    .module-card[data-atto="appendice"] { --module-color: #6fae5c; --module-color-glow: rgba(111, 174, 92, 0.18); }
     footer {
       text-align: center;
       padding: 40px 0;
@@ -307,7 +308,7 @@
       <p class="subtitle" id="pageSubtitle">Come ho costruito un sistema di conoscenza per Claude Code: cinque atti, tre storie vere, e perché tutto questo vi riguarda anche se non scrivete codice per lavoro.</p>
       <div class="stats">
         <div class="stat"><div class="stat-value">5</div><div class="stat-label" id="statLabel1">Atti</div></div>
-        <div class="stat"><div class="stat-value">35</div><div class="stat-label" id="statLabel2">Slide</div></div>
+        <div class="stat"><div class="stat-value">42</div><div class="stat-label" id="statLabel2">Slide</div></div>
         <div class="stat"><div class="stat-value">3</div><div class="stat-label" id="statLabel3">Simulatori</div></div>
       </div>
     </header>
@@ -320,7 +321,7 @@
             <h2 class="module-title" id="card1title">Il problema</h2>
           </div>
         </div>
-        <p class="module-description" id="card1desc">L'AI più potente del mondo ricomincia da zero ogni volta. Cosa significa lavorarci nei ritagli di tempo su 15+ progetti reali, e da dove viene l'idea per risolverlo.</p>
+        <p class="module-description" id="card1desc">L'AI più potente del mondo non porta ciò che impara da un progetto all'altro. Cosa significa lavorarci nei ritagli di tempo su 15+ progetti reali, e da dove viene l'idea per risolverlo.</p>
         <div class="module-topics" id="card1tags">
           <span class="topic-tag">Amnesia dell'AI</span>
           <span class="topic-tag">Prodotti reali</span>
@@ -407,6 +408,25 @@
           <div class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
         </div>
       </a>
+      <a href="appendice-sotto-il-cofano.html" class="module-card" data-atto="appendice" id="card6">
+        <div class="module-header">
+          <div class="module-icon">🔧</div>
+          <div class="module-meta">
+            <div class="module-number" id="card6number">Appendice</div>
+            <h2 class="module-title" id="card6title">Sotto il cofano</h2>
+          </div>
+        </div>
+        <p class="module-description" id="card6desc">Estratti reali dal repo pubblico: l'orchestratore, un agente, una skill, una pagina wiki, la KB stabile. File per file, verificabili da chi clona.</p>
+        <div class="module-topics" id="card6tags">
+          <span class="topic-tag">File reali</span>
+          <span class="topic-tag">Per chi vuole vedere il codice</span>
+          <span class="topic-tag">Verificabile</span>
+        </div>
+        <div class="module-footer">
+          <div class="module-slides"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg><span id="card6slides">7 slide</span></div>
+          <div class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </a>
     </div>
     <footer>
       <div class="footer-brand" id="footerBrand">Presentazione realizzata con Claude Code — nessun bug reso invisibile</div>
@@ -414,7 +434,7 @@
     </footer>
   </div>
   <script>
-    const CARD_IDS = ['card1', 'card2', 'card3', 'card4', 'card5'];
+    const CARD_IDS = ['card1', 'card2', 'card3', 'card4', 'card5', 'card6'];
 
     const T = {
       it: {
@@ -425,11 +445,12 @@
         statActs: 'Atti', statSlides: 'Slide', statSims: 'Simulatori',
         langIt: 'Italiano', langEn: 'English',
         cards: [
-          { number: 'Atto 1', title: 'Il problema', desc: "L'AI più potente del mondo ricomincia da zero ogni volta. Cosa significa lavorarci nei ritagli di tempo su 15+ progetti reali, e da dove viene l'idea per risolverlo.", tags: ["Amnesia dell'AI", 'Prodotti reali', 'Karpathy'], slides: '6 slide' },
+          { number: 'Atto 1', title: 'Il problema', desc: "L'AI più potente del mondo non porta ciò che impara da un progetto all'altro. Cosa significa lavorarci nei ritagli di tempo su 15+ progetti reali, e da dove viene l'idea per risolverlo.", tags: ["Amnesia dell'AI", 'Prodotti reali', 'Karpathy'], slides: '6 slide' },
           { number: 'Atto 2', title: "L'architettura", desc: "Tre livelli, un esame che decide cosa merita di restare. Il percorso di un fatto dalla sessione alla KB stabile, e l'orchestra di agenti al lavoro.", tags: ['Esame di promozione', 'Orchestra', '2 simulatori'], slides: '6 slide' },
           { number: 'Atto 3', title: 'Le tre storie', desc: "Tre volte in cui il sistema ha fallito, ed è servito a qualcosa: 10 agenti fantasma, 3 mesi di lavoro recuperati in un'ora, la memoria vista dall'alto, e 26 errori trovati dal reviewer, uno scritto dall'orchestratore stesso.", tags: ['Spot the bug', 'La wiki come rete', '26 errori'], slides: '10 slide' },
           { number: 'Atto 4', title: 'La macchina completa', desc: "Il workflow end-to-end messo insieme: orchestrazione parallela di più agenti, wiki e KB anche per chi lavora (non solo per chi legge), le skill, e cosa trovate nel repo.", tags: ['Orchestrazione', 'Skill', 'Wiki + KB'], slides: '7 slide' },
           { number: 'Atto 5', title: 'Perché lo regalo', desc: "Pubblico la mappa, tengo il territorio. Le 3 lezioni trasferibili, come provare il toolkit gratis, e come le vostre domande di oggi diventano issue.", tags: ['Repo pubblico', 'Lezioni trasferibili', 'Provalo tu'], slides: '6 slide' },
+          { number: 'Appendice', title: 'Sotto il cofano', desc: "Estratti reali dal repo pubblico: l'orchestratore, un agente, una skill, una pagina wiki, la KB stabile. File per file, verificabili da chi clona.", tags: ['File reali', 'Per chi vuole vedere il codice', 'Verificabile'], slides: '7 slide' },
         ],
         footerBrand: 'Presentazione realizzata con Claude Code — nessun bug reso invisibile',
         footerSource: 'codice sorgente su GitHub',
@@ -443,11 +464,12 @@
         statActs: 'Acts', statSlides: 'Slides', statSims: 'Simulators',
         langIt: 'Italiano', langEn: 'English',
         cards: [
-          { number: 'Act 1', title: 'The problem', desc: "The most capable AI in the world starts from zero every time. What that means when you run 15+ real projects in your spare time, and where the idea to fix it comes from.", tags: ['AI amnesia', 'Real products', 'Karpathy'], slides: '6 slides' },
+          { number: 'Act 1', title: 'The problem', desc: "The most capable AI in the world doesn't carry what it learns from one project to the next. What that means when you run 15+ real projects in your spare time, and where the idea to fix it comes from.", tags: ['AI amnesia', 'Real products', 'Karpathy'], slides: '6 slides' },
           { number: 'Act 2', title: 'The architecture', desc: "Three layers, and a promotion exam that decides what's worth keeping. How a fact travels from a session to the stable KB, and the orchestra of agents at work.", tags: ['Promotion exam', 'Orchestra', '2 simulators'], slides: '6 slides' },
           { number: 'Act 3', title: 'The three stories', desc: "Three times the system failed, and it was worth something: 10 ghost agents, 3 months of work recovered in an hour, the memory seen from above, and 26 findings from the reviewer, one written by the lead itself.", tags: ['Spot the bug', 'The wiki as a network', '26 findings'], slides: '10 slides' },
           { number: 'Act 4', title: 'The full machine', desc: "The end-to-end workflow put together: parallel orchestration across agents, wiki and KB for whoever does the work too (not just whoever reads it later), the skills, and what's in the repo.", tags: ['Orchestration', 'Skills', 'Wiki + KB'], slides: '7 slides' },
           { number: 'Act 5', title: 'Why I give it away', desc: "I publish the map, I keep the territory. The 3 lessons that carry over, how to try the toolkit for free, and how today's questions turn into issues.", tags: ['Public repo', 'Lessons that carry over', 'Try it yourself'], slides: '6 slides' },
+          { number: 'Appendix', title: 'Under the hood', desc: "Real excerpts from the public repo: the orchestrator, an agent, a skill, a wiki page, the stable KB. File by file, checkable by anyone who clones it.", tags: ['Real files', 'For the code-curious', 'Checkable'], slides: '7 slides' },
         ],
         footerBrand: 'Built with Claude Code, no bug swept under the rug',
         footerSource: 'source code on GitHub',

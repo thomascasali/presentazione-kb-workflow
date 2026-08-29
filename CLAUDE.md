@@ -9,9 +9,10 @@
 - NESSUN bundler, NESSUN npm, NESSUN framework aggiuntivo. Solo file HTML standalone, apribili anche da `file://`.
 
 ## Architettura
-- `index.html`: dashboard con le 5 card degli atti (HTML/CSS puro, nessun React)
+- `index.html`: dashboard con le 5 card degli atti più la card dell'appendice (HTML/CSS puro, nessun React)
 - `atto1-il-problema.html`, `atto2-larchitettura.html`, `atto3-le-storie.html`, `atto4-la-macchina.html`, `atto5-perche-lo-regalo.html`: un file HTML per atto
-- Ogni file atto è completamente standalone (include React, Babel, CSS inline)
+- `appendice-sotto-il-cofano.html`: appendice con estratti reali di file dal repo pubblico `claude-kb-workflow` (orchestratore, agente, skill, pagina wiki, KB stabile), codice/YAML non tradotto
+- Ogni file atto (e l'appendice) è completamente standalone (include React, Babel, CSS inline)
 - I componenti React sono definiti dentro un tag `<script type="text/babel">` nel file HTML
 
 ## Design System
@@ -37,6 +38,7 @@ const colors = {
 | 3 | Le tre storie | `#d1603d` (terracotta) | `#e88f6c` | 📖 |
 | 4 | La macchina completa | `#4e93b8` (blu-info) | `#7ab8d6` | ⚙️ |
 | 5 | Perché lo regalo | `#a879c4` (viola) | `#c9a3de` | 🎁 |
+| Appendice | Sotto il cofano | `#6fae5c` (verde/success) | `#98c98a` | 🔧 |
 
 ## Componenti Riutilizzabili (da definire in ogni file atto)
 - `Box({ type, title, children })`: callout `info` / `warn` / `danger` / `tip` / `success`
@@ -52,7 +54,7 @@ Ogni atto segue questa struttura:
 3. Slide simulatore/i interattivo/i (Atto 2 ne ha 2, Atto 3 ha il componente "spot the bug")
 4. Slide di chiusura atto con collegamento all'atto successivo
 
-Conteggio slide: Atto 1 = 6, Atto 2 = 6, Atto 3 = 10, Atto 4 = 7, Atto 5 = 6 → **35 slide totali**, 3 simulatori interattivi.
+Conteggio slide: Atto 1 = 6, Atto 2 = 6, Atto 3 = 10, Atto 4 = 7, Atto 5 = 6, Appendice = 7 → **42 slide totali**, 3 simulatori interattivi.
 
 ## Simulatori interattivi
 

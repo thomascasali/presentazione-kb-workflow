@@ -4,7 +4,7 @@ Presentation available in English: https://thomascasali.github.io/presentazione-
 
 ▶️ **Vedi la presentazione**: https://thomascasali.github.io/presentazione-kb-workflow/
 
-Presentazione interattiva su come funziona `claude-kb-workflow`, rivolta a chi si avvicina alla programmazione: un sistema di memoria a tre livelli (sessioni → wiki → KB stabile) per far ricordare all'AI quello che impara lavorando, invece di ripartire da zero ogni volta.
+Presentazione interattiva su come funziona `claude-kb-workflow`, rivolta a chi si avvicina alla programmazione: un sistema di memoria a tre livelli (sessioni → wiki → KB stabile) per far arrivare all'AI, su ogni progetto, quello che ha imparato lavorando sugli altri.
 
 Ora è bilingue italiano/inglese: un selettore di lingua in apertura sull'indice propaga la scelta a tutti e cinque gli atti (salvata in `localStorage`, sovrascrivibile con `?lang=en` o `?lang=it` in URL).
 
@@ -17,10 +17,11 @@ Ora è bilingue italiano/inglese: un selettore di lingua in apertura sull'indice
 | 3 | Le tre storie | 10 agenti fantasma, il bug dei 4 caratteri, il recupero in un'ora, la memoria vista dall'alto, i 26 errori | 10 |
 | 4 | La macchina completa | Il workflow end-to-end, l'orchestrazione parallela, wiki e KB anche per gli agenti, le skill in pratica, cosa c'è nel repo | 7 |
 | 5 | Perché lo regalo | Mappa vs territorio, le 3 lezioni trasferibili, come provarlo | 6 |
+| Appendice | Sotto il cofano | Estratti reali dal repo pubblico: orchestratore, agente, skill, pagina wiki, KB stabile | 7 |
 
 ## Caratteristiche
 
-- **35 slide** interattive in 5 atti
+- **42 slide** interattive in 5 atti più un'appendice
 - **3 simulatori interattivi veri** (viaggio di un fatto attraverso l'esame, orchestra in azione, spot the bug)
 - Design moderno con tema scuro, palette diversa per ogni atto
 - Navigazione da tastiera (frecce, spazio, ESC, tasti numerici 1-9)
