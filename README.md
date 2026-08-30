@@ -17,12 +17,12 @@ Ora è bilingue italiano/inglese: un selettore di lingua in apertura sull'indice
 | 3 | Le tre storie | 10 agenti fantasma, il bug dei 4 caratteri, il recupero in un'ora, la memoria vista dall'alto, i 26 errori | 10 |
 | 4 | La macchina completa | Il workflow end-to-end, l'orchestrazione parallela, wiki e KB anche per gli agenti, le skill in pratica, cosa c'è nel repo | 7 |
 | 5 | Perché lo regalo | Mappa vs territorio, le 3 lezioni trasferibili, come provarlo | 6 |
-| Appendice | Sotto il cofano | Estratti reali dal repo pubblico: bootstrap di sessione, orchestratore, agente, skill, pagina wiki, KB stabile | 8 |
+| Appendice | Sotto il cofano | Estratti reali dal repo pubblico: bootstrap di sessione, CLAUDE.md globale e di progetto, orchestratore, agente, skill, pagina wiki, KB stabile | 10 |
 | Appendice B | Una sessione vera | Simulatore a 3 scenari (Flutter, portale web, debug) con terminale e pannello attori | 3 |
 
 ## Caratteristiche
 
-- **46 slide** interattive in 5 atti più due appendici
+- **48 slide** interattive in 5 atti più due appendici
 - **4 simulatori interattivi veri** (viaggio di un fatto attraverso l'esame, orchestra in azione, spot the bug, sessione reale a 3 scenari)
 - Design moderno con tema scuro, palette diversa per ogni atto
 - Navigazione da tastiera (frecce, spazio, ESC, tasti numerici 1-9)

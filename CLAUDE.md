@@ -11,7 +11,7 @@
 ## Architettura
 - `index.html`: dashboard con le 5 card degli atti più le card delle due appendici (HTML/CSS puro, nessun React)
 - `atto1-il-problema.html`, `atto2-larchitettura.html`, `atto3-le-storie.html`, `atto4-la-macchina.html`, `atto5-perche-lo-regalo.html`: un file HTML per atto
-- `appendice-sotto-il-cofano.html`: appendice con estratti reali di file dal repo pubblico `claude-kb-workflow` (bootstrap di sessione, orchestratore, agente, skill, pagina wiki, KB stabile), codice/YAML non tradotto
+- `appendice-sotto-il-cofano.html`: appendice con estratti reali di file dal repo pubblico `claude-kb-workflow` (bootstrap di sessione, CLAUDE.md globale, CLAUDE.md di questo stesso repo, orchestratore, agente, skill, pagina wiki, KB stabile), codice/YAML non tradotto
 - `appendice-b-una-sessione-vera.html`: appendice con un simulatore a 3 scenari (Flutter, portale web, debug) che rigioca una sessione di lavoro passo-passo, terminale finto + pannello attori "Dietro le quinte"
 - Ogni file atto (e le appendici) è completamente standalone (include React, Babel, CSS inline)
 - I componenti React sono definiti dentro un tag `<script type="text/babel">` nel file HTML
@@ -56,7 +56,7 @@ Ogni atto segue questa struttura:
 3. Slide simulatore/i interattivo/i (Atto 2 ne ha 2, Atto 3 ha il componente "spot the bug")
 4. Slide di chiusura atto con collegamento all'atto successivo
 
-Conteggio slide: Atto 1 = 6, Atto 2 = 6, Atto 3 = 10, Atto 4 = 7, Atto 5 = 6, Appendice = 8, Appendice B = 3 → **46 slide totali**, 4 simulatori interattivi.
+Conteggio slide: Atto 1 = 6, Atto 2 = 6, Atto 3 = 10, Atto 4 = 7, Atto 5 = 6, Appendice = 10, Appendice B = 3 → **48 slide totali**, 4 simulatori interattivi.
 
 ## Simulatori interattivi
 

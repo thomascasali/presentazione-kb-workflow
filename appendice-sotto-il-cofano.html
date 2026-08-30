@@ -140,6 +140,12 @@
       s5link: "[[nome-pagina]]\n[[nome-pagina|Testo alias]]",
       s6tree: "claude-kb-workflow/\n├── agents/\n├── commands/\n├── docs/\n├── patterns/\n├── project-memories/\n└── skills/",
       s6checklist: "## Criteri di eleggibilità (verifica prima di procedere)\n\n- [ ] Appare in ≥ 2 progetti diversi\n- [ ] Stabile da ≥ 2 sessioni (controlla `wiki/log.md`)\n- [ ] Verificato in produzione (non solo teorico)\n- [ ] Non già presente in `$KB_PATH/patterns/patterns.md`",
+      a3_1: "## Basi di conoscenza personali\n\n- **KB stabile** (fonte curata): `~/kb/claude-knowledge-base/`\n  -> guide operative, agenti, pattern, workflow.\n- **LLM Wiki** (memoria di lavoro): `~/kb/llm-wiki/wiki/`\n  Interrogala con /kb-query; ingerisci nuove sessioni con /kb-ingest.\n\n**Prima di reimplementare qualcosa di infrastrutturale** (auth, push,\npagamenti, deploy...) controlla se esiste gia' una guida nella KB:\nquasi sempre si', con i gotcha gia' pagati.",
+      a3_2: "- **Testi store mobile / note reviewer.** Niente a-capo forzati dentro\n  una frase: ogni voce e' una riga continua, cosi' il copia/incolla\n  nel campo dello store non va ripulito a mano.",
+      a3_3: "## Flusso di orchestrazione (vale per ogni lavoro non banale)\n\nTu sei il lead: pianifica, decomponi, delega ai subagent -- non\neseguire tu il lavoro -- e sintetizza. Mostra prima il piano.\n- Ragionamento -> deep-reasoner  ·  Meccanico -> fast-worker\n- Gate obbligatorio: prima di dichiarare finito, passa da `reviewer`.\n- Eccezione: task banali in prima persona, senza cerimonia.",
+      a4_1: "## Stack Tecnologico\n- HTML5 + CSS3 (CSS Grid, Flexbox, clamp(), media queries)\n- React 18 via CDN (unpkg.com)\n- Babel standalone per transpilazione JSX\n- SVG per diagrammi e simulatori\n- Google Fonts: Fraunces, Public Sans, IBM Plex Mono\n- NESSUN bundler, NESSUN npm, NESSUN framework aggiuntivo. Solo file HTML standalone, apribili anche da `file://`.",
+      a4_2: "| Atto | Titolo | Accent | Accent-alt | Icona |\n|------|--------|--------|------------|-------|\n| 1 | Il problema | #d9a441 (oro) | #f0c169 | 🧠 |\n| 2 | L'architettura | #4fa88d (verde) | #7fcbb3 | 🏗️ |\n| Appendice | Sotto il cofano | #6fae5c (verde/success) | #98c98a | 🔧 |",
+      a4_3: "- `Box({ type, title, children })`: callout `info` / `warn` / `danger` / `tip` / `success`\n- `Glow({ children, color })`: card con bordo luminoso gradient",
     };
 
     // Frammenti citati nelle didascalie (invariati, sono codice)
@@ -157,6 +163,8 @@
       project: '<repo>/CLAUDE.md',
       agents: '~/.claude/agents/*.md',
     };
+    const PROJECT_CLAUDE_PATH = 'presentazione-kb-workflow/CLAUDE.md';
+    const SOURCE_REPO_URL = 'https://github.com/thomascasali/presentazione-kb-workflow';
 
     const BootstrapDiagram = ({ t }) => {
       const steps = [
@@ -263,7 +271,43 @@
         </div>
       ),
 
-      // A.3 - L'orchestratore
+      // A.3 - Dentro il CLAUDE.md globale
+      (t, lang) => (
+        <div style={{ padding: '30px' }}>
+          <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.sA3_eyebrow}</div>
+          <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🌍</span> {t.sA3_h2}
+          </h2>
+          <CodeBlock path={BOOT_PATHS.global} code={CODE.a3_1} />
+          {lang === 'en' && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', margin: '-8px 0 14px' }}>(the real file is in Italian; captions translate the gist)</div>}
+          <Box type="tip">{t.sA3_cap1}</Box>
+          <CodeBlock path={BOOT_PATHS.global} code={CODE.a3_2} />
+          <Box type="tip">{t.sA3_cap2}</Box>
+          <CodeBlock path={BOOT_PATHS.global} code={CODE.a3_3} />
+          <Box type="tip">{t.sA3_cap3}</Box>
+          <Box type="success">{t.sA3_closing}</Box>
+        </div>
+      ),
+
+      // A.4 - Dentro il CLAUDE.md di progetto
+      (t) => (
+        <div style={{ padding: '30px' }}>
+          <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.sA4_eyebrow}</div>
+          <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>📁</span> {t.sA4_h2}
+          </h2>
+          <CodeBlock path={PROJECT_CLAUDE_PATH} code={CODE.a4_1} />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '14px' }}>
+            <CodeBlock path={PROJECT_CLAUDE_PATH} code={CODE.a4_2} />
+            <CodeBlock path={PROJECT_CLAUDE_PATH} code={CODE.a4_3} />
+          </div>
+          <Box type="tip">{t.sA4_note_a}</Box>
+          <Box type="success">{t.sA4_note_b}</Box>
+          <Box type="info">{t.sA4_note_c} <a href={SOURCE_REPO_URL} target="_blank" rel="noopener noreferrer" style={{ color: colors.accent }}>{SOURCE_REPO_URL.replace('https://', '')}</a></Box>
+        </div>
+      ),
+
+      // A.5 - L'orchestratore
       (t) => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.s2_eyebrow}</div>
@@ -276,7 +320,7 @@
         </div>
       ),
 
-      // A.4 - Un agente vero
+      // A.6 - Un agente vero
       (t) => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.s3_eyebrow}</div>
@@ -289,7 +333,7 @@
         </div>
       ),
 
-      // A.5 - Una skill
+      // A.7 - Una skill
       (t) => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.s4_eyebrow}</div>
@@ -302,7 +346,7 @@
         </div>
       ),
 
-      // A.6 - Una pagina wiki
+      // A.8 - Una pagina wiki
       (t) => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.s5_eyebrow}</div>
@@ -321,7 +365,7 @@
         </div>
       ),
 
-      // A.7 - La KB stabile
+      // A.9 - La KB stabile
       (t) => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.s6_eyebrow}</div>
@@ -335,7 +379,7 @@
         </div>
       ),
 
-      // A.8 - Chiusura
+      // A.10 - Chiusura
       (t, lang) => (
         <div style={{ padding: '30px', textAlign: 'center' }}>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
@@ -376,6 +420,8 @@
         s1_index_title: 'Cosa vedremo',
         s1_index_items: [
           '🔌 Il bootstrap — cosa carica Claude Code prima del tuo primo messaggio',
+          '🌍 Dentro il CLAUDE.md globale — i puntatori, le regole, l\'orchestratore',
+          '📁 Dentro il CLAUDE.md di progetto — lo stesso file, ma per questo progetto',
           "🎼 L'orchestratore — non è codice, è un file di testo",
           "🤖 Un agente vero — frontmatter più prompt, niente altro",
           '🧩 Una skill — quando si attiva da sola, e quando no',
@@ -399,6 +445,17 @@
         sboot_code: "## Basi di conoscenza          <- puntatori a KB stabile e LLM Wiki (dove cercare)\n## Standard ingegneristici     <- regole valide su ogni progetto (auth, UI, store)\n## Flusso di orchestrazione    <- chi fa cosa: lead, subagent, gate del reviewer\n## Stile di comunicazione      <- quando parlare e quando lavorare in silenzio\n## Code review incrementale    <- si rivede solo il delta dall'ultimo SHA approvato",
         sboot_note1: "Il CLAUDE.md è l'unico file caricato sempre: per questo resta corto e fa da indice, con puntatori alla conoscenza invece del contenuto. Se il contenuto stesse lì dentro, ogni sessione pagherebbe il costo di leggerlo tutto.",
         sboot_note2: "È la gerarchia delle leve che ritroverete nella prossima slide: globale (il metodo), poi progetto (il contesto), poi prompt (il compito di oggi). Cambi il metodo una volta, e vale ovunque da subito.",
+        sA3_eyebrow: 'Lo stesso file, tre estratti veri',
+        sA3_h2: 'Dentro il CLAUDE.md globale',
+        sA3_cap1: 'Il file non contiene la conoscenza: dice dove sta e quando andarla a cercare. La frase sui gotcha già pagati è la stessa che, nell\'Appendice B, ferma il lead prima di scrivere una riga di codice.',
+        sA3_cap2: 'Le regole nascono da errori veri: questa viene da un pomeriggio passato a togliere a mano gli a-capo da un testo destinato allo store. Da quel momento vale su ogni progetto, per sempre.',
+        sA3_cap3: "La costituzione vista in azione nel simulatore dell'Appendice B. Nessuno la ripete nei prompt: vale perché sta scritta qui.",
+        sA3_closing: 'In queste righe convivono tre generi di contenuto: dove cercare, quali regole di qualità rispettare, chi fa cosa. Vale un solo principio, lo stesso di ogni sessione da qui in avanti: quello che scrivete in questo file conta da subito su ogni progetto.',
+        sA4_eyebrow: 'Un livello più specifico',
+        sA4_h2: 'Dentro il CLAUDE.md di progetto',
+        sA4_note_a: 'Il file globale porta il metodo: pianifica, delega, verifica prima di dichiarare finito. Questo file porta il contesto: stack tecnico, palette dei colori, nomi dei componenti da riusare.',
+        sA4_note_b: "La prova sta nella slide che state guardando in questo momento: rispetta la stessa palette e gli stessi componenti perché Claude ha letto questo file prima di scriverla.",
+        sA4_note_c: 'Il file è nel repository pubblico di questa presentazione. Apritelo e controllate voi stessi:',
         s2_eyebrow: 'Pezzo 1 di 5',
         s2_h2: "L'orchestratore",
         s2_captions: [
@@ -470,6 +527,8 @@
         s1_index_title: "What's coming up",
         s1_index_items: [
           '🔌 The bootstrap — what Claude Code loads before your first message',
+          '🌍 Inside the global CLAUDE.md — the pointers, the rules, the orchestrator',
+          '📁 Inside the project CLAUDE.md — the same file, for this project',
           "🎼 The orchestrator — not code, a text file",
           '🤖 A real agent — frontmatter plus a prompt, nothing else',
           '🧩 A skill — when it fires on its own, and when it does not',
@@ -493,6 +552,17 @@
         sboot_code: "## Basi di conoscenza          <- pointers to the stable KB and the LLM Wiki (where to look)\n## Standard ingegneristici     <- rules that hold on every project (auth, UI, store text)\n## Flusso di orchestrazione    <- who does what: lead, subagents, the reviewer gate\n## Stile di comunicazione      <- when to talk and when to work in silence\n## Code review incrementale    <- only the delta since the last approved SHA gets reviewed",
         sboot_note1: 'CLAUDE.md is the one file loaded every time, so it stays short and works as an index: pointers to the knowledge, never the knowledge itself. If the content lived there, every session would pay the cost of reading all of it.',
         sboot_note2: "It's the same hierarchy of levers in the next slide: global (the method), then project (the context), then prompt (today's task). Change the method once, and it holds everywhere from that point.",
+        sA3_eyebrow: 'The same file, three real excerpts',
+        sA3_h2: 'Inside the global CLAUDE.md',
+        sA3_cap1: 'The file does not hold the knowledge: it says where it lives and when to go look for it. The line about gotchas already paid for is the same one that, in Appendix B, stops the lead before it writes a single line of code.',
+        sA3_cap2: 'Rules come from real mistakes: this one from an afternoon spent manually stripping line breaks out of a store listing. From that afternoon on, it holds on every project, for good.',
+        sA3_cap3: "The constitution you watched run in the Appendix B simulator. Nobody repeats it in prompts: it holds because it's written here.",
+        sA3_closing: 'Three kinds of content live in these lines: where to look, which quality rules apply, who does what. One principle covers all of it, the same one that holds for every session from here on: what you write in this file counts on every project, starting immediately.',
+        sA4_eyebrow: 'One level more specific',
+        sA4_h2: 'Inside the project CLAUDE.md',
+        sA4_note_a: 'The global file carries the method: plan, delegate, verify before calling anything done. This file carries the context: the tech stack, the color palette, the component names to reuse.',
+        sA4_note_b: "The proof is the slide you're looking at right now: it matches this exact palette and these exact components because Claude read this file before writing it.",
+        sA4_note_c: "The file sits in this presentation's public repository. Open it and check for yourself:",
         s2_eyebrow: 'Piece 1 of 5',
         s2_h2: 'The orchestrator',
         s2_captions: [
