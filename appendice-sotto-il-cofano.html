@@ -151,6 +151,50 @@
       s6: ['agents/ commands/ skills/', 'patterns/', 'project-memories/', '≥ 2 progetti diversi', 'Verificato in produzione'],
     };
 
+    // ---------- Diagramma verticale: la sequenza di avvio ----------
+    const BOOT_PATHS = {
+      global: '~/.claude/CLAUDE.md',
+      project: '<repo>/CLAUDE.md',
+      agents: '~/.claude/agents/*.md',
+    };
+
+    const BootstrapDiagram = ({ t }) => {
+      const steps = [
+        { n: null, icon: '▶️', label: t.sboot_start, color: colors.textMuted },
+        { n: 1, icon: '🌍', label: t.sboot_s1_label, detail: t.sboot_s1_detail, path: BOOT_PATHS.global, color: colors.info },
+        { n: 2, icon: '📁', label: t.sboot_s2_label, detail: t.sboot_s2_detail, path: BOOT_PATHS.project, color: colors.warn },
+        { n: 3, icon: '🧠', label: t.sboot_s3_label, detail: t.sboot_s3_detail, color: colors.purple },
+        { n: 4, icon: '🧩', label: t.sboot_s4_label, detail: t.sboot_s4_detail, path: BOOT_PATHS.agents, color: colors.accent },
+        { n: 5, icon: '💬', label: t.sboot_s5_label, detail: t.sboot_s5_detail, color: colors.accentAlt },
+      ];
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', margin: '18px 0' }}>
+          {steps.map((s, i) => (
+            <div key={i}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', background: colors.bgCard, border: `1px solid ${s.color}`, borderRadius: '8px', padding: '12px 16px' }}>
+                {s.n ? (
+                  <div style={{ flexShrink: 0, width: '26px', height: '26px', borderRadius: '50%', background: s.color, color: colors.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700', fontSize: 'var(--fs-xs)' }}>{s.n}</div>
+                ) : (
+                  <div style={{ flexShrink: 0, width: '26px', height: '26px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '15px' }}>{s.icon}</div>
+                )}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                    {s.n && <span style={{ fontSize: '17px' }}>{s.icon}</span>}
+                    <span style={{ color: colors.text, fontSize: 'var(--fs-body)', fontWeight: '600' }}>{s.label}</span>
+                  </div>
+                  {s.detail && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', marginTop: '2px' }}>{s.detail}</div>}
+                  {s.path && <code style={{ display: 'inline-block', marginTop: '6px', background: colors.bgLight, color: colors.accentAlt, padding: '2px 8px', borderRadius: '4px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', border: `1px solid ${colors.border}` }}>{s.path}</code>}
+                </div>
+              </div>
+              {i < steps.length - 1 && (
+                <div style={{ textAlign: 'center', color: colors.textMuted, fontSize: '18px', lineHeight: '1', padding: '2px 0' }}>↓</div>
+              )}
+            </div>
+          ))}
+        </div>
+      );
+    };
+
     // ---------- Diagramma di chiusura: il giro completo ----------
     const ClosingDiagram = ({ t }) => {
       const nodes = [
@@ -204,7 +248,22 @@
         </div>
       ),
 
-      // A.2 - L'orchestratore
+      // A.2 - Il bootstrap
+      (t) => (
+        <div style={{ padding: '30px' }}>
+          <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.sboot_eyebrow}</div>
+          <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🔌</span> {t.sboot_h2}
+          </h2>
+          <BootstrapDiagram t={t} />
+          <Box type="warn">{t.sboot_callout}</Box>
+          <CodeBlock path="~/.claude/CLAUDE.md" code={t.sboot_code} />
+          <Box type="tip">{t.sboot_note1}</Box>
+          <Box type="success">{t.sboot_note2}</Box>
+        </div>
+      ),
+
+      // A.3 - L'orchestratore
       (t) => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.s2_eyebrow}</div>
@@ -217,7 +276,7 @@
         </div>
       ),
 
-      // A.3 - Un agente vero
+      // A.4 - Un agente vero
       (t) => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.s3_eyebrow}</div>
@@ -230,7 +289,7 @@
         </div>
       ),
 
-      // A.4 - Una skill
+      // A.5 - Una skill
       (t) => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.s4_eyebrow}</div>
@@ -243,7 +302,7 @@
         </div>
       ),
 
-      // A.5 - Una pagina wiki
+      // A.6 - Una pagina wiki
       (t) => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.s5_eyebrow}</div>
@@ -262,7 +321,7 @@
         </div>
       ),
 
-      // A.6 - La KB stabile
+      // A.7 - La KB stabile
       (t) => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.s6_eyebrow}</div>
@@ -276,7 +335,7 @@
         </div>
       ),
 
-      // A.7 - Chiusura
+      // A.8 - Chiusura
       (t) => (
         <div style={{ padding: '30px', textAlign: 'center' }}>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
@@ -313,12 +372,30 @@
         s1_note: 'Ogni estratto in questa appendice viene dal repository pubblico claude-kb-workflow: è verificabile da chiunque lo clona, non solo dichiarato qui.',
         s1_index_title: 'Cosa vedremo',
         s1_index_items: [
+          '🔌 Il bootstrap — cosa carica Claude Code prima del tuo primo messaggio',
           "🎼 L'orchestratore — non è codice, è un file di testo",
           "🤖 Un agente vero — frontmatter più prompt, niente altro",
           '🧩 Una skill — quando si attiva da sola, e quando no',
           "📓 Una pagina wiki — la struttura dietro la rete dell'Atto 3",
           '📚 La KB stabile — le soglie per entrarci',
         ],
+        sboot_eyebrow: 'Ad ogni sessione, prima del prompt',
+        sboot_h2: 'Il bootstrap: cosa succede quando apri una sessione',
+        sboot_start: 'Avvio sessione',
+        sboot_s1_label: 'CLAUDE.md globale',
+        sboot_s1_detail: 'vale per tutti i progetti',
+        sboot_s2_label: 'CLAUDE.md di progetto',
+        sboot_s2_detail: 'se esiste',
+        sboot_s3_label: 'Memoria automatica',
+        sboot_s3_detail: 'quella del progetto corrente',
+        sboot_s4_label: 'Agenti e skill',
+        sboot_s4_detail: 'frontmatter valido da agents/*.md, skill indicizzate per description',
+        sboot_s5_label: 'Il tuo primo messaggio',
+        sboot_s5_detail: 'solo adesso',
+        sboot_callout: 'Tutto questo avviene PRIMA del tuo primo prompt, a ogni sessione.',
+        sboot_code: "## Basi di conoscenza          <- puntatori a KB stabile e LLM Wiki (dove cercare)\n## Standard ingegneristici     <- regole valide su ogni progetto (auth, UI, store)\n## Flusso di orchestrazione    <- chi fa cosa: lead, subagent, gate del reviewer\n## Stile di comunicazione      <- quando parlare e quando lavorare in silenzio\n## Code review incrementale    <- si rivede solo il delta dall'ultimo SHA approvato",
+        sboot_note1: "Il CLAUDE.md è l'unico file caricato sempre: per questo resta corto e fa da indice, con puntatori alla conoscenza invece del contenuto. Se il contenuto stesse lì dentro, ogni sessione pagherebbe il costo di leggerlo tutto.",
+        sboot_note2: "È la gerarchia delle leve che ritroverete nella prossima slide: globale (il metodo), poi progetto (il contesto), poi prompt (il compito di oggi). Cambi il metodo una volta, e vale ovunque da subito.",
         s2_eyebrow: 'Pezzo 1 di 5',
         s2_h2: "L'orchestratore",
         s2_captions: [
@@ -388,12 +465,30 @@
         s1_note: 'Every excerpt in this appendix comes from the public claude-kb-workflow repository: anyone who clones it can check it, not just take it on faith here.',
         s1_index_title: "What's coming up",
         s1_index_items: [
+          '🔌 The bootstrap — what Claude Code loads before your first message',
           "🎼 The orchestrator — not code, a text file",
           '🤖 A real agent — frontmatter plus a prompt, nothing else',
           '🧩 A skill — when it fires on its own, and when it does not',
           "📓 A wiki page — the structure behind Act 3's network",
           '📚 The stable KB — the bar it takes to get in',
         ],
+        sboot_eyebrow: 'Every session, before the prompt',
+        sboot_h2: 'The bootstrap: what happens when you open a session',
+        sboot_start: 'Session start',
+        sboot_s1_label: 'Global CLAUDE.md',
+        sboot_s1_detail: 'applies to every project',
+        sboot_s2_label: 'Project CLAUDE.md',
+        sboot_s2_detail: 'if there is one',
+        sboot_s3_label: 'Automatic memory',
+        sboot_s3_detail: 'for the current project',
+        sboot_s4_label: 'Agents and skills',
+        sboot_s4_detail: 'valid frontmatter from agents/*.md, skills indexed by description',
+        sboot_s5_label: 'Your first message',
+        sboot_s5_detail: 'only now',
+        sboot_callout: 'All of this happens BEFORE your first prompt, every session.',
+        sboot_code: "## Basi di conoscenza          <- pointers to the stable KB and the LLM Wiki (where to look)\n## Standard ingegneristici     <- rules that hold on every project (auth, UI, store text)\n## Flusso di orchestrazione    <- who does what: lead, subagents, the reviewer gate\n## Stile di comunicazione      <- when to talk and when to work in silence\n## Code review incrementale    <- only the delta since the last approved SHA gets reviewed",
+        sboot_note1: 'CLAUDE.md is the one file loaded every time, so it stays short and works as an index: pointers to the knowledge, never the knowledge itself. If the content lived there, every session would pay the cost of reading all of it.',
+        sboot_note2: "It's the same hierarchy of levers in the next slide: global (the method), then project (the context), then prompt (today's task). Change the method once, and it holds everywhere from that point.",
         s2_eyebrow: 'Piece 1 of 5',
         s2_h2: 'The orchestrator',
         s2_captions: [
