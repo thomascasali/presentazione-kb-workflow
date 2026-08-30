@@ -9,10 +9,11 @@
 - NESSUN bundler, NESSUN npm, NESSUN framework aggiuntivo. Solo file HTML standalone, apribili anche da `file://`.
 
 ## Architettura
-- `index.html`: dashboard con le 5 card degli atti più la card dell'appendice (HTML/CSS puro, nessun React)
+- `index.html`: dashboard con le 5 card degli atti più le card delle due appendici (HTML/CSS puro, nessun React)
 - `atto1-il-problema.html`, `atto2-larchitettura.html`, `atto3-le-storie.html`, `atto4-la-macchina.html`, `atto5-perche-lo-regalo.html`: un file HTML per atto
 - `appendice-sotto-il-cofano.html`: appendice con estratti reali di file dal repo pubblico `claude-kb-workflow` (bootstrap di sessione, orchestratore, agente, skill, pagina wiki, KB stabile), codice/YAML non tradotto
-- Ogni file atto (e l'appendice) è completamente standalone (include React, Babel, CSS inline)
+- `appendice-b-una-sessione-vera.html`: appendice con un simulatore a 3 scenari (Flutter, portale web, debug) che rigioca una sessione di lavoro passo-passo, terminale finto + pannello attori "Dietro le quinte"
+- Ogni file atto (e le appendici) è completamente standalone (include React, Babel, CSS inline)
 - I componenti React sono definiti dentro un tag `<script type="text/babel">` nel file HTML
 
 ## Design System
@@ -39,6 +40,7 @@ const colors = {
 | 4 | La macchina completa | `#4e93b8` (blu-info) | `#7ab8d6` | ⚙️ |
 | 5 | Perché lo regalo | `#a879c4` (viola) | `#c9a3de` | 🎁 |
 | Appendice | Sotto il cofano | `#6fae5c` (verde/success) | `#98c98a` | 🔧 |
+| Appendice B | Una sessione vera | `#b5566a` (rosa cotto/vinaccia) | `#dd93a2` | 🖥️ |
 
 ## Componenti Riutilizzabili (da definire in ogni file atto)
 - `Box({ type, title, children })`: callout `info` / `warn` / `danger` / `tip` / `success`
@@ -54,13 +56,14 @@ Ogni atto segue questa struttura:
 3. Slide simulatore/i interattivo/i (Atto 2 ne ha 2, Atto 3 ha il componente "spot the bug")
 4. Slide di chiusura atto con collegamento all'atto successivo
 
-Conteggio slide: Atto 1 = 6, Atto 2 = 6, Atto 3 = 10, Atto 4 = 7, Atto 5 = 6, Appendice = 8 → **43 slide totali**, 3 simulatori interattivi.
+Conteggio slide: Atto 1 = 6, Atto 2 = 6, Atto 3 = 10, Atto 4 = 7, Atto 5 = 6, Appendice = 8, Appendice B = 3 → **46 slide totali**, 4 simulatori interattivi.
 
 ## Simulatori interattivi
 
 - **Atto 2, slide 2.3 — "Il viaggio di un fatto"**: componente React con `useState` + `setInterval`. Un pallino si muove tra i riquadri Sessioni sporche → Wiki viva → esame → KB stabile. Due checkbox ("Verificato in produzione", "Visto almeno 2 volte") determinano se il pallino passa l'esame o si blocca.
 - **Atto 2, slide 2.6 — "L'orchestra in azione"**: card cliccabili per i ruoli (Direttore, 4 specialisti, Controllore) con pannello informativo, più un bottone che anima una sequenza a step (con `setTimeout` incatenati) che mostra il ciclo lavoro → verifica → correzione → verifica → fine, includendo un passaggio in cui il controllore respinge il lavoro.
 - **Atto 3, slide 3.3 — "Spot the bug"**: due blocchi di codice affiancati, uno corretto (`---`) e uno con il bug reale (`\---`). Un bottone rivela ed evidenzia il carattere di troppo con un'animazione CSS (`@keyframes pulseBug`).
+- **Appendice B, slide B.2 — "Il simulatore"**: selettore a 3 schede (uno scenario ciascuna), replay manuale passo-passo (Avanti/Indietro/Ricomincia, nessun autoplay) con terminale finto ad auto-scroll a sinistra e pannello attori "Dietro le quinte" a destra (CLAUDE.md, KB stabile, LLM Wiki, specialista, skill, reviewer) che si illumina in base al passo corrente.
 
 ## Responsive Design
 - Testo sempre con `clamp()`, mai `px` fissi per font-size dei contenuti

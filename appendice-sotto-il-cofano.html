@@ -336,7 +336,7 @@
       ),
 
       // A.8 - Chiusura
-      (t) => (
+      (t, lang) => (
         <div style={{ padding: '30px', textAlign: 'center' }}>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
             <span style={{ fontSize: '28px' }}>🔁</span> {t.s7_h2}
@@ -353,6 +353,9 @@
           </div>
           <p style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)' }}>
             {t.s7_footer}
+          </p>
+          <p style={{ marginTop: '18px' }}>
+            <a href={lang === 'en' ? 'appendice-b-una-sessione-vera.html?lang=en' : 'appendice-b-una-sessione-vera.html'} style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', textDecoration: 'none', borderBottom: `1px solid ${colors.border}` }}>{t.s7_next_link}</a>
           </p>
         </div>
       ),
@@ -451,6 +454,7 @@
         s7_para: "Quello che avete visto in queste sette slide non è teoria da manuale: sono estratti degli stessi file che girano ora, sul serio, dietro le sessioni di lavoro di questa stessa presentazione. Il cerchio si chiude quando la KB nutre una sessione futura, anche su un progetto che oggi non esiste ancora.",
         s7_badge: 'Repo pubblico',
         s7_footer: 'Curiosi di leggere il resto? Il repository intero è lì, con lo stesso permesso di clonarlo, romperlo e capire perché si è rotto.',
+        s7_next_link: 'Ora guardala girare → Appendice B',
       },
       en: {
         pageTitle: 'Appendix - Under the hood',
@@ -544,6 +548,7 @@
         s7_para: 'What you just saw across these seven slides is not textbook theory: these are excerpts from the same files running right now, for real, behind the working sessions of this very presentation. The loop closes when the KB feeds a future session, even on a project that does not exist yet today.',
         s7_badge: 'Public repo',
         s7_footer: 'Curious to read the rest? The whole repository is right there, with the same permission to clone it, break it, and work out why it broke.',
+        s7_next_link: 'Now watch it run → Appendix B',
       }
     };
 
@@ -603,7 +608,7 @@
           </div>
           <div style={{ paddingTop: '54px', paddingBottom: '76px', minHeight: 'calc(100vh - 130px)', position: 'relative', zIndex: 1 }}>
             <div className="slide-content" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
-              {slides[current](t)}
+              {slides[current](t, lang)}
             </div>
           </div>
           <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, minHeight: '64px', background: colors.bgCard + 'e0', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', zIndex: 100, flexWrap: 'wrap', padding: '8px 20px' }}>

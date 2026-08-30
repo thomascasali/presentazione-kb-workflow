@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appendice B - Una sessione vera</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #15120f;
+      --bg-card: #1e1a15;
+      --bg-light: #29231d;
+      --border: #3c332a;
+      --text: #f4eee3;
+      --text-dim: #d2c8b8;
+      --text-muted: #a89a83;
+      --success: #6fae5c;
+      --danger: #e0563a;
+      --warn: #d9a441;
+      --info: #4e93b8;
+      --purple: #a879c4;
+      --fs-xs: clamp(13px, 0.7vw + 11px, 14px);
+      --fs-sm: clamp(15px, 0.8vw + 12px, 16px);
+      --fs-body: clamp(17px, 1vw + 13px, 19px);
+      --fs-lead: clamp(19px, 1.3vw + 14px, 22px);
+      --fs-h3: clamp(20px, 1.6vw + 14px, 26px);
+      --fs-h2: clamp(26px, 2.4vw + 16px, 36px);
+      --fs-h1: clamp(34px, 5vw + 18px, 58px);
+      --fs-display: clamp(44px, 7vw + 20px, 84px);
+      --lh-body: 1.65;
+      --lh-heading: 1.18;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Public Sans', sans-serif; }
+    #root { min-height: 100vh; }
+    a { color: inherit; }
+    h2, h3 { font-family: 'Public Sans', sans-serif; font-weight: 600; }
+    p, li { line-height: var(--lh-body); }
+    .lang-toggle { display: flex; font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-xs); font-weight: 600; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; flex-shrink: 0; }
+    .lang-toggle button { padding: 5px 9px; background: transparent; border: none; cursor: pointer; color: var(--text-muted); }
+    .lang-toggle button + button { border-left: 1px solid var(--border); }
+    .lang-toggle button.active { background: var(--warn); color: var(--bg); }
+    .sim-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .sim-tab { padding: 10px 16px; min-height: 44px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; color: var(--text-dim); cursor: pointer; font-size: var(--fs-sm); font-family: 'Public Sans', sans-serif; text-align: left; transition: border-color 0.2s, color 0.2s; }
+    .sim-tab.active { color: var(--text); font-weight: 600; }
+    .sim-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+    .terminal-box { height: 380px; overflow-y: auto; overflow-x: hidden; padding: 16px; font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-sm); line-height: 1.75; background: var(--bg); }
+    .terminal-line { white-space: pre-wrap; word-break: break-word; margin-bottom: 6px; }
+    .actor-card { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; background: var(--bg); border: 2px solid var(--border); opacity: 0.45; transition: opacity 0.25s, border-color 0.25s, box-shadow 0.25s; }
+    .actor-card.actor-active { opacity: 1; }
+    .sim-controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+    .b3-table-wrap { overflow-x: auto; margin: 18px 0; }
+    .b3-table { width: 100%; border-collapse: collapse; min-width: 560px; font-size: var(--fs-sm); }
+    .b3-table th, .b3-table td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text-dim); vertical-align: top; }
+    .b3-table th { color: var(--text-muted); font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+    .b3-table td:first-child, .b3-table th:first-child { color: var(--text); font-weight: 600; }
+    @media (max-width: 768px) {
+      .slide-content { padding: 16px !important; }
+      .slide-content > div { padding: 20px 16px !important; }
+      .top-bar { padding: 0 12px !important; }
+      .top-bar span { font-size: var(--fs-xs) !important; }
+      .bottom-bar { gap: 8px !important; }
+      .bottom-bar button, .bottom-bar a { padding: 10px 16px !important; font-size: var(--fs-xs) !important; }
+      svg { max-width: 100%; height: auto; }
+      .sim-grid { grid-template-columns: 1fr; }
+      .terminal-box { height: 260px; font-size: var(--fs-xs); }
+      .sim-tab { flex: 1 1 100%; }
+    }
+    @media (max-width: 480px) {
+      .top-bar > div:first-child span:nth-child(4) { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    const colors = {
+      bg: '#15120f', bgCard: '#1e1a15', bgLight: '#29231d',
+      accent: '#b5566a', accentAlt: '#dd93a2',
+      text: '#f4eee3', textDim: '#d2c8b8', textMuted: '#a89a83',
+      border: '#3c332a',
+      success: '#6fae5c', danger: '#e0563a', warn: '#d9a441', info: '#4e93b8', purple: '#a879c4'
+    };
+
+    function getLang() {
+      const params = new URLSearchParams(window.location.search);
+      const urlLang = params.get('lang');
+      if (urlLang === 'en' || urlLang === 'it') { localStorage.setItem('kbLang', urlLang); return urlLang; }
+      const stored = localStorage.getItem('kbLang');
+      if (stored === 'en' || stored === 'it') return stored;
+      return 'it';
+    }
+
+    const PREV_ACT_HREF = 'appendice-sotto-il-cofano.html';
+    const REPO_URL = 'https://github.com/thomascasali/claude-kb-workflow';
+
+    const BgTexture = () => (
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, opacity: 0.05, backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")" }} />
+    );
+
+    const Box = ({ type = 'info', title, children }) => {
+      const cfg = { info: { c: colors.info, i: 'ℹ️' }, warn: { c: colors.warn, i: '⚠️' }, danger: { c: colors.danger, i: '🛑' }, tip: { c: colors.purple, i: '💡' }, success: { c: colors.success, i: '✓' } };
+      const { c, i } = cfg[type];
+      return (
+        <div style={{ background: c + '15', border: `1px solid ${c}40`, borderLeft: `4px solid ${c}`, borderRadius: '0 4px 4px 0', padding: '18px 22px', margin: '16px 0' }}>
+          {title && <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', fontWeight: '600', fontSize: 'var(--fs-body)', color: c }}>{i} {title}</div>}
+          <div style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)' }}>{children}</div>
+        </div>
+      );
+    };
+
+    // ---------- Colori per tipo di riga nel terminale ----------
+    const LINE_COLOR = {
+      prompt: colors.text,
+      lead: colors.textDim,
+      kb: colors.info,
+      agent: colors.accent,
+      agentresp: colors.textDim,
+      agent2: colors.purple,
+      skill: colors.warn,
+      reviewer: colors.accentAlt,
+      command: colors.textMuted,
+      success: colors.success,
+    };
+    const LINE_PREFIX = { prompt: '> ', command: '$ ', success: '✓ ' };
+    const LINE_WEIGHT = { prompt: '700', agent: '600', command: '600' };
+
+    // ---------- Riquadro terminale, altezza fissa, auto-scroll ----------
+    const TerminalPane = ({ titleText, lines }) => {
+      const ref = useRef(null);
+      useEffect(() => {
+        if (ref.current) ref.current.scrollTop = ref.current.scrollHeight;
+      }, [lines.length]);
+      return (
+        <div style={{ borderRadius: '8px', border: `1px solid ${colors.border}`, overflow: 'hidden', background: colors.bg }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 14px', background: colors.bgLight, borderBottom: `1px solid ${colors.border}`, fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.textMuted }}>
+            <span style={{ opacity: 0.7 }}>💻</span>{titleText}
+          </div>
+          <div className="terminal-box" ref={ref}>
+            {lines.length === 0 && <div className="terminal-line" style={{ color: colors.textMuted }}>...</div>}
+            {lines.map((l, i) => (
+              <div key={i} className="terminal-line" style={{ color: LINE_COLOR[l.kind] || colors.textDim, fontWeight: LINE_WEIGHT[l.kind] || '400' }}>
+                {(LINE_PREFIX[l.kind] || '')}{l.text}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    };
+
+    // ---------- Pannello attori: "Dietro le quinte" ----------
+    const BackstagePanel = ({ titleText, actors, active, note }) => (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', color: colors.textMuted, textTransform: 'uppercase', letterSpacing: '1px' }}>{titleText}</div>
+        {actors.map(a => {
+          const isActive = active.indexOf(a.id) !== -1;
+          return (
+            <div
+              key={a.id}
+              className={`actor-card ${isActive ? 'actor-active' : ''}`}
+              data-actor-id={a.id}
+              data-active={isActive ? 'true' : 'false'}
+              style={{
+                borderColor: isActive ? colors.accent : colors.border,
+                boxShadow: isActive ? `0 0 14px ${colors.accent}66` : 'none',
+              }}
+            >
+              <span style={{ fontSize: '20px', flexShrink: 0 }}>{a.icon}</span>
+              <span style={{ fontSize: 'var(--fs-sm)', color: colors.text, fontFamily: "'IBM Plex Mono', monospace" }}>{a.label}</span>
+            </div>
+          );
+        })}
+        <div style={{ marginTop: '4px', padding: '12px 14px', background: colors.bgLight, borderRadius: '8px', borderLeft: `3px solid ${colors.accent}`, minHeight: '64px' }}>
+          <div style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 'var(--lh-body)' }} data-testid="backstage-note">{note}</div>
+        </div>
+      </div>
+    );
+
+    // ---------- I tre copioni (dati) ----------
+    const SCENARIOS = {
+      it: [
+        {
+          id: 'flutter',
+          tabLabel: 'Notifiche push',
+          termTitle: '~/liste-condivise — sessione simulata',
+          actors: [
+            { id: 'claudemd', icon: '📜', label: '~/.claude/CLAUDE.md' },
+            { id: 'kb', icon: '📚', label: 'KB stabile' },
+            { id: 'wiki', icon: '📓', label: 'LLM Wiki' },
+            { id: 'specialist', icon: '📱', label: 'mobile-dev' },
+            { id: 'skill', icon: '🧪', label: 'verifica-prima-di-completare' },
+            { id: 'reviewer', icon: '🔍', label: 'reviewer' },
+          ],
+          moral: 'Il secondo progetto non ha dovuto ripagare da capo quello che il primo aveva già pagato.',
+          centerActor: 'mobile-dev',
+          kbRef: 'Guida FCM (+1 gotcha)',
+          steps: [
+            { lines: [{ kind: 'prompt', text: 'Aggiungi le notifiche push alla mia app Flutter di liste condivise' }], active: ['claudemd'], note: 'Il CLAUDE.md globale è già in memoria da prima del prompt: impone di controllare la KB prima di scrivere codice.' },
+            { lines: [{ kind: 'lead', text: 'Lead: prima di partire, controllo la KB per "push notifications flutter"...' }], active: ['kb'], note: 'Il lead consulta la KB stabile invece di iniziare subito a scrivere codice.' },
+            { lines: [
+                { kind: 'kb', text: 'KB stabile: trovata una guida FCM su Flutter, nata da un progetto precedente' },
+                { kind: 'kb', text: 'gotcha: su Android l\'app in stato "stopped" non riceve push, i test sembrano falliti' },
+                { kind: 'kb', text: 'gotcha: la PWA installata maschera l\'esito del test' },
+              ], active: ['kb'], note: 'Due gotcha già pagati in un altro progetto, pronti da riusare in questo.' },
+            { lines: [{ kind: 'agent', text: 'Lead → Task(mobile-dev): implementa push FCM, guida allegata' }], active: ['specialist'], note: 'Il lead delega e passa la guida della KB come contesto, non solo il compito.' },
+            { lines: [{ kind: 'agentresp', text: 'mobile-dev: FCM configurato, token salvato, notifica di test inviata' }], active: ['specialist'], note: 'mobile-dev implementa seguendo i gotcha della guida.' },
+            { lines: [
+                { kind: 'skill', text: 'skill verifica-prima-di-completare: serve un test su dispositivo reale prima di dire "fatto"' },
+                { kind: 'agentresp', text: 'mobile-dev: test su device Android fisico → notifica ricevuta' },
+              ], active: ['skill', 'specialist'], note: 'La skill si attiva sulla claim "fatto" e blocca la chiusura senza un test vero, non nell\'emulatore.' },
+            { lines: [{ kind: 'reviewer', text: 'reviewer: icona di notifica trasparente su Android, va sistemata prima di chiudere' }], active: ['reviewer'], note: 'Il reviewer trova una sottigliezza che il test funzionale non copriva.' },
+            { lines: [
+                { kind: 'agentresp', text: 'mobile-dev: icona corretta, ritest sul device → ok' },
+                { kind: 'reviewer', text: 'reviewer: approvato' },
+              ], active: ['specialist', 'reviewer'], note: 'Corretto e riverificato prima di dichiarare finito.' },
+            { lines: [
+                { kind: 'command', text: '/kb-ingest' },
+                { kind: 'success', text: 'La guida FCM si arricchisce di un gotcha nuovo: icona di notifica trasparente su Android' },
+              ], active: ['wiki', 'kb'], note: 'La sessione confluisce nella wiki; il gotcha nuovo aspetta la sua seconda conferma per entrare stabile.' },
+          ],
+        },
+        {
+          id: 'portal',
+          tabLabel: 'Firma dei genitori',
+          termTitle: '~/portale-scuola — sessione simulata',
+          actors: [
+            { id: 'claudemd', icon: '📜', label: '~/.claude/CLAUDE.md' },
+            { id: 'kb', icon: '📚', label: 'KB stabile' },
+            { id: 'wiki', icon: '📓', label: 'LLM Wiki' },
+            { id: 'specialist', icon: '⚙️', label: 'backend-dev' },
+            { id: 'skill', icon: '🔒', label: 'security' },
+            { id: 'reviewer', icon: '🔍', label: 'reviewer' },
+          ],
+          moral: 'I requisiti di sicurezza non si sono improvvisati a fine progetto: erano già scritti prima di aprire l\'editor.',
+          centerActor: 'backend-dev + security',
+          kbRef: 'Pattern #14 (OTP via email)',
+          steps: [
+            { lines: [{ kind: 'prompt', text: 'I genitori devono poter firmare le autorizzazioni online sul portale della scuola' }], active: ['claudemd'], note: 'Nessun account per i genitori: non è un "login utente" standard, il CLAUDE.md da solo non basta a coprirlo.' },
+            { lines: [{ kind: 'lead', text: 'Lead: controllo la KB, firma per esterni senza account, ne abbiamo già parlato?' }], active: ['kb'], note: 'Il lead cerca un pattern prima di improvvisare un flusso di firma.' },
+            { lines: [
+                { kind: 'kb', text: 'KB stabile: trovato pattern #14, OTP via email come firma elettronica semplice' },
+                { kind: 'kb', text: 'link monouso + OTP a 6 cifre, scadenza ~10 minuti, audit trail con IP e hash del documento' },
+              ], active: ['kb'], note: 'Il pattern arriva da due portali già in produzione, non da una specifica scritta oggi.' },
+            { lines: [{ kind: 'agent', text: 'Lead → Task(backend-dev, security): firma OTP su pattern #14, rivedete insieme i punti critici' }], active: ['specialist', 'skill'], note: 'Il lead delega a backend-dev e security insieme: qui sicurezza e implementazione procedono appaiate, non una dopo l\'altra.' },
+            { lines: [
+                { kind: 'agentresp', text: 'backend-dev: link monouso, OTP con pepper, sessione breve, record di firma con hash del documento' },
+                { kind: 'agent2', text: 'security: rate-limit sui tentativi, tetto a 5 prima del blocco' },
+              ], active: ['specialist', 'skill'], note: 'Ognuno lavora sulla propria parte dello stesso pattern.' },
+            { lines: [{ kind: 'reviewer', text: 'reviewer: e se l\'email finisce nello spam?' }], active: ['reviewer'], note: 'Il reviewer testa il caso che nessuno aveva ancora nominato.' },
+            { lines: [{ kind: 'agentresp', text: 'backend-dev: reinvio con throttle, è già previsto nel pattern #14' }], active: ['specialist'], note: 'La risposta era già scritta nel pattern, non improvvisata sul momento.' },
+            { lines: [{ kind: 'reviewer', text: 'reviewer: approvato' }], active: ['reviewer'], note: 'Verificato, si chiude.' },
+            { lines: [
+                { kind: 'command', text: '/kb-ingest' },
+                { kind: 'success', text: 'Pattern #14 confermato una volta in più: seconda comparsa utile per la soglia della KB stabile' },
+              ], active: ['wiki', 'kb'], note: 'Non è un pattern nuovo: è la stessa regola vista reggere un\'altra volta.' },
+          ],
+        },
+        {
+          id: 'debug',
+          tabLabel: 'Ordine non pagato',
+          termTitle: '~/negozio-online — sessione simulata',
+          actors: [
+            { id: 'claudemd', icon: '📜', label: '~/.claude/CLAUDE.md' },
+            { id: 'kb', icon: '📚', label: 'KB stabile' },
+            { id: 'wiki', icon: '📓', label: 'LLM Wiki' },
+            { id: 'specialist', icon: '⚙️', label: 'backend-dev' },
+            { id: 'skill', icon: '🐛', label: 'debugging-sistematico' },
+            { id: 'reviewer', icon: '🔍', label: 'reviewer' },
+          ],
+          moral: 'Forzare l\'ordine a "pagato" a mano avrebbe nascosto il bug, non risolto.',
+          centerActor: 'backend-dev + skill debugging-sistematico',
+          kbRef: 'Pattern #16 (webhook idempotente)',
+          steps: [
+            { lines: [{ kind: 'prompt', text: 'Un cliente ha pagato ma l\'ordine risulta non pagato, nel negozio online' }], active: ['claudemd'], note: 'Arriva un bug in produzione, non una richiesta di feature.' },
+            { lines: [{ kind: 'skill', text: 'skill debugging-sistematico: si attiva da sola sulla description, niente fix d\'istinto prima della causa radice' }], active: ['skill'], note: 'Nessuno l\'ha invocata: il contesto (un bug, uno stato incoerente) corrisponde alla sua description, e si accende da sola.' },
+            { lines: [{ kind: 'lead', text: 'Lead: prima di toccare il codice, controllo la KB per "webhook pagamento stato"' }], active: ['kb'], note: 'La skill impone il passo, il lead lo esegue.' },
+            { lines: [
+                { kind: 'kb', text: 'KB stabile: trovato pattern #16, un webhook può segnare "paid" prima che la transazione si consolidi, e può arrivare due volte' },
+                { kind: 'kb', text: 'idempotenza sull\'ID transazione, stato pending vs settled' },
+              ], active: ['kb'], note: 'Il pattern nomina esattamente la forma di questo bug, prima ancora di leggere i log.' },
+            { lines: [{ kind: 'agent', text: 'Lead → Task(backend-dev): verifica i log del webhook per questo ordine' }], active: ['specialist'], note: 'Delega mirata dalla causa sospetta, non un giro a tappeto sul codice.' },
+            { lines: [{ kind: 'agentresp', text: 'backend-dev: il webhook è arrivato due volte, la seconda chiamata ha sovrascritto lo stato "paid" con un valore vecchio' }], active: ['specialist'], note: 'Causa radice trovata: non un bug di pagamento, un bug di ordine di arrivo.' },
+            { lines: [{ kind: 'agentresp', text: 'backend-dev: fix con idempotency key sulla transazione, lock di riga sull\'aggiornamento dello stato' }], active: ['specialist'], note: 'Il fix segue esattamente la ricetta del pattern #16.' },
+            { lines: [{ kind: 'reviewer', text: 'reviewer: replay del webhook due volte sullo stesso ordine → lo stato resta corretto' }], active: ['reviewer'], note: 'Verifica non sull\'ordine originale, ma riproducendo il difetto.' },
+            { lines: [
+                { kind: 'command', text: '/kb-ingest' },
+                { kind: 'success', text: 'La sessione conferma il pattern #16 su un terzo progetto' },
+              ], active: ['wiki', 'kb'], note: 'Il pattern regge ancora, altrove.' },
+          ],
+        },
+      ],
+      en: [
+        {
+          id: 'flutter',
+          tabLabel: 'Push notifications',
+          termTitle: '~/shared-lists — simulated session',
+          actors: [
+            { id: 'claudemd', icon: '📜', label: '~/.claude/CLAUDE.md' },
+            { id: 'kb', icon: '📚', label: 'Stable KB' },
+            { id: 'wiki', icon: '📓', label: 'LLM Wiki' },
+            { id: 'specialist', icon: '📱', label: 'mobile-dev' },
+            { id: 'skill', icon: '🧪', label: 'verifica-prima-di-completare' },
+            { id: 'reviewer', icon: '🔍', label: 'reviewer' },
+          ],
+          moral: "The second project didn't have to repay what the first one had already paid for.",
+          centerActor: 'mobile-dev',
+          kbRef: 'FCM guide (+1 gotcha)',
+          steps: [
+            { lines: [{ kind: 'prompt', text: 'Add push notifications to my Flutter shared-lists app' }], active: ['claudemd'], note: 'The global CLAUDE.md is already loaded before the prompt: it requires checking the KB before writing code.' },
+            { lines: [{ kind: 'lead', text: 'Lead: before I start, let me check the KB for "flutter push notifications"...' }], active: ['kb'], note: 'The lead checks the stable KB instead of jumping straight into code.' },
+            { lines: [
+                { kind: 'kb', text: 'Stable KB: found an FCM guide for Flutter, written during an earlier project' },
+                { kind: 'kb', text: 'gotcha: on Android, an app in "stopped" state never receives push, tests look like they failed' },
+                { kind: 'kb', text: 'gotcha: an installed PWA masks the test result' },
+              ], active: ['kb'], note: 'Two gotchas already paid for on another project, ready to reuse here.' },
+            { lines: [{ kind: 'agent', text: 'Lead → Task(mobile-dev): implement FCM push, guide attached' }], active: ['specialist'], note: 'The lead delegates and hands over the KB guide as context, not just the task.' },
+            { lines: [{ kind: 'agentresp', text: 'mobile-dev: FCM configured, token stored, test notification sent' }], active: ['specialist'], note: 'mobile-dev implements it, following the gotchas from the guide.' },
+            { lines: [
+                { kind: 'skill', text: 'skill verifica-prima-di-completare: needs a real-device test before calling it done' },
+                { kind: 'agentresp', text: 'mobile-dev: tested on a physical Android device → notification received' },
+              ], active: ['skill', 'specialist'], note: 'The skill fires on the "done" claim and blocks closing without a real test, not an emulator one.' },
+            { lines: [{ kind: 'reviewer', text: 'reviewer: transparent notification icon on Android, fix it before closing' }], active: ['reviewer'], note: 'The reviewer catches something the functional test never covered.' },
+            { lines: [
+                { kind: 'agentresp', text: 'mobile-dev: icon fixed, retested on device → ok' },
+                { kind: 'reviewer', text: 'reviewer: approved' },
+              ], active: ['specialist', 'reviewer'], note: 'Fixed and re-checked before calling it done.' },
+            { lines: [
+                { kind: 'command', text: '/kb-ingest' },
+                { kind: 'success', text: 'The FCM guide gains a new gotcha: transparent notification icon on Android' },
+              ], active: ['wiki', 'kb'], note: 'The session flows into the wiki; the new gotcha waits for a second sighting before it can go stable.' },
+          ],
+        },
+        {
+          id: 'portal',
+          tabLabel: 'Parental signature',
+          termTitle: '~/school-portal — simulated session',
+          actors: [
+            { id: 'claudemd', icon: '📜', label: '~/.claude/CLAUDE.md' },
+            { id: 'kb', icon: '📚', label: 'Stable KB' },
+            { id: 'wiki', icon: '📓', label: 'LLM Wiki' },
+            { id: 'specialist', icon: '⚙️', label: 'backend-dev' },
+            { id: 'skill', icon: '🔒', label: 'security' },
+            { id: 'reviewer', icon: '🔍', label: 'reviewer' },
+          ],
+          moral: "The security requirements weren't improvised at the end: they were already written before the editor opened.",
+          centerActor: 'backend-dev + security',
+          kbRef: 'Pattern #14 (email OTP)',
+          steps: [
+            { lines: [{ kind: 'prompt', text: 'Parents need to be able to sign authorization forms online on the school portal' }], active: ['claudemd'], note: "No account for the parents: this isn't a standard \"user login\" case, CLAUDE.md alone doesn't cover it." },
+            { lines: [{ kind: 'lead', text: 'Lead: checking the KB, signing for outside users without an account, has this come up before?' }], active: ['kb'], note: 'The lead looks for a pattern before improvising a signing flow.' },
+            { lines: [
+                { kind: 'kb', text: 'Stable KB: found pattern #14, OTP over email as a simple e-signature' },
+                { kind: 'kb', text: 'single-use link + 6-digit OTP, roughly a 10-minute expiry, audit trail with IP and a document hash' },
+              ], active: ['kb'], note: 'The pattern comes from two portals already running in production, not from a spec written today.' },
+            { lines: [{ kind: 'agent', text: 'Lead → Task(backend-dev, security): OTP signing on pattern #14, review the sensitive parts together' }], active: ['specialist', 'skill'], note: 'The lead delegates to backend-dev and security together: here security and implementation move side by side, not one after the other.' },
+            { lines: [
+                { kind: 'agentresp', text: 'backend-dev: single-use link, OTP hashed with a pepper, short session, signature record with a document hash' },
+                { kind: 'agent2', text: 'security: rate limit on attempts, capped at 5 before lockout' },
+              ], active: ['specialist', 'skill'], note: 'Each works their own side of the same pattern.' },
+            { lines: [{ kind: 'reviewer', text: 'reviewer: what happens if the email lands in spam?' }], active: ['reviewer'], note: "The reviewer tests the case nobody had named yet." },
+            { lines: [{ kind: 'agentresp', text: "backend-dev: resend with throttling, it's already in pattern #14" }], active: ['specialist'], note: 'The answer was already written into the pattern, not improvised on the spot.' },
+            { lines: [{ kind: 'reviewer', text: 'reviewer: approved' }], active: ['reviewer'], note: 'Checked, and closed.' },
+            { lines: [
+                { kind: 'command', text: '/kb-ingest' },
+                { kind: 'success', text: 'Pattern #14 confirmed once more: a second sighting counts toward the stable-KB bar' },
+              ], active: ['wiki', 'kb'], note: 'Not a new pattern: the same rule, holding up a second time.' },
+          ],
+        },
+        {
+          id: 'debug',
+          tabLabel: 'Unpaid order',
+          termTitle: '~/online-store — simulated session',
+          actors: [
+            { id: 'claudemd', icon: '📜', label: '~/.claude/CLAUDE.md' },
+            { id: 'kb', icon: '📚', label: 'Stable KB' },
+            { id: 'wiki', icon: '📓', label: 'LLM Wiki' },
+            { id: 'specialist', icon: '⚙️', label: 'backend-dev' },
+            { id: 'skill', icon: '🐛', label: 'debugging-sistematico' },
+            { id: 'reviewer', icon: '🔍', label: 'reviewer' },
+          ],
+          moral: 'Forcing the order back to "paid" by hand would have hidden the bug, not fixed it.',
+          centerActor: 'backend-dev + skill debugging-sistematico',
+          kbRef: 'Pattern #16 (idempotent webhook)',
+          steps: [
+            { lines: [{ kind: 'prompt', text: 'A customer paid but the order still shows as unpaid, in the online store' }], active: ['claudemd'], note: 'A production bug walks in, not a feature request.' },
+            { lines: [{ kind: 'skill', text: "skill debugging-sistematico: fires on its own from the description, no instinct fix before the root cause" }], active: ['skill'], note: "Nobody called it: the context (a bug, an inconsistent state) matches its description, and it switches on by itself." },
+            { lines: [{ kind: 'lead', text: 'Lead: before touching any code, checking the KB for "payment webhook state"' }], active: ['kb'], note: 'The skill forces the step, the lead runs it.' },
+            { lines: [
+                { kind: 'kb', text: 'Stable KB: found pattern #16, a payment webhook can say "paid" before the transaction settles, and it can arrive twice' },
+                { kind: 'kb', text: 'idempotency on the transaction ID, pending vs settled state' },
+              ], active: ['kb'], note: 'The pattern names the exact shape of this bug before the logs are even open.' },
+            { lines: [{ kind: 'agent', text: 'Lead → Task(backend-dev): check the webhook logs for this order' }], active: ['specialist'], note: 'A targeted delegation from a suspected cause, not a sweep through the whole codebase.' },
+            { lines: [{ kind: 'agentresp', text: 'backend-dev: the webhook arrived twice, the second call overwrote the "paid" state with a stale value' }], active: ['specialist'], note: 'Root cause found: not a payment bug, an arrival-order bug.' },
+            { lines: [{ kind: 'agentresp', text: 'backend-dev: fix with an idempotency key on the transaction, a row lock on the state update' }], active: ['specialist'], note: 'The fix follows pattern #16 to the letter.' },
+            { lines: [{ kind: 'reviewer', text: 'reviewer: replayed the webhook twice on the same order → the state stays correct' }], active: ['reviewer'], note: 'Verified not on the original order, but by reproducing the defect.' },
+            { lines: [
+                { kind: 'command', text: '/kb-ingest' },
+                { kind: 'success', text: 'The session confirms pattern #16 on a third project' },
+              ], active: ['wiki', 'kb'], note: 'The pattern holds again, somewhere else.' },
+          ],
+        },
+      ],
+    };
+
+    // ---------- Il simulatore ----------
+    const SessionSimulator = ({ t, lang }) => {
+      const scenarios = SCENARIOS[lang];
+      const [scenarioIdx, setScenarioIdx] = useState(0);
+      const [stepIdx, setStepIdx] = useState(-1);
+
+      const scenario = scenarios[scenarioIdx];
+      const steps = scenario.steps;
+      const total = steps.length;
+      const current = stepIdx >= 0 ? steps[stepIdx] : null;
+      const lines = steps.slice(0, stepIdx + 1).reduce((acc, s) => acc.concat(s.lines), []);
+      const active = current ? current.active : [];
+      const note = current ? current.note : t.sim_not_started;
+      const finished = stepIdx === total - 1;
+
+      const selectScenario = (i) => { setScenarioIdx(i); setStepIdx(-1); };
+      const next = () => setStepIdx(i => Math.min(i + 1, total - 1));
+      const prev = () => setStepIdx(i => Math.max(i - 1, -1));
+      const restart = () => setStepIdx(-1);
+
+      return (
+        <div>
+          <div className="sim-tabs" role="tablist">
+            {scenarios.map((s, i) => (
+              <button
+                key={s.id}
+                className={`sim-tab ${i === scenarioIdx ? 'active' : ''}`}
+                data-scenario-id={s.id}
+                style={{ borderColor: i === scenarioIdx ? colors.accent : colors.border }}
+                onClick={() => selectScenario(i)}
+              >
+                {t.sim_tab_prefix} {i + 1} · {s.tabLabel}
+              </button>
+            ))}
+          </div>
+          <div className="sim-grid">
+            <TerminalPane titleText={scenario.termTitle} lines={lines} />
+            <BackstagePanel titleText={t.sim_backstage_title} actors={scenario.actors} active={active} note={note} />
+          </div>
+          <div className="sim-controls">
+            <button onClick={prev} disabled={stepIdx <= -1} style={{ padding: '10px 20px', minHeight: '44px', background: stepIdx <= -1 ? colors.bgLight : colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '6px', color: stepIdx <= -1 ? colors.textMuted : colors.text, cursor: stepIdx <= -1 ? 'not-allowed' : 'pointer', fontSize: 'var(--fs-sm)' }}>← {t.sim_prev}</button>
+            <button onClick={next} disabled={stepIdx >= total - 1} style={{ padding: '10px 20px', minHeight: '44px', background: stepIdx >= total - 1 ? colors.bgLight : `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, border: 'none', borderRadius: '6px', color: stepIdx >= total - 1 ? colors.textMuted : colors.bg, cursor: stepIdx >= total - 1 ? 'not-allowed' : 'pointer', fontSize: 'var(--fs-sm)', fontWeight: '600' }}>{t.sim_next} →</button>
+            <button onClick={restart} style={{ padding: '10px 20px', minHeight: '44px', background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '6px', color: colors.textDim, cursor: 'pointer', fontSize: 'var(--fs-sm)' }}>↺ {t.sim_restart}</button>
+            <span style={{ color: colors.textMuted, fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-sm)' }} data-testid="sim-step-counter">
+              {t.sim_step_prefix} {stepIdx + 1} {t.sim_step_of} {total}
+            </span>
+          </div>
+          {finished && (
+            <Box type="tip" title={t.sim_moral_label}>{scenario.moral}</Box>
+          )}
+        </div>
+      );
+    };
+
+    const slides = [
+      // B.1 - Titolo + istruzioni
+      (t) => (
+        <div style={{ textAlign: 'center', padding: '60px 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '70vh' }}>
+          <div style={{ fontSize: 'clamp(40px, 8vw, 56px)', marginBottom: '20px' }}>🖥️</div>
+          <div style={{ fontSize: 'var(--fs-xs)', color: colors.accent, textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '16px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.actLabel}</div>
+          <h1 style={{ fontSize: 'var(--fs-h1)', fontFamily: 'Fraunces, serif', fontWeight: '600', lineHeight: 'var(--lh-heading)', background: `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '20px' }}>{t.actTitle}</h1>
+          <p style={{ fontSize: 'var(--fs-lead)', color: colors.textDim, maxWidth: '620px', lineHeight: 'var(--lh-body)', marginBottom: '10px' }}>{t.s1_lead}</p>
+          <Box type="tip">{t.s1_howto}</Box>
+          <div style={{ marginTop: '10px', textAlign: 'left', maxWidth: '520px', width: '100%' }}>
+            <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.s1_index_title}</div>
+            <ul style={{ color: colors.textDim, lineHeight: '2.1', paddingLeft: '20px', fontSize: 'var(--fs-body)' }}>
+              {t.s1_index_items.map((it, i) => <li key={i}>{it}</li>)}
+            </ul>
+          </div>
+        </div>
+      ),
+
+      // B.2 - Il simulatore
+      (t, lang) => (
+        <div style={{ padding: '30px' }}>
+          <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.s2_eyebrow}</div>
+          <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>▶️</span> {t.s2_h2}
+          </h2>
+          <SessionSimulator t={t} lang={lang} />
+        </div>
+      ),
+
+      // B.3 - Chiusura
+      (t) => (
+        <div style={{ padding: '30px' }}>
+          <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.s3_eyebrow}</div>
+          <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '28px' }}>🔁</span> {t.s3_h2}
+          </h2>
+          <div className="b3-table-wrap">
+            <table className="b3-table">
+              <thead>
+                <tr>
+                  <th>{t.s3_col1}</th>
+                  <th>{t.s3_col2}</th>
+                  <th>{t.s3_col3}</th>
+                  <th>{t.s3_col4}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {SCENARIOS[t.langKey].map((s, i) => (
+                  <tr key={s.id}>
+                    <td>{s.tabLabel}</td>
+                    <td>{s.steps[0].lines[0].text}</td>
+                    <td>{s.centerActor}</td>
+                    <td>{s.kbRef}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ color: colors.textDim, lineHeight: 'var(--lh-body)', fontSize: 'var(--fs-body)', maxWidth: '760px', margin: '10px 0 0' }}>
+            {t.s3_para}
+          </p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'center', alignItems: 'center', margin: '26px 0' }}>
+            <a href={REPO_URL} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: '10px', background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '12px', padding: '18px 26px', textDecoration: 'none' }}>
+              <span style={{ fontFamily: "'IBM Plex Mono', monospace", color: colors.text, fontSize: 'var(--fs-sm)' }}>github.com/thomascasali/claude-kb-workflow</span>
+              <span style={{ display: 'inline-block', padding: '5px 14px', background: colors.accent, color: colors.bg, borderRadius: '20px', fontSize: 'var(--fs-xs)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>{t.s3_badge}</span>
+            </a>
+          </div>
+        </div>
+      ),
+    ];
+
+    const T = {
+      it: {
+        langKey: 'it',
+        pageTitle: 'Appendice B - Una sessione vera',
+        actLabel: 'Appendice B',
+        actTitle: 'Una sessione vera, dall\'inizio alla fine',
+        prevActLabel: 'Appendice A',
+        navIndex: 'Indice',
+        navBack: 'Indietro',
+        navNext: 'Avanti',
+        navHome: "Torna all'indice",
+        s1_lead: 'Tre sessioni simulate, una per scenario, con gli stessi attori caricati dal bootstrap descritto nell\'Appendice A: lo stesso CLAUDE.md, lo stesso pool di agenti, la stessa KB.',
+        s1_howto: 'Come si usa: scegliete uno scenario dalle schede in alto, poi avanzate un passo alla volta con "Avanti". "Indietro" torna al passo precedente, "Ricomincia" azzera il replay. Nessun autoplay: il ritmo lo decidete voi.',
+        s1_index_title: 'Cosa vedrete',
+        s1_index_items: [
+          '📱 Scenario 1 — Flutter: la KB che paga in anticipo un bug di notifiche push',
+          '🔒 Scenario 2 — Portale web: firma dei genitori, sicurezza e backend fianco a fianco',
+          '🐛 Scenario 3 — Debug: una skill che si attiva da sola e blocca il fix d\'istinto',
+        ],
+        s2_eyebrow: 'Tre scenari, stessa ossatura',
+        s2_h2: 'Il simulatore',
+        s3_eyebrow: 'Chiusura',
+        s3_h2: 'Stesso metodo, prompt diversi',
+        s3_col1: 'Scenario', s3_col2: 'Prompt', s3_col3: 'Al centro', s3_col4: 'Cosa entra o torna nella KB',
+        s3_para: 'Tre prompt diversi aprono tre sessioni diverse, ma intorno a scenari diversi si ripete lo stesso giro: CLAUDE.md prima del codice, la KB prima dell\'istinto, un secondo paio d\'occhi prima del "fatto". I pattern #14 e #16 citati negli scenari 2 e 3, insieme alla guida FCM dello scenario 1, sono nel repository pubblico claude-kb-workflow, non solo descritti qui.',
+        s3_badge: 'Repo pubblico',
+        sim_tab_prefix: 'Scenario',
+        sim_backstage_title: 'Dietro le quinte',
+        sim_prev: 'Indietro',
+        sim_next: 'Avanti',
+        sim_restart: 'Ricomincia',
+        sim_step_prefix: 'Passo',
+        sim_step_of: 'di',
+        sim_not_started: 'Premi "Avanti" per cominciare.',
+        sim_moral_label: 'Morale',
+      },
+      en: {
+        langKey: 'en',
+        pageTitle: 'Appendix B - A real session',
+        actLabel: 'Appendix B',
+        actTitle: 'A real session, start to finish',
+        prevActLabel: 'Appendix A',
+        navIndex: 'Index',
+        navBack: 'Back',
+        navNext: 'Next',
+        navHome: 'Back to the index',
+        s1_lead: 'Three simulated sessions, one per scenario, with the same actors loaded from the bootstrap described in Appendix A: the same CLAUDE.md, the same pool of agents, the same KB.',
+        s1_howto: 'How it works: pick a scenario from the tabs above, then step forward one at a time with "Next". "Back" returns to the previous step, "Restart" resets the replay. No autoplay: you set the pace.',
+        s1_index_title: "What's coming up",
+        s1_index_items: [
+          '📱 Scenario 1 — Flutter: the KB that pays for a push-notification bug in advance',
+          '🔒 Scenario 2 — Web portal: parental signature, security and backend side by side',
+          '🐛 Scenario 3 — Debugging: a skill that fires on its own and blocks the instinct fix',
+        ],
+        s2_eyebrow: 'Three scenarios, one skeleton',
+        s2_h2: 'The simulator',
+        s3_eyebrow: 'Closing',
+        s3_h2: 'Same method, different prompts',
+        s3_col1: 'Scenario', s3_col2: 'Prompt', s3_col3: 'At the center', s3_col4: 'What goes back into the KB',
+        s3_para: 'Three different prompts open three different sessions, but around three different scenarios the same loop repeats: CLAUDE.md before the code, the KB before the instinct, a second pair of eyes before "done". Patterns #14 and #16 from scenarios 2 and 3, along with the FCM guide from scenario 1, live in the public claude-kb-workflow repository, not just described here.',
+        s3_badge: 'Public repo',
+        sim_tab_prefix: 'Scenario',
+        sim_backstage_title: 'Backstage',
+        sim_prev: 'Back',
+        sim_next: 'Next',
+        sim_restart: 'Restart',
+        sim_step_prefix: 'Step',
+        sim_step_of: 'of',
+        sim_not_started: 'Press "Next" to begin.',
+        sim_moral_label: 'Takeaway',
+      },
+    };
+
+    function App() {
+      const [current, setCurrent] = useState(0);
+      const [lang, setLang] = useState(getLang());
+      const total = slides.length;
+      const t = T[lang];
+
+      const next = () => setCurrent(c => Math.min(c + 1, total - 1));
+      const prev = () => setCurrent(c => Math.max(c - 1, 0));
+      const switchLang = (l) => {
+        localStorage.setItem('kbLang', l);
+        setLang(l);
+        const url = new URL(window.location.href);
+        if (l === 'en') url.searchParams.set('lang', 'en'); else url.searchParams.delete('lang');
+        window.history.replaceState({}, '', url);
+      };
+      const withLang = (href) => lang === 'en' ? href + '?lang=en' : href;
+
+      useEffect(() => {
+        document.documentElement.lang = lang;
+        document.title = t.pageTitle;
+      }, [lang]);
+
+      useEffect(() => {
+        const handler = e => {
+          if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+          if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+          if (e.key === 'Escape') window.location.href = withLang('index.html');
+          if (e.key >= '1' && e.key <= '9') { const idx = parseInt(e.key) - 1; if (idx < total) setCurrent(idx); }
+        };
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
+      }, [lang]);
+
+      return (
+        <div style={{ minHeight: '100vh', background: colors.bg, position: 'relative' }}>
+          <BgTexture />
+          <div className="top-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '54px', background: colors.bgCard + 'e0', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px', zIndex: 100 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <a href={withLang('index.html')} style={{ color: colors.textMuted, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← {t.navIndex}</a>
+              <span style={{ color: colors.border }}>|</span>
+              <span style={{ color: colors.accent, fontWeight: '600', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)' }}>{t.actLabel}</span>
+              <span style={{ color: colors.textDim }}>{t.actTitle}</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ color: colors.textMuted, fontSize: 'var(--fs-sm)', fontFamily: "'IBM Plex Mono', monospace" }}>{current + 1} / {total}</span>
+              <div style={{ width: '100px', height: '6px', background: colors.bgLight, borderRadius: '3px' }}>
+                <div style={{ height: '100%', width: `${((current + 1) / total) * 100}%`, background: colors.accent, borderRadius: '3px', transition: 'width 0.3s' }} />
+              </div>
+              <div className="lang-toggle">
+                <button className={lang === 'it' ? 'active' : ''} onClick={() => switchLang('it')}>IT</button>
+                <button className={lang === 'en' ? 'active' : ''} onClick={() => switchLang('en')}>EN</button>
+              </div>
+            </div>
+          </div>
+          <div style={{ paddingTop: '54px', paddingBottom: '76px', minHeight: 'calc(100vh - 130px)', position: 'relative', zIndex: 1 }}>
+            <div className="slide-content" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+              {slides[current](t, lang)}
+            </div>
+          </div>
+          <div className="bottom-bar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, minHeight: '64px', background: colors.bgCard + 'e0', backdropFilter: 'blur(10px)', borderTop: `1px solid ${colors.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', zIndex: 100, flexWrap: 'wrap', padding: '8px 20px' }}>
+            {current === 0 && PREV_ACT_HREF && (
+              <a href={withLang(PREV_ACT_HREF)} style={{ padding: '10px 24px', minHeight: '44px', display: 'inline-flex', alignItems: 'center', background: colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '6px', color: colors.textDim, textDecoration: 'none', fontSize: 'var(--fs-sm)' }}>← {t.prevActLabel}</a>
+            )}
+            <button onClick={prev} disabled={current === 0} style={{ padding: '10px 24px', minHeight: '44px', background: current === 0 ? colors.bgLight : colors.bgCard, border: `1px solid ${colors.border}`, borderRadius: '6px', color: current === 0 ? colors.textMuted : colors.text, cursor: current === 0 ? 'not-allowed' : 'pointer', fontSize: 'var(--fs-sm)' }}>← {t.navBack}</button>
+            <button onClick={next} disabled={current === total - 1} style={{ padding: '10px 24px', minHeight: '44px', background: current === total - 1 ? colors.bgLight : `linear-gradient(135deg, ${colors.accent}, ${colors.accentAlt})`, border: 'none', borderRadius: '6px', color: current === total - 1 ? colors.textMuted : colors.bg, cursor: current === total - 1 ? 'not-allowed' : 'pointer', fontSize: 'var(--fs-sm)', fontWeight: '600' }}>{t.navNext} →</button>
+            {current === total - 1 && (
+              <a href={withLang('index.html')} style={{ padding: '10px 24px', minHeight: '44px', display: 'inline-flex', alignItems: 'center', background: colors.success, border: 'none', borderRadius: '6px', color: colors.bg, textDecoration: 'none', fontSize: 'var(--fs-sm)', fontWeight: '600' }}>🏠 {t.navHome}</a>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
