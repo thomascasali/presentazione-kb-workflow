@@ -148,6 +148,16 @@
       a4_3: "- `Box({ type, title, children })`: callout `info` / `warn` / `danger` / `tip` / `success`\n- `Glow({ children, color })`: card con bordo luminoso gradient",
     };
 
+    // Versioni EN degli estratti CLAUDE.md (l'originale e' in italiano)
+    const CODE_EN = {
+      a3_1: "## Personal knowledge bases\n\n- **Stable KB** (curated source): `~/kb/claude-knowledge-base/`\n  -> operating guides, agents, patterns, workflows.\n- **LLM Wiki** (working memory): `~/kb/llm-wiki/wiki/`\n  Query it with /kb-query; ingest new sessions with /kb-ingest.\n\n**Before reimplementing anything infrastructural** (auth, push,\npayments, deploy...) check whether a KB guide already exists:\nit almost always does, with the gotchas already paid for.",
+      a3_2: "- **Mobile store texts / reviewer notes.** No forced line breaks\n  inside a sentence: each entry is one continuous line, so pasting\n  into the store field needs no manual cleanup.",
+      a3_3: "## Orchestration flow (applies to any non-trivial work)\n\nYou are the lead: plan, decompose, delegate to subagents -- do not\ndo the work yourself -- and synthesize. Show the plan first.\n- Reasoning -> deep-reasoner  \u00b7  Mechanical -> fast-worker\n- Mandatory gate: before declaring done, go through `reviewer`.\n- Exception: trivial tasks first-person, no ceremony.",
+      a4_1: "## Tech stack\n- HTML5 + CSS3 (CSS Grid, Flexbox, clamp(), media queries)\n- React 18 via CDN (unpkg.com)\n- Babel standalone for JSX transpilation\n- SVG for diagrams and simulators\n- Google Fonts: Fraunces, Public Sans, IBM Plex Mono\n- NO bundler, NO npm, NO extra framework. Standalone HTML files only, they open from `file://` too.",
+      a4_2: "| Act | Title | Accent | Accent-alt | Icon |\n|-----|-------|--------|------------|------|\n| 1 | The problem | #d9a441 (gold) | #f0c169 | \ud83e\udde0 |\n| 2 | The architecture | #4fa88d (green) | #7fcbb3 | \ud83c\udfd7\ufe0f |\n| Appendix | Under the hood | #6fae5c (green/success) | #98c98a | \ud83d\udd27 |",
+      a4_3: "- `Box({ type, title, children })`: `info` / `warn` / `danger` / `tip` / `success` callouts\n- `Glow({ children, color })`: card with a gradient glowing border",
+    };
+
     // Frammenti citati nelle didascalie (invariati, sono codice)
     const FRAGS = {
       s2: ['## Flusso di orchestrazione', 'delega ai subagent', 'deep-reasoner · fast-worker', 'Gate obbligatorio: … reviewer'],
@@ -278,28 +288,28 @@
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ fontSize: '28px' }}>🌍</span> {t.sA3_h2}
           </h2>
-          <CodeBlock path={BOOT_PATHS.global} code={CODE.a3_1} />
-          {lang === 'en' && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', margin: '-8px 0 14px' }}>(the real file is in Italian; captions translate the gist)</div>}
+          <CodeBlock path={BOOT_PATHS.global} code={(lang === 'en' ? CODE_EN : CODE).a3_1} />
+          {lang === 'en' && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', margin: '-8px 0 14px' }}>(translated excerpts; the original file is in Italian)</div>}
           <Box type="tip">{t.sA3_cap1}</Box>
-          <CodeBlock path={BOOT_PATHS.global} code={CODE.a3_2} />
+          <CodeBlock path={BOOT_PATHS.global} code={(lang === 'en' ? CODE_EN : CODE).a3_2} />
           <Box type="tip">{t.sA3_cap2}</Box>
-          <CodeBlock path={BOOT_PATHS.global} code={CODE.a3_3} />
+          <CodeBlock path={BOOT_PATHS.global} code={(lang === 'en' ? CODE_EN : CODE).a3_3} />
           <Box type="tip">{t.sA3_cap3}</Box>
           <Box type="success">{t.sA3_closing}</Box>
         </div>
       ),
 
       // A.4 - Dentro il CLAUDE.md di progetto
-      (t) => (
+      (t, lang) => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.sA4_eyebrow}</div>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ fontSize: '28px' }}>📁</span> {t.sA4_h2}
           </h2>
-          <CodeBlock path={PROJECT_CLAUDE_PATH} code={CODE.a4_1} />
+          <CodeBlock path={PROJECT_CLAUDE_PATH} code={(lang === 'en' ? CODE_EN : CODE).a4_1} />
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '14px' }}>
-            <CodeBlock path={PROJECT_CLAUDE_PATH} code={CODE.a4_2} />
-            <CodeBlock path={PROJECT_CLAUDE_PATH} code={CODE.a4_3} />
+            <CodeBlock path={PROJECT_CLAUDE_PATH} code={(lang === 'en' ? CODE_EN : CODE).a4_2} />
+            <CodeBlock path={PROJECT_CLAUDE_PATH} code={(lang === 'en' ? CODE_EN : CODE).a4_3} />
           </div>
           <Box type="tip">{t.sA4_note_a}</Box>
           <Box type="success">{t.sA4_note_b}</Box>
