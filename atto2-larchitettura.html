@@ -161,7 +161,7 @@
               [standard, setStandard, t.sim1_check4],
             ].map(([val, set, label], i) => (
               <label key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: colors.text, fontSize: 'var(--fs-sm)', cursor: 'pointer', minHeight: '44px' }}>
-                <input type="checkbox" checked={val} onChange={e => { set(e.target.checked); resetDot(); }} style={{ width: '20px', height: '20px', accentColor: colors.accent, cursor: 'pointer' }} />
+                <input type="checkbox" checked={val} onChange={e => { set(e.target.checked); resetDot(); }} style={{ width: '20px', height: '20px', flexShrink: 0, accentColor: colors.accent, cursor: 'pointer' }} />
                 {label}
               </label>
             ))}
@@ -415,7 +415,7 @@
         s2_li2_strong: 'Wiki viva',
         s2_li2_rest: ' — memoria di lavoro: appunti organizzati ma ancora provvisori',
         s2_li3_strong: 'KB stabile',
-        s2_li3_rest: ' — solo ciò che ha superato l\'esame di promozione ed è stato verificato in produzione',
+        s2_li3_rest: ' — solo ciò che ha superato l\'esame di promozione ed è stato verificato in produzione o su dispositivo reale',
         s3_h2: 'Il percorso di un fatto',
         s4_h2: 'Perché non mettere tutto subito nel libro di testo?',
         s4_body: 'Sembra più comodo salvare tutto subito come "verità". Ma se lo fai, dopo un po\' non ti fidi più di niente nella KB — non sai più cosa è stato controllato davvero e cosa è solo un tentativo.',
@@ -488,7 +488,7 @@
         s2_li2_strong: 'Living wiki',
         s2_li2_rest: ' — working memory: organized notes, still provisional',
         s2_li3_strong: 'Stable KB',
-        s2_li3_rest: ' — only what passed the promotion exam and has been verified in production',
+        s2_li3_rest: ' — only what passed the promotion exam and has been verified in production or on a real device',
         s3_h2: 'How a fact travels',
         s4_h2: 'Why not put everything straight into the textbook?',
         s4_body: 'It seems easier to save everything right away as "truth". But if you do, after a while you stop trusting anything in the KB: you no longer know what has actually been checked and what is just an attempt.',

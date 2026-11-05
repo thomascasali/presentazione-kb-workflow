@@ -123,7 +123,7 @@
       <div style={{ display: 'grid', gap: '10px', margin: '18px 0' }}>
         {frags.map((f, i) => (
           <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-            <code style={{ flexShrink: 0, background: colors.bgLight, color: colors.accentAlt, padding: '3px 9px', borderRadius: '4px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', border: `1px solid ${colors.border}` }}>{f}</code>
+            <code style={{ maxWidth: '100%', overflowWrap: 'anywhere', whiteSpace: 'pre-wrap', background: colors.bgLight, color: colors.accentAlt, padding: '3px 9px', borderRadius: '4px', fontFamily: "'IBM Plex Mono', monospace", fontSize: 'var(--fs-xs)', border: `1px solid ${colors.border}` }}>{f}</code>
             <div style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', lineHeight: 'var(--lh-body)', flex: '1 1 220px', minWidth: 0 }}>{texts[i]}</div>
           </div>
         ))}
@@ -282,7 +282,7 @@
       ),
 
       // A.2 - Il bootstrap
-      (t) => (
+      (t, lang) => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.sboot_eyebrow}</div>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -290,7 +290,7 @@
           </h2>
           <BootstrapDiagram t={t} />
           <Box type="warn">{t.sboot_callout}</Box>
-          <CodeBlock path="~/.claude/CLAUDE.md" code={t.sboot_code} />
+          <CodeBlock path={lang === 'en' ? '~/.claude/CLAUDE.md (simplified outline)' : '~/.claude/CLAUDE.md (schema semplificato)'} code={t.sboot_code} />
           <Box type="tip">{t.sboot_note1}</Box>
           <Box type="success">{t.sboot_note2}</Box>
         </div>
@@ -304,7 +304,7 @@
             <span style={{ fontSize: '28px' }}>🌍</span> {t.sA3_h2}
           </h2>
           <CodeBlock path={BOOT_PATHS.global} code={(lang === 'en' ? CODE_EN : CODE).a3_1} />
-          {lang === 'en' && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', margin: '-8px 0 14px' }}>(translated excerpts; the original file is in Italian)</div>}
+          <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', margin: '-8px 0 14px' }}>{lang === 'en' ? 'Simplified, translated example of my global CLAUDE.md: the real file is personal and not in the repository. The third excerpt is the real block from docs/orchestration.md.' : 'Esempio semplificato del mio CLAUDE.md globale: il file reale è personale e non è nel repository. Il terzo estratto è invece il blocco reale di docs/orchestrazione.md.'}</div>
           <Box type="tip">{t.sA3_cap1}</Box>
           <CodeBlock path={BOOT_PATHS.global} code={(lang === 'en' ? CODE_EN : CODE).a3_2} />
           <Box type="tip">{t.sA3_cap2}</Box>
@@ -329,7 +329,7 @@
           {lang === 'en' && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', margin: '-8px 0 14px' }}>(translated excerpts; the original file is in Italian)</div>}
           <Box type="tip">{t.sA4_note_a}</Box>
           <Box type="success">{t.sA4_note_b}</Box>
-          <Box type="info">{t.sA4_note_c} <a href={SOURCE_REPO_URL} target="_blank" rel="noopener noreferrer" style={{ color: colors.accent }}>{SOURCE_REPO_URL.replace('https://', '')}</a></Box>
+          <Box type="info">{t.sA4_note_c} <a href={SOURCE_REPO_URL} target="_blank" rel="noopener noreferrer" style={{ color: colors.accent, overflowWrap: 'anywhere' }}>{SOURCE_REPO_URL.replace('https://', '')}</a></Box>
         </div>
       ),
 
@@ -580,7 +580,7 @@
         sboot_s5_label: 'Your first message',
         sboot_s5_detail: 'only now',
         sboot_callout: 'All of this happens BEFORE your first prompt, every session.',
-        sboot_code: "## Basi di conoscenza          <- pointers to the stable KB and the LLM Wiki (where to look)\n## Standard obbligatori        <- rules that hold on every project (auth, UI, store text)\n## Orchestrazione              <- who does what: lead, three model tiers, the reviewer gate\n## Stile di comunicazione      <- when to talk and when to work in silence\n## Code review incrementale    <- only the delta since the last approved SHA gets reviewed",
+        sboot_code: "## Knowledge bases             <- pointers to the stable KB and the LLM Wiki (where to look)\n## Mandatory standards       <- rules that hold on every project (auth, UI, store text)\n## Orchestration              <- who does what: lead, three model tiers, the reviewer gate\n## Communication style       <- when to talk and when to work in silence\n## Incremental code review   <- only the delta since the last approved SHA gets reviewed",
         sboot_note1: 'CLAUDE.md is the one file loaded every time, so it stays short and works as an index: pointers to the knowledge, never the knowledge itself. If the content lived there, every session would pay the cost of reading all of it.',
         sboot_note2: "It's the same hierarchy of levers in the next slide: global (the method), then project (the context), then prompt (today's task). Change the method once, and it holds everywhere from that point.",
         sA3_eyebrow: 'The same file, three excerpts (simplified paths)',

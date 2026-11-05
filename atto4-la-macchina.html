@@ -117,11 +117,12 @@
     // ---------- Diagramma 4.2: il ciclo completo ----------
     const boxStyle = { fill: colors.bgLight, stroke: colors.border, strokeWidth: 2, rx: 8 };
     const labelStyle = { textAnchor: 'middle', fill: colors.text, fontSize: '12', fontWeight: 'bold' };
-    const subLabelStyle = { textAnchor: 'middle', fill: colors.textMuted, fontSize: '9' };
+    const subLabelStyle = { textAnchor: 'middle', fill: colors.textMuted, fontSize: '10' };
     const monoLabelStyle = { textAnchor: 'middle', fill: colors.accentAlt, fontSize: '11', fontFamily: "'IBM Plex Mono', monospace", fontWeight: '600' };
 
     const MachineDiagram = ({ t }) => (
-      <svg viewBox="0 0 920 380" style={{ width: '100%', background: colors.bg, borderRadius: '8px' }}>
+      <div style={{ overflowX: 'auto', borderRadius: '8px' }}>
+      <svg viewBox="0 0 920 380" style={{ width: '100%', minWidth: '860px', background: colors.bg, borderRadius: '8px' }}>
         <defs>
           <marker id="arrowPurple" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
             <path d="M0,0 L8,4 L0,8 Z" fill={colors.purple} />
@@ -202,6 +203,7 @@
         <path d="M725,300 L725,20 L205,20 L205,90" fill="none" stroke={colors.purple} strokeWidth="2" strokeDasharray="6,4" markerEnd="url(#arrowPurple)" />
         <text x="465" y="14" textAnchor="middle" fill={colors.purple} fontSize="10" fontFamily="'IBM Plex Mono', monospace">{t.diag_reread}</text>
       </svg>
+      </div>
     );
 
     // ---------- Diagramma 4.3: 10 corsie parallele ----------

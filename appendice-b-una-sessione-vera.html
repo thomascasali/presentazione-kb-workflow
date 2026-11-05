@@ -51,7 +51,7 @@
     .sim-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 16px; align-items: start; }
     .terminal-box { height: 380px; overflow-y: auto; overflow-x: hidden; padding: 16px; font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-sm); line-height: 1.75; background: var(--bg); }
     .terminal-line { white-space: pre-wrap; word-break: break-word; margin-bottom: 6px; }
-    .actor-card { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; background: var(--bg); border: 2px solid var(--border); opacity: 0.45; transition: opacity 0.25s, border-color 0.25s, box-shadow 0.25s; }
+    .actor-card { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; background: var(--bg); border: 2px solid var(--border); opacity: 0.7; transition: opacity 0.25s, border-color 0.25s, box-shadow 0.25s; }
     .actor-card.actor-active { opacity: 1; }
     .sim-controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
     .b3-table-wrap { overflow-x: auto; margin: 18px 0; }
@@ -258,7 +258,7 @@
             { lines: [{ kind: 'reviewer', text: 'reviewer: approvato' }], active: ['reviewer'], note: 'Verificato, si chiude.' },
             { lines: [
                 { kind: 'command', text: '/kb-ingest' },
-                { kind: 'success', text: 'Pattern #14 confermato una volta in più: seconda comparsa utile per la soglia della KB stabile' },
+                { kind: 'success', text: 'Pattern #14 confermato una volta in più' },
               ], active: ['wiki', 'kb'], note: 'Non è un pattern nuovo: è la stessa regola vista reggere un\'altra volta.' },
           ],
         },
@@ -369,7 +369,7 @@
             { lines: [{ kind: 'reviewer', text: 'reviewer: approved' }], active: ['reviewer'], note: 'Checked, and closed.' },
             { lines: [
                 { kind: 'command', text: '/kb-ingest' },
-                { kind: 'success', text: 'Pattern #14 confirmed once more: a second sighting counts toward the stable-KB bar' },
+                { kind: 'success', text: 'Pattern #14 confirmed once more' },
               ], active: ['wiki', 'kb'], note: 'Not a new pattern: the same rule, holding up a second time.' },
           ],
         },

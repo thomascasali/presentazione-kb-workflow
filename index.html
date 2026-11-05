@@ -199,7 +199,7 @@
     .module-number {
       font-family: 'IBM Plex Mono', monospace;
       font-size: var(--fs-xs);
-      color: var(--module-color);
+      color: var(--module-text, var(--module-color));
       text-transform: uppercase;
       letter-spacing: 2px;
       margin-bottom: 4px;
@@ -262,11 +262,11 @@
     .module-card:hover .module-arrow svg { stroke: var(--bg); }
     .module-card[data-atto="1"] { --module-color: #d9a441; --module-color-glow: rgba(217, 164, 65, 0.18); }
     .module-card[data-atto="2"] { --module-color: #4fa88d; --module-color-glow: rgba(79, 168, 141, 0.18); }
-    .module-card[data-atto="3"] { --module-color: #d1603d; --module-color-glow: rgba(209, 96, 61, 0.18); }
+    .module-card[data-atto="3"] { --module-color: #d1603d; --module-text: #e88f6c; --module-color-glow: rgba(209, 96, 61, 0.18); }
     .module-card[data-atto="4"] { --module-color: #4e93b8; --module-color-glow: rgba(78, 147, 184, 0.18); }
     .module-card[data-atto="5"] { --module-color: #a879c4; --module-color-glow: rgba(168, 121, 196, 0.18); }
     .module-card[data-atto="appendice"] { --module-color: #6fae5c; --module-color-glow: rgba(111, 174, 92, 0.18); }
-    .module-card[data-atto="appendice-b"] { --module-color: #b5566a; --module-color-glow: rgba(181, 86, 106, 0.18); }
+    .module-card[data-atto="appendice-b"] { --module-color: #b5566a; --module-text: #dd93a2; --module-color-glow: rgba(181, 86, 106, 0.18); }
     footer {
       text-align: center;
       padding: 40px 0;

@@ -4,7 +4,7 @@ Presentation available in English: https://thomascasali.github.io/presentazione-
 
 ▶️ **Vedi la presentazione**: https://thomascasali.github.io/presentazione-kb-workflow/
 
-Presentazione interattiva su come funziona `claude-kb-workflow`, rivolta a chi si avvicina alla programmazione: un sistema di memoria a tre livelli (sessioni → wiki → KB stabile) per far arrivare all'AI, su ogni progetto, quello che ha imparato lavorando sugli altri.
+Presentazione interattiva su come funziona `claude-kb-workflow`, rivolta a chi si avvicina alla programmazione: un flusso a tre livelli (sessioni → wiki → KB stabile) per far arrivare all'AI, su ogni progetto, quello che ha imparato lavorando sugli altri.
 
 Ora è bilingue italiano/inglese: un selettore di lingua in apertura sull'indice propaga la scelta a tutti e cinque gli atti (salvata in `localStorage`, sovrascrivibile con `?lang=en` o `?lang=it` in URL).
 
@@ -12,7 +12,7 @@ Ora è bilingue italiano/inglese: un selettore di lingua in apertura sull'indice
 
 | Atto | Titolo | Argomenti | Slide |
 |------|--------|-----------|-------|
-| 1 | Il problema | L'amnesia dell'AI, 15+ prodotti reali gestiti nei ritagli di tempo, l'idea di Karpathy | 6 |
+| 1 | Il problema | L'amnesia dell'AI, prodotti reali gestiti nei ritagli di tempo, l'idea di Karpathy | 6 |
 | 2 | L'architettura | I tre livelli, l'esame di promozione, l'orchestra di agenti | 6 |
 | 3 | Le tre storie | 10 agenti fantasma, il bug dei 4 caratteri, il recupero in un'ora, la memoria vista dall'alto, i 26 errori | 10 |
 | 4 | La macchina completa | Il workflow end-to-end, l'orchestrazione parallela, wiki e KB anche per gli agenti, le skill in pratica, cosa c'è nel repo | 7 |
