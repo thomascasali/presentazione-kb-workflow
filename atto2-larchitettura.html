@@ -114,7 +114,9 @@
     // ---------- Simulatore 1: il viaggio di un fatto ----------
     const FactJourneySimulator = ({ t }) => {
       const [verified, setVerified] = useState(false);
-      const [seenTwice, setSeenTwice] = useState(false);
+      const [multi, setMulti] = useState(false);
+      const [gotcha, setGotcha] = useState(false);
+      const [standard, setStandard] = useState(false);
       const [dot, setDot] = useState(null);
       const [running, setRunning] = useState(false);
       const intervalRef = useRef(null);
@@ -124,7 +126,7 @@
       const travel = () => {
         if (running) return;
         setRunning(true);
-        const canPass = verified && seenTwice;
+        const canPass = verified && (multi || gotcha || standard);
         let pos = 95;
         setDot({ x: pos, blocked: false, promoted: false });
         intervalRef.current = setInterval(() => {
@@ -152,14 +154,17 @@
           <h3 style={{ color: colors.accent, marginBottom: '12px' }}>{t.sim1_header}</h3>
           <p style={{ color: colors.textDim, fontSize: 'var(--fs-sm)', marginBottom: '16px' }}>{t.sim1_desc}</p>
           <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', marginBottom: '16px' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', color: colors.text, fontSize: 'var(--fs-sm)', cursor: 'pointer', minHeight: '44px' }}>
-              <input type="checkbox" checked={verified} onChange={e => { setVerified(e.target.checked); resetDot(); }} style={{ width: '20px', height: '20px', accentColor: colors.accent, cursor: 'pointer' }} />
-              {t.sim1_check1}
-            </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', color: colors.text, fontSize: 'var(--fs-sm)', cursor: 'pointer', minHeight: '44px' }}>
-              <input type="checkbox" checked={seenTwice} onChange={e => { setSeenTwice(e.target.checked); resetDot(); }} style={{ width: '20px', height: '20px', accentColor: colors.accent, cursor: 'pointer' }} />
-              {t.sim1_check2}
-            </label>
+            {[
+              [verified, setVerified, t.sim1_check1],
+              [multi, setMulti, t.sim1_check2],
+              [gotcha, setGotcha, t.sim1_check3],
+              [standard, setStandard, t.sim1_check4],
+            ].map(([val, set, label], i) => (
+              <label key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: colors.text, fontSize: 'var(--fs-sm)', cursor: 'pointer', minHeight: '44px' }}>
+                <input type="checkbox" checked={val} onChange={e => { set(e.target.checked); resetDot(); }} style={{ width: '20px', height: '20px', accentColor: colors.accent, cursor: 'pointer' }} />
+                {label}
+              </label>
+            ))}
           </div>
           <svg viewBox="0 0 640 170" style={{ width: '100%', background: colors.bg, borderRadius: '8px' }}>
             <rect x="20" y="40" width="150" height="100" fill={colors.bgLight} stroke={colors.border} strokeWidth="2" rx="8" />
@@ -410,17 +415,17 @@
         s2_li2_strong: 'Wiki viva',
         s2_li2_rest: ' — memoria di lavoro: appunti organizzati ma ancora provvisori',
         s2_li3_strong: 'KB stabile',
-        s2_li3_rest: ' — solo ciò che è stato verificato in produzione e rivisto almeno 2 volte',
+        s2_li3_rest: ' — solo ciò che ha superato l\'esame di promozione ed è stato verificato in produzione',
         s3_h2: 'Il percorso di un fatto',
         s4_h2: 'Perché non mettere tutto subito nel libro di testo?',
         s4_body: 'Sembra più comodo salvare tutto subito come "verità". Ma se lo fai, dopo un po\' non ti fidi più di niente nella KB — non sai più cosa è stato controllato davvero e cosa è solo un tentativo.',
         s4_danger: 'Un libro di testo pieno di appunti non verificati non è più un libro di testo: è rumore.',
-        s4_success_title: "La regola dell'esame — entrambi i requisiti richiesti",
-        s4_success_body: '✅ Verificato in produzione  +  ✅ Visto almeno 2 volte',
+        s4_success_title: "L'esame di promozione: una di queste tre, e la verifica sempre",
+        s4_success_body: 'Usato da 2+ progetti, oppure un gotcha già pagato (un\'ora o più per ritrovarlo), oppure uno standard dichiarato. In ogni caso verificato in produzione o su un dispositivo reale.',
         s5_h2: 'Chi lavora davvero, dietro le quinte',
         s5_glow: "L'AI non lavora da sola: è organizzata come un'orchestra.",
         s5_li1_strong: 'Il direttore (lead)',
-        s5_li1_rest: ' — pianifica, decide chi fa cosa. Non suona lui stesso gli strumenti.',
+        s5_li1_rest: ' — pianifica, decide chi fa cosa e a che livello: Haiku per gli incarichi piccoli e chiusi, Sonnet per gli specialisti e per chi deve cercare una causa, Opus per progettare e per il controllo. Se il livello basso non basta, il lavoro sale al successivo.',
         s5_li2_strong: 'Gli specialisti',
         s5_li2_rest: ' — musicisti esperti: chi lavora sul backend, chi sul frontend, chi sul database, chi sul deploy... ognuno suona la propria parte.',
         s5_li3_strong: 'Il controllore (reviewer)',
@@ -433,13 +438,15 @@
         svg_provisional: 'provvisorio',
         svg_exam: 'esame',
         svg_kb: 'KB stabile',
-        svg_verified_x2: 'verificato x2',
+        svg_verified_x2: 'verificato',
         sim1_header: '🧭 Simulatore: il percorso di un fatto',
-        sim1_desc: 'Provate voi: un fatto passa alla KB solo se supera il controllo.',
-        sim1_check1: 'Verificato in produzione',
-        sim1_check2: 'Visto almeno 2 volte',
+        sim1_desc: "Provate voi: un fatto passa alla KB solo se supera l'esame di promozione.",
+        sim1_check1: 'Verificato in produzione o su dispositivo reale',
+        sim1_check2: 'Usato da 2+ progetti',
+        sim1_check3: 'Gotcha già pagato',
+        sim1_check4: 'Standard dichiarato',
         sim1_button: '▶ Manda avanti questo fatto',
-        sim1_blocked: "⛔ Bocciato all'esame: mancano i requisiti",
+        sim1_blocked: "⛔ Bocciato all'esame: serve la verifica e almeno una delle tre ragioni",
         sim1_promoted: '✓ Promosso alla KB stabile',
         sim2_header: "🎻 Simulatore: l'orchestra in azione",
         sim2_desc: 'Cliccate un ruolo per capire cosa fa, poi provate il flusso completo di un lavoro.',
@@ -481,17 +488,17 @@
         s2_li2_strong: 'Living wiki',
         s2_li2_rest: ' — working memory: organized notes, still provisional',
         s2_li3_strong: 'Stable KB',
-        s2_li3_rest: ' — only what has been verified in production and reviewed at least twice',
+        s2_li3_rest: ' — only what passed the promotion exam and has been verified in production',
         s3_h2: 'How a fact travels',
         s4_h2: 'Why not put everything straight into the textbook?',
         s4_body: 'It seems easier to save everything right away as "truth". But if you do, after a while you stop trusting anything in the KB: you no longer know what has actually been checked and what is just an attempt.',
         s4_danger: 'A textbook full of unverified notes stops being a textbook. It becomes noise.',
-        s4_success_title: 'The exam rule — both requirements needed',
-        s4_success_body: '✅ Verified in production  +  ✅ Seen at least twice',
+        s4_success_title: 'The promotion exam: one of these three, and verification always',
+        s4_success_body: 'Used by 2+ projects, or a gotcha already paid for (an hour or more to hit again), or a declared standard. In every case verified in production or on a real device.',
         s5_h2: 'Who actually does the work, behind the scenes',
         s5_glow: 'The AI does not work alone: it is organized like an orchestra.',
         s5_li1_strong: 'The conductor (lead)',
-        s5_li1_rest: ' — plans, decides who does what. Does not play the instruments themselves.',
+        s5_li1_rest: ' — plans, decides who does what and at which level: Haiku for small, closed jobs, Sonnet for the specialists and for hunting an unknown cause, Opus for design and review. If the lower level is not enough, the work moves up to the next one.',
         s5_li2_strong: 'The specialists',
         s5_li2_rest: ' — expert musicians: one works on the backend, one on the frontend, one on the database, one on deploy... each plays their own part.',
         s5_li3_strong: 'The reviewer',
@@ -504,13 +511,15 @@
         svg_provisional: 'provisional',
         svg_exam: 'exam',
         svg_kb: 'Stable KB',
-        svg_verified_x2: 'verified x2',
+        svg_verified_x2: 'verified',
         sim1_header: '🧭 Simulator: how a fact travels',
-        sim1_desc: 'Try it yourself: a fact only reaches the KB if it passes the check.',
-        sim1_check1: 'Verified in production',
-        sim1_check2: 'Seen at least twice',
+        sim1_desc: 'Try it yourself: a fact only reaches the KB if it passes the promotion exam.',
+        sim1_check1: 'Verified in production or on a real device',
+        sim1_check2: 'Used by 2+ projects',
+        sim1_check3: 'Gotcha already paid for',
+        sim1_check4: 'Declared standard',
         sim1_button: '▶ Send this fact forward',
-        sim1_blocked: '⛔ Failed the exam: requirements missing',
+        sim1_blocked: '⛔ Failed the exam: needs verification and at least one of the three reasons',
         sim1_promoted: '✓ Promoted to the stable KB',
         sim2_header: '🎻 Simulator: the orchestra in action',
         sim2_desc: 'Click a role to see what it does, then try the full flow of a piece of work.',

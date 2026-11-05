@@ -138,17 +138,21 @@
         <text x="205" y="112" {...labelStyle}>{t.diag_lead}</text>
         <text x="205" y="128" {...subLabelStyle}>{t.diag_plans}</text>
 
-        <rect x="320" y="30" width="170" height="44" {...boxStyle} />
-        <text x="405" y="48" {...labelStyle}>deep-reasoner</text>
-        <text x="405" y="64" {...subLabelStyle}>{t.diag_reasoning}</text>
+        <rect x="320" y="30" width="170" height="42" {...boxStyle} />
+        <text x="405" y="47" {...labelStyle}>quick-worker</text>
+        <text x="405" y="62" {...subLabelStyle}>{t.diag_quick}</text>
 
-        <rect x="320" y="88" width="170" height="44" {...boxStyle} />
-        <text x="405" y="106" {...labelStyle}>fast-worker</text>
-        <text x="405" y="122" {...subLabelStyle}>{t.diag_mechanical}</text>
+        <rect x="320" y="84" width="170" height="42" {...boxStyle} />
+        <text x="405" y="101" {...labelStyle}>fast-worker</text>
+        <text x="405" y="116" {...subLabelStyle}>{t.diag_mechanical}</text>
 
-        <rect x="320" y="146" width="170" height="44" {...boxStyle} />
-        <text x="405" y="164" {...labelStyle}>{t.diag_specialists}</text>
-        <text x="405" y="180" {...subLabelStyle}>{t.diag_by_domain}</text>
+        <rect x="320" y="138" width="170" height="42" {...boxStyle} />
+        <text x="405" y="155" {...labelStyle}>{t.diag_specialists}</text>
+        <text x="405" y="170" {...subLabelStyle}>{t.diag_by_domain}</text>
+
+        <rect x="320" y="192" width="170" height="42" {...boxStyle} />
+        <text x="405" y="209" {...labelStyle}>deep-reasoner</text>
+        <text x="405" y="224" {...subLabelStyle}>{t.diag_reasoning}</text>
 
         <rect x="560" y="90" width="140" height="50" {...boxStyle} stroke={colors.warn} />
         <text x="630" y="112" {...labelStyle}>{t.diag_check}</text>
@@ -159,12 +163,14 @@
 
         {/* connessioni riga 1 */}
         <line x1="100" y1="115" x2="150" y2="115" stroke={colors.textMuted} strokeWidth="2" />
-        <line x1="260" y1="105" x2="320" y2="52" stroke={colors.textMuted} strokeWidth="2" />
-        <line x1="260" y1="115" x2="320" y2="110" stroke={colors.textMuted} strokeWidth="2" />
-        <line x1="260" y1="125" x2="320" y2="168" stroke={colors.textMuted} strokeWidth="2" />
-        <line x1="490" y1="52" x2="560" y2="105" stroke={colors.textMuted} strokeWidth="2" />
-        <line x1="490" y1="110" x2="560" y2="115" stroke={colors.textMuted} strokeWidth="2" />
-        <line x1="490" y1="168" x2="560" y2="125" stroke={colors.textMuted} strokeWidth="2" />
+        <line x1="260" y1="100" x2="320" y2="51" stroke={colors.textMuted} strokeWidth="2" />
+        <line x1="260" y1="108" x2="320" y2="105" stroke={colors.textMuted} strokeWidth="2" />
+        <line x1="260" y1="122" x2="320" y2="159" stroke={colors.textMuted} strokeWidth="2" />
+        <line x1="260" y1="130" x2="320" y2="213" stroke={colors.textMuted} strokeWidth="2" />
+        <line x1="490" y1="51" x2="560" y2="100" stroke={colors.textMuted} strokeWidth="2" />
+        <line x1="490" y1="105" x2="560" y2="108" stroke={colors.textMuted} strokeWidth="2" />
+        <line x1="490" y1="159" x2="560" y2="122" stroke={colors.textMuted} strokeWidth="2" />
+        <line x1="490" y1="213" x2="560" y2="130" stroke={colors.textMuted} strokeWidth="2" />
         <line x1="700" y1="115" x2="760" y2="115" stroke={colors.textMuted} strokeWidth="2" />
 
         {/* Riga 2: il ciclo della conoscenza */}
@@ -367,6 +373,7 @@
           </Glow>
           <ul style={{ color: colors.textDim, lineHeight: '1.9', paddingLeft: '22px', fontSize: 'var(--fs-body)', marginTop: '18px' }}>
             <li><strong style={{ color: colors.text }}>{t.s7_li1_strong}</strong>{t.s7_li1_rest}</li>
+            <li><strong style={{ color: colors.text }}>{t.s7_li3_strong}</strong>{t.s7_li3_rest}</li>
             <li><strong style={{ color: colors.text }}>{t.s7_li2_strong}</strong>{t.s7_li2_rest}</li>
           </ul>
           <Box type="tip">
@@ -388,14 +395,14 @@
         navNext: 'Avanti',
         s1_lead: 'Come persone, agenti e memoria lavorano insieme, dal primo prompt alla KB stabile.',
         s2_h2: "Come gira la macchina, dall'inizio alla fine",
-        s2_body: "In alto scorre il lavoro di tutti i giorni: voi chiedete, il direttore (lead) pianifica e delega in parallelo a chi ragiona a fondo, a chi esegue il meccanico e agli specialisti di dominio, poi tutto confluisce nel controllo del reviewer prima del risultato finale. In basso scorre un secondo ciclo, quello della conoscenza: ogni sessione può essere ingerita nella wiki, esaminata, e promossa alla KB stabile — che a sua volta viene riletta dagli agenti nelle sessioni future, chiudendo il cerchio.",
+        s2_body: "In alto scorre il lavoro di tutti i giorni: voi chiedete, il direttore (lead) pianifica e sceglie il livello di modello più economico che basta e delega in parallelo: Haiku (quick-worker) per gli incarichi piccoli e chiusi, Sonnet (fast-worker e specialisti di dominio) per cercare una causa o lavorare su più file, Opus (deep-reasoner, reviewer, security) per progettare e controllare. Se un livello torna incompleto, il lavoro sale a quello sopra. Poi tutto confluisce nel controllo del reviewer prima del risultato finale. In basso scorre un secondo ciclo, quello della conoscenza: ogni sessione può essere ingerita nella wiki, esaminata, e promossa alla KB stabile — che a sua volta viene riletta dagli agenti nelle sessioni future, chiudendo il cerchio.",
         s2_tip: 'Le due metà si alimentano a vicenda: il lavoro produce conoscenza, la conoscenza migliora il lavoro successivo.',
-        s3_h2: "10 corsie parallele, un'ora, 15 progetti",
+        s3_h2: "Allora: 10 corsie parallele, un'ora, 15 progetti",
         s3_body1: "È il censimento retroattivo raccontato nell'Atto 3, visto qui dal lato dell'organizzazione: invece di leggere i log di 15 progetti uno alla volta, sono stati lanciati ",
         s3_body_strong: '10 agenti di lettura in parallelo',
         s3_body2: ', uno per progetto, ognuno sui propri registri di sessione. Nessuno aspetta il turno di un altro.',
         s3_box_title: 'Secondo esempio: la release v0.2',
-        s3_box_body: "Anche il collaudo della v0.2 (Atto 3) era orchestrazione in azione: il lead scriveva i documenti mentre il fast-worker faceva in parallelo il lavoro meccanico, e solo alla fine il reviewer ha controllato tutto insieme — lavoro diviso per competenza, non per turno.",
+        s3_box_body: "Anche il collaudo della v0.2 (Atto 3) era orchestrazione in azione: il lead scriveva i documenti mentre il fast-worker di allora faceva in parallelo il lavoro meccanico (oggi quel lavoro parte da Haiku), e solo alla fine il reviewer ha controllato tutto insieme — lavoro diviso per competenza, non per turno.",
         s4_h2: 'Chi legge cosa — anche per gli agenti',
         s4_body: "La stessa metafora dell'Atto 2 vale per gli agenti, non solo per voi: la wiki è il quaderno di appunti, la KB è il libro di testo. Ma qui il libro lo consulta anche chi lavora — non solo chi legge alla fine.",
         s4_card1_title: 'Wiki — stato fresco',
@@ -434,7 +441,9 @@
         s7_h2: "Cosa c'è nel repo pubblico — e cosa resta privato",
         s7_glow: 'Tutta la macchina che avete visto in questo atto è quello che finisce nel repo pubblico.',
         s7_li1_strong: 'Cosa contiene il repo pubblico',
-        s7_li1_rest: ' — la pipeline wiki → KB, 12 agenti, 30 pattern pagati in produzione, 6 skill',
+        s7_li1_rest: ' — la pipeline wiki → KB, 13 agenti su tre livelli di modello, 16 pattern nati da bug di produzione, 6 skill',
+        s7_li3_strong: 'Due strumenti di sicurezza (v0.4)',
+        s7_li3_rest: ' — uno scanner che cerca chiavi e password nei file prima di un commit, e uno script che prova backup e ripristino in una cartella temporanea, per verificare che funzionino davvero',
         s7_li2_strong: 'Cosa resta privato',
         s7_li2_rest: ' — la wiki con i progetti reali',
         s7_tip: 'E allora perché regalarlo? La risposta è nel prossimo atto.',
@@ -442,10 +451,11 @@
         diag_you: 'Tu',
         diag_lead: 'Lead',
         diag_plans: 'pianifica',
-        diag_reasoning: 'ragionamento',
-        diag_mechanical: 'meccanico',
+        diag_reasoning: 'Opus: design, controllo',
+        diag_quick: 'Haiku: piccolo e chiuso (default)',
+        diag_mechanical: 'Sonnet: causa da trovare',
         diag_specialists: 'specialisti',
-        diag_by_domain: 'per dominio',
+        diag_by_domain: 'Sonnet: per dominio',
         diag_check: 'Controllo',
         diag_result: 'Risultato',
         diag_row2_label: 'IL CICLO DELLA CONOSCENZA',
@@ -454,7 +464,7 @@
         diag_stable_kb: 'KB stabile',
         diag_reread: 'riletta dagli agenti nelle sessioni future',
         diag_agent: 'agente',
-        diag_lanes_title: '15 progetti, 3 mesi di lavoro',
+        diag_lanes_title: '15 progetti, 3 mesi di lavoro (allora)',
         diag_lanes_sub: "ricostruiti in circa un'ora",
       },
       en: {
@@ -468,14 +478,14 @@
         navNext: 'Next',
         s1_lead: 'How people, agents and memory work together, from the first prompt to the stable KB.',
         s2_h2: 'How the machine runs, start to finish',
-        s2_body: "On top runs the everyday work: you ask, the lead plans and delegates in parallel to whoever reasons deeply, whoever handles the mechanical work, and the domain specialists, then everything flows into the reviewer's check before the final result. Below runs a second cycle, the knowledge one: every session can be ingested into the wiki, examined, and promoted to the stable KB, which in turn gets read back by the agents in future sessions, closing the loop.",
+        s2_body: "On top runs the everyday work: you ask, the lead plans and picks the cheapest model tier that is enough and delegates in parallel: Haiku (quick-worker) for small, closed jobs, Sonnet (fast-worker and the domain specialists) for hunting a cause or wide changes, Opus (deep-reasoner, reviewer, security) for design and review. If a tier comes back incomplete, the work moves up one tier. Then everything flows into the reviewer's check before the final result. Below runs a second cycle, the knowledge one: every session can be ingested into the wiki, examined, and promoted to the stable KB, which in turn gets read back by the agents in future sessions, closing the loop.",
         s2_tip: 'The two halves feed each other: the work produces knowledge, the knowledge improves the next round of work.',
-        s3_h2: '10 parallel lanes, one hour, 15 projects',
+        s3_h2: 'Back then: 10 parallel lanes, one hour, 15 projects',
         s3_body1: 'It is the retroactive census told in Act 3, seen here from the organization side: instead of reading the logs of 15 projects one at a time, ',
         s3_body_strong: '10 reading agents were launched in parallel',
         s3_body2: ', one per project, each on its own session records. Nobody waits for anyone else\'s turn.',
         s3_box_title: 'Second example: the v0.2 release',
-        s3_box_body: "The v0.2 review (Act 3) was orchestration in action too: the lead wrote the documents while fast-worker did the mechanical work in parallel, and only at the end did the reviewer check everything together. Work split by skill, not by turn.",
+        s3_box_body: "The v0.2 review (Act 3) was orchestration in action too: the lead wrote the documents while the fast-worker of the time did the mechanical work in parallel (today that work starts on Haiku), and only at the end did the reviewer check everything together. Work split by skill, not by turn.",
         s4_h2: 'Who reads what, for the agents too',
         s4_body: "The same metaphor from Act 2 applies to the agents too, not just to you: the wiki is the notebook, the KB is the textbook. But here the textbook gets consulted by whoever is doing the work too, not only by whoever reads it at the end.",
         s4_card1_title: 'Wiki — current state',
@@ -514,7 +524,9 @@
         s7_h2: 'What is in the public repo — and what stays private',
         s7_glow: 'The whole machine you saw in this act is what ends up in the public repo.',
         s7_li1_strong: 'What the public repo contains',
-        s7_li1_rest: ' — the wiki → KB pipeline, 12 agents, 30 patterns paid for in production, 6 skills',
+        s7_li1_rest: ' — the wiki → KB pipeline, 13 agents on three model tiers, 16 patterns born from production bugs, 6 skills',
+        s7_li3_strong: 'Two safety tools (v0.4)',
+        s7_li3_rest: ' — a scanner that looks for keys and passwords in files before a commit, and a script that runs backup and restore in a temporary folder, to check that they really work',
         s7_li2_strong: 'What stays private',
         s7_li2_rest: ' — the wiki with the real projects',
         s7_tip: 'So why give it away? The answer is in the next act.',
@@ -522,10 +534,11 @@
         diag_you: 'You',
         diag_lead: 'Lead',
         diag_plans: 'plans',
-        diag_reasoning: 'reasoning',
-        diag_mechanical: 'mechanical',
+        diag_reasoning: 'Opus: design, review',
+        diag_quick: 'Haiku: small and closed (default)',
+        diag_mechanical: 'Sonnet: cause to find',
         diag_specialists: 'specialists',
-        diag_by_domain: 'by domain',
+        diag_by_domain: 'Sonnet: by domain',
         diag_check: 'Check',
         diag_result: 'Result',
         diag_row2_label: 'THE KNOWLEDGE CYCLE',
@@ -534,7 +547,7 @@
         diag_stable_kb: 'Stable KB',
         diag_reread: 'read back by agents in future sessions',
         diag_agent: 'agent',
-        diag_lanes_title: '15 projects, 3 months of work',
+        diag_lanes_title: '15 projects, 3 months of work (back then)',
         diag_lanes_sub: 'rebuilt in about an hour',
       }
     };

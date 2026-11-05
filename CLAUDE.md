@@ -11,7 +11,7 @@
 ## Architettura
 - `index.html`: dashboard con le 5 card degli atti più le card delle due appendici (HTML/CSS puro, nessun React)
 - `atto1-il-problema.html`, `atto2-larchitettura.html`, `atto3-le-storie.html`, `atto4-la-macchina.html`, `atto5-perche-lo-regalo.html`: un file HTML per atto
-- `appendice-sotto-il-cofano.html`: appendice con estratti reali di file dal repo pubblico `claude-kb-workflow` (bootstrap di sessione, CLAUDE.md globale, CLAUDE.md di questo stesso repo, orchestratore, agente, skill, pagina wiki, KB stabile), codice/YAML non tradotto
+- `appendice-sotto-il-cofano.html`: appendice con estratti di file dal repo pubblico `claude-kb-workflow` alla v0.4.0 (orchestratore da `docs/orchestrazione.md`, agente `deep-reasoner`, skill `verifica-prima-di-completare`, schema della wiki, `/kb-promote`), più il CLAUDE.md di questo stesso repo e uno schema semplificato del CLAUDE.md globale (file personale, non nel repo). Gli estratti vanno copiati dai file reali, mai riscritti a memoria; nella versione EN sono tradotti, con la nota "translated excerpts; the original file is in Italian" (l'orchestratore EN è il blocco reale di `docs/orchestration.md`)
 - `appendice-b-una-sessione-vera.html`: appendice con un simulatore a 3 scenari (Flutter, portale web, debug) che rigioca una sessione di lavoro passo-passo, terminale finto + pannello attori "Dietro le quinte"
 - Ogni file atto (e le appendici) è completamente standalone (include React, Babel, CSS inline)
 - I componenti React sono definiti dentro un tag `<script type="text/babel">` nel file HTML
@@ -60,7 +60,7 @@ Conteggio slide: Atto 1 = 6, Atto 2 = 6, Atto 3 = 10, Atto 4 = 7, Atto 5 = 6, Ap
 
 ## Simulatori interattivi
 
-- **Atto 2, slide 2.3 — "Il viaggio di un fatto"**: componente React con `useState` + `setInterval`. Un pallino si muove tra i riquadri Sessioni sporche → Wiki viva → esame → KB stabile. Due checkbox ("Verificato in produzione", "Visto almeno 2 volte") determinano se il pallino passa l'esame o si blocca.
+- **Atto 2, slide 2.3 — "Il viaggio di un fatto"**: componente React con `useState` + `setInterval`. Un pallino si muove tra i riquadri Sessioni sporche → Wiki viva → esame → KB stabile. Quattro checkbox ("Verificato in produzione o su dispositivo reale", più tre ragioni: "Usato da 2+ progetti", "Gotcha già pagato", "Standard dichiarato") determinano se il pallino passa l'esame di promozione o si blocca: serve la verifica e almeno una delle tre ragioni.
 - **Atto 2, slide 2.6 — "L'orchestra in azione"**: card cliccabili per i ruoli (Direttore, 4 specialisti, Controllore) con pannello informativo, più un bottone che anima una sequenza a step (con `setTimeout` incatenati) che mostra il ciclo lavoro → verifica → correzione → verifica → fine, includendo un passaggio in cui il controllore respinge il lavoro.
 - **Atto 3, slide 3.3 — "Spot the bug"**: due blocchi di codice affiancati, uno corretto (`---`) e uno con il bug reale (`\---`). Un bottone rivela ed evidenzia il carattere di troppo con un'animazione CSS (`@keyframes pulseBug`).
 - **Appendice B, slide B.2 — "Il simulatore"**: selettore a 3 schede (uno scenario ciascuna), replay manuale passo-passo (Avanti/Indietro/Ricomincia, nessun autoplay) con terminale finto ad auto-scroll a sinistra e pannello attori "Dietro le quinte" a destra (CLAUDE.md, KB stabile, LLM Wiki, specialista, skill, reviewer) che si illumina in base al passo corrente.
@@ -82,6 +82,7 @@ Conteggio slide: Atto 1 = 6, Atto 2 = 6, Atto 3 = 10, Atto 4 = 7, Atto 5 = 6, Ap
 ## Vincoli di contenuto (da rispettare in ogni modifica futura)
 - Mai IP, porte o path di server/macchine privati
 - Mai nomi di persone terze (solo "il prof", "io", "voi studenti")
+- Non usare i conteggi (numero di progetti, di siti, di agenti ecc.) come argomento di vanto; i numeri di una storia al passato restano solo se datati ("allora", versione)
 - Mai nomi (né sigle né abbreviazioni) di progetti non pubblici: citabili solo i prodotti pubblici elencati qui sotto
 - I nomi di prodotti pubblici del prof (fivbeach.com, maraffaonline.it, tornei.app, beacharena.it, palabvu.it, aibvc.app, clubseries.app, centrosportivo.online) sono citabili e vanno resi cliccabili con `target="_blank"`
 - Sono citabili anche le app mobile pubblicate negli store: FiChess, TeamToDo (oltre alle versioni mobile di BeachArena, ClubSeries, già citabili come prodotti web) — niente link cliccabile per queste, sono app da store, non siti. Tutte su App Store + Play Store (una sola riga sotto i badge, non ripetuta per ogni app). MaraffaOnline NON è pubblicata negli store: resta citabile solo come prodotto web (maraffaonline.it)

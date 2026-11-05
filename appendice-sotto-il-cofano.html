@@ -132,19 +132,19 @@
 
     // ---------- Frammenti di codice reali (identici in IT ed EN) ----------
     const CODE = {
-      s2: "## Flusso di orchestrazione (vale per ogni lavoro non banale)\nTu sei il lead: pianifica, decomponi, delega ai subagent — non eseguire\ntu il lavoro — e sintetizza. Mostra prima il piano, poi esegui.\n- Ragionamento -> deep-reasoner · Meccanico -> fast-worker\n- Per il resto scegli lo specialista dalla description del pool.\n- Gate obbligatorio: prima di dichiarare finito, passa da `reviewer`.\n- Eccezione: task banali/conversazionali in prima persona, senza cerimonia.",
-      s3: "---\nname: deep-reasoner\ndescription: Fasi ad alto ragionamento - architettura, debug complesso, design di algoritmi. […]\nmodel: opus\n---\n\nSei una sottomente di ragionamento profondo. Considera più ipotesi\ne falsificale. Leggi i file rilevanti prima di concludere, mai\nspeculare. Restituisci una conclusione azionabile in cima, la\nmotivazione essenziale sotto, i rischi solo se materiali.",
-      s4: "---\nname: verifica-prima-di-completare\ndescription: Prima di dichiarare […] NON da usare per task di pura esplorazione/lettura senza modifiche.\n---\n\n## La regola\n\n1. **Identifica** il comando che prova la claim\n2. **Esegui** il comando completo (non un subset, non da cache vecchia)\n3. **Leggi** l'output integrale e l'exit code\n4. **Conferma** che l'output corrisponda alla claim\n5. **Solo allora** comunica il successo",
-      s5tree: "llm-wiki/\n├── schema.md\n├── wiki/\n│   ├── index.md\n│   ├── log.md\n│   ├── projects/\n│   ├── concepts/\n│   ├── decisions/\n│   └── lessons/\n└── raw/\n    ├── sessions/\n    ├── status/\n    └── decisions/",
+      s2: "## Flusso di orchestrazione (vale per ogni lavoro non banale)\nTu sei il lead: pianifica, decomponi, delega ai subagent — non eseguire\ntu il lavoro — e sintetizza. Mostra prima il piano, poi esegui.\n- Incarichi piccoli, chiusi, provabili -> quick-worker (default)\n- Causa sconosciuta, scelta vera, modifiche ampie -> fast-worker\n- Design, piani, secondo parere -> deep-reasoner\n- Se un livello fallisce, rilancia quello sopra con il lavoro già fatto allegato.\n- Per il resto scegli lo specialista dalla description del pool.\n- Gate obbligatorio: prima di dichiarare finito, passa da `reviewer`.\n- Eccezione: task banali/conversazionali in prima persona, senza cerimonia.",
+      s3: "---\nname: deep-reasoner\ndescription: Fasi ad alto ragionamento - architettura, piani, debug complesso, design di algoritmi, secondo parere prima di azioni difficili da annullare; rilancio quando fast-worker (Sonnet) torna incompleto o fallisce. Pensa a fondo, restituisci una conclusione concisa su cui l'orchestratore possa agire.\nmodel: opus\n---\n\nSei una sottomente di ragionamento profondo. Considera più ipotesi\ne falsificale. Leggi i file rilevanti prima di concludere, mai\nspeculare. Restituisci una conclusione azionabile in cima, la\nmotivazione essenziale sotto, i rischi solo se materiali.",
+      s4: "---\nname: verifica-prima-di-completare\ndescription: Prima di dichiarare una task completata, fixata, funzionante o pronta per il deploy, esegui il comando di verifica e leggi l'output. Da usare quando stai per scrivere \"fatto\", \"risolto\", \"funziona\", \"pronto\", \"deployato\" o equivalenti. NON da usare per task di pura esplorazione/lettura senza modifiche.\n---\n[…]\n## La regola\n\nNiente claim di completamento senza evidenza fresca dell'esecuzione.\n\nPrima di scrivere \"fatto / risolto / funziona / pronto\":\n\n1. **Identifica** il comando che prova la claim (test, build, lint, type-check, curl, navigazione browser)\n2. **Esegui** il comando completo (non un subset, non da cache vecchia)\n3. **Leggi** l'output integrale e l'exit code\n4. **Conferma** che l'output corrisponda alla claim\n5. **Solo allora** comunica il successo",
+      s5tree: "llm-wiki/\n├── schema.md              # Questo file — governance del sistema\n├── wiki/\n│   ├── index.md           # Indice globale (una riga per pagina)\n│   ├── log.md             # Append-only: ogni operazione ingest/lint/promote\n│   ├── projects/          # 1 pagina per progetto — stato corrente + lezioni\n│   ├── concepts/          # Concetti tecnici emersi dalle sessioni\n│   ├── decisions/         # ADR — Architecture Decision Records\n│   └── lessons/           # Lezioni apprese da bug, deploy, errori\n└── raw/\n    ├── sessions/          # Dump di sessioni Claude significative\n    ├── status/            # Snapshot di CURRENT_STATUS.md dai progetti\n    └── decisions/         # Note grezze su decisioni architetturali",
       s5front: "# Titolo\n**Aggiornato**: YYYY-MM-DD\n**Sorgenti**: raw/sessions/YYYY-MM-DD-*.md, ...\n**Tags**: #progetto, #concetto",
       s5link: "[[nome-pagina]]\n[[nome-pagina|Testo alias]]",
-      s6tree: "claude-kb-workflow/\n├── agents/\n├── commands/\n├── docs/\n├── patterns/\n├── project-memories/\n└── skills/",
-      s6checklist: "## Criteri di eleggibilità (verifica prima di procedere)\n\n- [ ] Appare in ≥ 2 progetti diversi\n- [ ] Stabile da ≥ 2 sessioni (controlla `wiki/log.md`)\n- [ ] Verificato in produzione (non solo teorico)\n- [ ] Non già presente in `$KB_PATH/patterns/patterns.md`",
+      s6tree: "claude-kb-workflow/\n├── agents/\n├── commands/\n├── docs/\n├── llm-wiki-template/\n├── patterns/\n├── project-memories/\n├── scripts/\n├── skills/\n└── workflows/",
+      s6checklist: "## Esame di promozione (verifica prima di procedere)\n\nDeve valere ALMENO UNA di queste:\n\n- [ ] È usato da almeno 2 progetti\n- [ ] È un gotcha già pagato, che costerebbe almeno un'ora a chi lo reincontra\n- [ ] Lo dichiari standard (per esempio il flusso di login che vuoi in ogni app)\n\nE sempre:\n\n- [ ] Verificato in produzione o su device reale (non solo teorico)\n- [ ] Non già presente in `$KB_PATH/patterns/patterns.md` o `$KB_PATH/patterns/field-notes-it.md`",
       a3_1: "## Basi di conoscenza personali\n\n- **KB stabile** (fonte curata): `~/kb/claude-knowledge-base/`\n  -> guide operative, agenti, pattern, workflow.\n- **LLM Wiki** (memoria di lavoro): `~/kb/llm-wiki/wiki/`\n  Interrogala con /kb-query; ingerisci nuove sessioni con /kb-ingest.\n\n**Prima di reimplementare qualcosa di infrastrutturale** (auth, push,\npagamenti, deploy...) controlla se esiste gia' una guida nella KB:\nquasi sempre si', con i gotcha gia' pagati.",
       a3_2: "- **Testi store mobile / note reviewer.** Niente a-capo forzati dentro\n  una frase: ogni voce e' una riga continua, cosi' il copia/incolla\n  nel campo dello store non va ripulito a mano.",
-      a3_3: "## Flusso di orchestrazione (vale per ogni lavoro non banale)\n\nTu sei il lead: pianifica, decomponi, delega ai subagent -- non\neseguire tu il lavoro -- e sintetizza. Mostra prima il piano.\n- Ragionamento -> deep-reasoner  ·  Meccanico -> fast-worker\n- Gate obbligatorio: prima di dichiarare finito, passa da `reviewer`.\n- Eccezione: task banali in prima persona, senza cerimonia.",
+      a3_3: "## Flusso di orchestrazione (vale per ogni lavoro non banale)\nTu sei il lead: pianifica, decomponi, delega ai subagent — non eseguire\ntu il lavoro — e sintetizza. Mostra prima il piano, poi esegui.\n- Incarichi piccoli, chiusi, provabili -> quick-worker (default)\n- Causa sconosciuta, scelta vera, modifiche ampie -> fast-worker\n- Design, piani, secondo parere -> deep-reasoner\n- Se un livello fallisce, rilancia quello sopra con il lavoro già fatto allegato.\n- Per il resto scegli lo specialista dalla description del pool.\n- Gate obbligatorio: prima di dichiarare finito, passa da `reviewer`.\n- Eccezione: task banali/conversazionali in prima persona, senza cerimonia.",
       a4_1: "## Stack Tecnologico\n- HTML5 + CSS3 (CSS Grid, Flexbox, clamp(), media queries)\n- React 18 via CDN (unpkg.com)\n- Babel standalone per transpilazione JSX\n- SVG per diagrammi e simulatori\n- Google Fonts: Fraunces, Public Sans, IBM Plex Mono\n- NESSUN bundler, NESSUN npm, NESSUN framework aggiuntivo. Solo file HTML standalone, apribili anche da `file://`.",
-      a4_2: "| Atto | Titolo | Accent | Accent-alt | Icona |\n|------|--------|--------|------------|-------|\n| 1 | Il problema | #d9a441 (oro) | #f0c169 | 🧠 |\n| 2 | L'architettura | #4fa88d (verde) | #7fcbb3 | 🏗️ |\n| Appendice | Sotto il cofano | #6fae5c (verde/success) | #98c98a | 🔧 |",
+      a4_2: "| Atto | Titolo | Accent | Accent-alt | Icona |\n|------|--------|--------|------------|-------|\n| 1 | Il problema | `#d9a441` (oro) | `#f0c169` | 🧠 |\n| 2 | L'architettura | `#4fa88d` (verde) | `#7fcbb3` | 🏗️ |\n…\n| Appendice | Sotto il cofano | `#6fae5c` (verde/success) | `#98c98a` | 🔧 |",
       a4_3: "- `Box({ type, title, children })`: callout `info` / `warn` / `danger` / `tip` / `success`\n- `Glow({ children, color })`: card con bordo luminoso gradient",
     };
 
@@ -152,20 +152,35 @@
     const CODE_EN = {
       a3_1: "## Personal knowledge bases\n\n- **Stable KB** (curated source): `~/kb/claude-knowledge-base/`\n  -> operating guides, agents, patterns, workflows.\n- **LLM Wiki** (working memory): `~/kb/llm-wiki/wiki/`\n  Query it with /kb-query; ingest new sessions with /kb-ingest.\n\n**Before reimplementing anything infrastructural** (auth, push,\npayments, deploy...) check whether a KB guide already exists:\nit almost always does, with the gotchas already paid for.",
       a3_2: "- **Mobile store texts / reviewer notes.** No forced line breaks\n  inside a sentence: each entry is one continuous line, so pasting\n  into the store field needs no manual cleanup.",
-      a3_3: "## Orchestration flow (applies to any non-trivial work)\n\nYou are the lead: plan, decompose, delegate to subagents -- do not\ndo the work yourself -- and synthesize. Show the plan first.\n- Reasoning -> deep-reasoner  \u00b7  Mechanical -> fast-worker\n- Mandatory gate: before declaring done, go through `reviewer`.\n- Exception: trivial tasks first-person, no ceremony.",
+      a3_3: "## Orchestration flow (applies to all non-trivial work)\nYou are the lead: plan, decompose, delegate to subagents — don't do\nthe work yourself — and synthesize. Show the plan first, then execute.\n- Small, closed, testable jobs -> quick-worker (default)\n- Unknown cause, real choice, wide changes -> fast-worker\n- Design, plans, second opinion -> deep-reasoner\n- Relaunch one tier up, with the previous work attached, when a tier fails.\n- For everything else, pick the specialist from the pool's description.\n- Mandatory gate: before declaring done, pass through `reviewer`.\n- Exception: trivial/conversational tasks done directly, no ceremony.",
       a4_1: "## Tech stack\n- HTML5 + CSS3 (CSS Grid, Flexbox, clamp(), media queries)\n- React 18 via CDN (unpkg.com)\n- Babel standalone for JSX transpilation\n- SVG for diagrams and simulators\n- Google Fonts: Fraunces, Public Sans, IBM Plex Mono\n- NO bundler, NO npm, NO extra framework. Standalone HTML files only, they open from `file://` too.",
-      a4_2: "| Act | Title | Accent | Accent-alt | Icon |\n|-----|-------|--------|------------|------|\n| 1 | The problem | #d9a441 (gold) | #f0c169 | \ud83e\udde0 |\n| 2 | The architecture | #4fa88d (green) | #7fcbb3 | \ud83c\udfd7\ufe0f |\n| Appendix | Under the hood | #6fae5c (green/success) | #98c98a | \ud83d\udd27 |",
+      a4_2: "| Act | Title | Accent | Accent-alt | Icon |\n|-----|-------|--------|------------|------|\n| 1 | The problem | `#d9a441` (gold) | `#f0c169` | 🧠 |\n| 2 | The architecture | `#4fa88d` (green) | `#7fcbb3` | 🏗️ |\n…\n| Appendix | Under the hood | `#6fae5c` (green/success) | `#98c98a` | 🔧 |",
       a4_3: "- `Box({ type, title, children })`: `info` / `warn` / `danger` / `tip` / `success` callouts\n- `Glow({ children, color })`: card with a gradient glowing border",
+      s2: "## Orchestration flow (applies to all non-trivial work)\nYou are the lead: plan, decompose, delegate to subagents — don't do\nthe work yourself — and synthesize. Show the plan first, then execute.\n- Small, closed, testable jobs -> quick-worker (default)\n- Unknown cause, real choice, wide changes -> fast-worker\n- Design, plans, second opinion -> deep-reasoner\n- Relaunch one tier up, with the previous work attached, when a tier fails.\n- For everything else, pick the specialist from the pool's description.\n- Mandatory gate: before declaring done, pass through `reviewer`.\n- Exception: trivial/conversational tasks done directly, no ceremony.",
+      s3: "---\nname: deep-reasoner\ndescription: High-reasoning phases - architecture, plans, complex debugging, algorithm design, second opinion before hard-to-undo actions; relaunch when fast-worker (Sonnet) comes back incomplete or fails. Think deeply, return a concise conclusion the orchestrator can act on.\nmodel: opus\n---\n\nYou are a deep-reasoning sub-mind. Consider several hypotheses\nand try to falsify them. Read the relevant files before concluding,\nnever speculate. Return an actionable conclusion at the top, the\nessential reasoning below, risks only if material.",
+      s4: "---\nname: verifica-prima-di-completare\ndescription: Before declaring a task complete, fixed, working or ready to deploy, run the verification command and read the output. Use when you are about to write \"done\", \"fixed\", \"works\", \"ready\", \"deployed\" or equivalents. NOT for pure exploration/reading tasks with no changes.\n---\n[…]\n## The rule\n\nNo completion claim without fresh evidence of execution.\n\nBefore writing \"done / fixed / works / ready\":\n\n1. **Identify** the command that proves the claim (test, build, lint, type-check, curl, browser navigation)\n2. **Run** the full command (not a subset, not from a stale cache)\n3. **Read** the full output and the exit code\n4. **Confirm** that the output matches the claim\n5. **Only then** report success",
+      s5tree: "llm-wiki/\n├── schema.md              # This file — governance of the system\n├── wiki/\n│   ├── index.md           # Global index (one line per page)\n│   ├── log.md             # Append-only: every ingest/lint/promote operation\n│   ├── projects/          # 1 page per project — current state + lessons\n│   ├── concepts/          # Technical concepts that came out of sessions\n│   ├── decisions/         # ADR — Architecture Decision Records\n│   └── lessons/           # Lessons learned from bugs, deploys, errors\n└── raw/\n    ├── sessions/          # Dumps of significant Claude sessions\n    ├── status/            # Snapshots of CURRENT_STATUS.md from the projects\n    └── decisions/         # Raw notes on architectural decisions",
+      s5front: "# Title\n**Updated**: YYYY-MM-DD\n**Sources**: raw/sessions/YYYY-MM-DD-*.md, ...\n**Tags**: #project, #concept",
+      s5link: "[[page-name]]\n[[page-name|Alias text]]",
+      s6tree: "claude-kb-workflow/\n├── agents/\n├── commands/\n├── docs/\n├── llm-wiki-template/\n├── patterns/\n├── project-memories/\n├── scripts/\n├── skills/\n└── workflows/",
+      s6checklist: "## Promotion exam (check before proceeding)\n\nAt least ONE of these must hold:\n\n- [ ] It is used by at least 2 projects\n- [ ] It is a gotcha already paid for, which would cost anyone who meets it again at least an hour\n- [ ] You declare it a standard (for example the login flow you want in every app)\n\nAnd always:\n\n- [ ] Verified in production or on a real device (not just in theory)\n- [ ] Not already present in `$KB_PATH/patterns/patterns.md` or `$KB_PATH/patterns/field-notes-it.md`",
     };
 
     // Frammenti citati nelle didascalie (invariati, sono codice)
     const FRAGS = {
-      s2: ['## Flusso di orchestrazione', 'delega ai subagent', 'deep-reasoner · fast-worker', 'Gate obbligatorio: … reviewer'],
+      s2: ['## Flusso di orchestrazione', 'delega ai subagent', 'quick-worker · fast-worker · deep-reasoner', 'Se un livello fallisce, rilancia quello sopra', 'Gate obbligatorio: … reviewer'],
       s3: ['---', 'name: deep-reasoner', 'description:', 'model: opus'],
       s4: ['description:', '1-5', 'NON da usare per'],
       s5: ['raw/', 'wiki/projects, concepts, …', 'log.md', '**Aggiornato** / **Sorgenti** / **Tags**', '[[nome-pagina]]'],
-      s6: ['agents/ commands/ skills/', 'patterns/', 'project-memories/', '≥ 2 progetti diversi', 'Verificato in produzione'],
+      s6: ['agents/ commands/ skills/', 'patterns/', 'project-memories/', 'ALMENO UNA di queste', 'Verificato in produzione o su device reale'],
     };
+    const FRAGS_EN = {
+      s2: ['## Orchestration flow', 'delegate to subagents', 'quick-worker · fast-worker · deep-reasoner', 'Relaunch one tier up', 'Mandatory gate: … reviewer'],
+      s3: ['---', 'name: deep-reasoner', 'description:', 'model: opus'],
+      s4: ['description:', '1-5', 'NOT for'],
+      s5: ['raw/', 'wiki/projects, concepts, …', 'log.md', '**Updated** / **Sources** / **Tags**', '[[page-name]]'],
+      s6: ['agents/ commands/ skills/', 'patterns/', 'project-memories/', 'At least ONE of these', 'Verified in production or on a real device'],
+    };;
 
     // ---------- Diagramma verticale: la sequenza di avvio ----------
     const BOOT_PATHS = {
@@ -311,6 +326,7 @@
             <CodeBlock path={PROJECT_CLAUDE_PATH} code={(lang === 'en' ? CODE_EN : CODE).a4_2} />
             <CodeBlock path={PROJECT_CLAUDE_PATH} code={(lang === 'en' ? CODE_EN : CODE).a4_3} />
           </div>
+          {lang === 'en' && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', margin: '-8px 0 14px' }}>(translated excerpts; the original file is in Italian)</div>}
           <Box type="tip">{t.sA4_note_a}</Box>
           <Box type="success">{t.sA4_note_b}</Box>
           <Box type="info">{t.sA4_note_c} <a href={SOURCE_REPO_URL} target="_blank" rel="noopener noreferrer" style={{ color: colors.accent }}>{SOURCE_REPO_URL.replace('https://', '')}</a></Box>
@@ -318,73 +334,77 @@
       ),
 
       // A.5 - L'orchestratore
-      (t) => (
+      (t, lang) => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.s2_eyebrow}</div>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ fontSize: '28px' }}>🎼</span> {t.s2_h2}
           </h2>
-          <CodeBlock path="docs/orchestrazione.md" code={CODE.s2} />
-          <CaptionList frags={FRAGS.s2} texts={t.s2_captions} />
+          <CodeBlock path={lang === 'en' ? 'docs/orchestration.md' : 'docs/orchestrazione.md'} code={(lang === 'en' ? CODE_EN : CODE).s2} />
+          <CaptionList frags={(lang === 'en' ? FRAGS_EN : FRAGS).s2} texts={t.s2_captions} />
           <Box type="success">{t.s2_lesson}</Box>
         </div>
       ),
 
       // A.6 - Un agente vero
-      (t) => (
+      (t, lang) => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.s3_eyebrow}</div>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ fontSize: '28px' }}>🤖</span> {t.s3_h2}
           </h2>
-          <CodeBlock path="agents/deep-reasoner.md" code={CODE.s3} />
-          <CaptionList frags={FRAGS.s3} texts={t.s3_captions} />
+          <CodeBlock path="agents/deep-reasoner.md" code={(lang === 'en' ? CODE_EN : CODE).s3} />
+          {lang === 'en' && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', margin: '-8px 0 14px' }}>(translated excerpts; the original file is in Italian)</div>}
+          <CaptionList frags={(lang === 'en' ? FRAGS_EN : FRAGS).s3} texts={t.s3_captions} />
           <Box type="success">{t.s3_lesson}</Box>
         </div>
       ),
 
       // A.7 - Una skill
-      (t) => (
+      (t, lang) => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.s4_eyebrow}</div>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ fontSize: '28px' }}>🧩</span> {t.s4_h2}
           </h2>
-          <CodeBlock path="skills/verifica-prima-di-completare/SKILL.md" code={CODE.s4} />
-          <CaptionList frags={FRAGS.s4} texts={t.s4_captions} />
+          <CodeBlock path="skills/verifica-prima-di-completare/SKILL.md" code={(lang === 'en' ? CODE_EN : CODE).s4} />
+          {lang === 'en' && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', margin: '-8px 0 14px' }}>(translated excerpts; the original file is in Italian)</div>}
+          <CaptionList frags={(lang === 'en' ? FRAGS_EN : FRAGS).s4} texts={t.s4_captions} />
           <Box type="success">{t.s4_lesson}</Box>
         </div>
       ),
 
       // A.8 - Una pagina wiki
-      (t) => (
+      (t, lang) => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.s5_eyebrow}</div>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ fontSize: '28px' }}>📓</span> {t.s5_h2}
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px' }}>
-            <CodeBlock path="llm-wiki-template/schema.md" code={CODE.s5tree} />
+            <CodeBlock path="llm-wiki-template/schema.md" code={(lang === 'en' ? CODE_EN : CODE).s5tree} />
             <div>
-              <CodeBlock path="(frontmatter di una pagina)" code={CODE.s5front} />
-              <CodeBlock path="(link interni)" code={CODE.s5link} />
+              <CodeBlock path={lang === 'en' ? '(frontmatter of a page)' : '(frontmatter di una pagina)'} code={(lang === 'en' ? CODE_EN : CODE).s5front} />
+              <CodeBlock path={lang === 'en' ? '(internal links)' : '(link interni)'} code={(lang === 'en' ? CODE_EN : CODE).s5link} />
             </div>
           </div>
-          <CaptionList frags={FRAGS.s5} texts={t.s5_captions} />
+          {lang === 'en' && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', margin: '-8px 0 14px' }}>(translated excerpts; the original file is in Italian)</div>}
+          <CaptionList frags={(lang === 'en' ? FRAGS_EN : FRAGS).s5} texts={t.s5_captions} />
           <Box type="success">{t.s5_lesson}</Box>
         </div>
       ),
 
       // A.9 - La KB stabile
-      (t) => (
+      (t, lang) => (
         <div style={{ padding: '30px' }}>
           <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px', fontFamily: "'IBM Plex Mono', monospace" }}>{t.s6_eyebrow}</div>
           <h2 style={{ color: colors.accent, fontSize: 'var(--fs-h2)', fontWeight: '600', lineHeight: 'var(--lh-heading)', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ fontSize: '28px' }}>📚</span> {t.s6_h2}
           </h2>
-          <CodeBlock path="claude-kb-workflow/ (albero reale)" code={CODE.s6tree} />
-          <CodeBlock path="commands/kb-promote.md" code={CODE.s6checklist} />
-          <CaptionList frags={FRAGS.s6} texts={t.s6_captions} />
+          <CodeBlock path={lang === 'en' ? 'claude-kb-workflow/ (real tree)' : 'claude-kb-workflow/ (albero reale)'} code={(lang === 'en' ? CODE_EN : CODE).s6tree} />
+          <CodeBlock path="commands/kb-promote.md" code={(lang === 'en' ? CODE_EN : CODE).s6checklist} />
+          {lang === 'en' && <div style={{ color: colors.textMuted, fontSize: 'var(--fs-xs)', margin: '-8px 0 14px' }}>(translated excerpts; the original file is in Italian)</div>}
+          <CaptionList frags={(lang === 'en' ? FRAGS_EN : FRAGS).s6} texts={t.s6_captions} />
           <Box type="success">{t.s6_lesson}</Box>
         </div>
       ),
@@ -426,7 +446,7 @@
         navNext: 'Avanti',
         navHome: "Torna all'indice",
         s1_lead: 'Come sono fatti davvero i pezzi del sistema, riga per riga.',
-        s1_note: 'Ogni estratto in questa appendice viene dal repository pubblico claude-kb-workflow: è verificabile da chiunque lo clona, non solo dichiarato qui.',
+        s1_note: 'Gli estratti di agenti, documenti, skill, comando e schema della wiki vengono dal repository pubblico claude-kb-workflow alla v0.4.0: li verifica chiunque lo clona. Fanno eccezione i due CLAUDE.md (slide 3 e 4): quello di questa presentazione è nel suo repository, quello globale è un file personale e qui è semplificato.',
         s1_index_title: 'Cosa vedremo',
         s1_index_items: [
           '🔌 Il bootstrap — cosa carica Claude Code prima del tuo primo messaggio',
@@ -436,7 +456,7 @@
           "🤖 Un agente vero — frontmatter più prompt, niente altro",
           '🧩 Una skill — quando si attiva da sola, e quando no',
           "📓 Una pagina wiki — la struttura dietro la rete dell'Atto 3",
-          '📚 La KB stabile — le soglie per entrarci',
+          '📚 La KB stabile — l\'esame per entrarci',
         ],
         sboot_eyebrow: 'Ad ogni sessione, prima del prompt',
         sboot_h2: 'Il bootstrap: cosa succede quando apri una sessione',
@@ -452,14 +472,14 @@
         sboot_s5_label: 'Il tuo primo messaggio',
         sboot_s5_detail: 'solo adesso',
         sboot_callout: 'Tutto questo avviene PRIMA del tuo primo prompt, a ogni sessione.',
-        sboot_code: "## Basi di conoscenza          <- puntatori a KB stabile e LLM Wiki (dove cercare)\n## Standard ingegneristici     <- regole valide su ogni progetto (auth, UI, store)\n## Flusso di orchestrazione    <- chi fa cosa: lead, subagent, gate del reviewer\n## Stile di comunicazione      <- quando parlare e quando lavorare in silenzio\n## Code review incrementale    <- si rivede solo il delta dall'ultimo SHA approvato",
+        sboot_code: "## Basi di conoscenza          <- puntatori a KB stabile e LLM Wiki (dove cercare)\n## Standard obbligatori        <- regole valide su ogni progetto (auth, UI, store)\n## Orchestrazione              <- chi fa cosa: lead, tre livelli di modello, gate del reviewer\n## Stile di comunicazione      <- quando parlare e quando lavorare in silenzio\n## Code review incrementale    <- si rivede solo il delta dall'ultimo SHA approvato",
         sboot_note1: "Il CLAUDE.md è l'unico file caricato sempre: per questo resta corto e fa da indice, con puntatori alla conoscenza invece del contenuto. Se il contenuto stesse lì dentro, ogni sessione pagherebbe il costo di leggerlo tutto.",
         sboot_note2: "È la gerarchia delle leve che ritroverete nella prossima slide: globale (il metodo), poi progetto (il contesto), poi prompt (il compito di oggi). Cambi il metodo una volta, e vale ovunque da subito.",
-        sA3_eyebrow: 'Lo stesso file, tre estratti veri',
+        sA3_eyebrow: 'Lo stesso file, tre estratti (percorsi semplificati)',
         sA3_h2: 'Dentro il CLAUDE.md globale',
         sA3_cap1: 'Il file non contiene la conoscenza: dice dove sta e quando andarla a cercare. La frase sui gotcha già pagati è la stessa che, nell\'Appendice B, ferma il lead prima di scrivere una riga di codice.',
         sA3_cap2: 'Le regole nascono da errori veri: questa viene da un pomeriggio passato a togliere a mano gli a-capo da un testo destinato allo store. Da quel momento vale su ogni progetto, per sempre.',
-        sA3_cap3: "La costituzione vista in azione nel simulatore dell'Appendice B. Nessuno la ripete nei prompt: vale perché sta scritta qui.",
+        sA3_cap3: "Il blocco di orchestrazione, identico a quello d'esempio in docs/orchestrazione.md, con i tre livelli di modello e il rilancio al livello sopra. Nessuno lo ripete nei prompt: vale perché sta scritto qui.",
         sA3_closing: 'In queste righe convivono tre generi di contenuto: dove cercare, quali regole di qualità rispettare, chi fa cosa. Vale un solo principio, lo stesso di ogni sessione da qui in avanti: quello che scrivete in questo file conta da subito su ogni progetto.',
         sA4_eyebrow: 'Un livello più specifico',
         sA4_h2: 'Dentro il CLAUDE.md di progetto',
@@ -471,7 +491,8 @@
         s2_captions: [
           "Un titolo markdown, non una riga di codice: questa policy è prosa dentro CLAUDE.md, ricaricata a ogni nuova sessione.",
           'Il vincolo centrale: chi orchestra non esegue. Pianifica e delega, il lavoro sporco resta nei subagent.',
-          'Due corsie già decise di default: ragionamento profondo a un modello, lavoro meccanico a un altro.',
+          'Tre livelli di modello scelti in base all\'incarico: Haiku per i lavori piccoli e chiusi (il default), Sonnet per le cause da trovare, Opus per design e secondo parere.',
+          'Il rilancio: se un livello torna incompleto o fallisce, si riparte da quello sopra con il lavoro già fatto allegato.',
           "Il gate di qualità: niente è dichiarato finito prima che un secondo contesto, pulito, lo riguardi.",
         ],
         s2_lesson: "L'orchestratore non è un programma che gira: è un contratto scritto in italiano semplice, dentro un file che il sistema rilegge a ogni avvio. Quando qualcosa va storto, la gerarchia delle leve è CLAUDE.md (la politica) prima, la description dell'agente poi, il prompt di sessione per ultimo.",
@@ -506,16 +527,16 @@
         s6_h2: 'La KB stabile',
         s6_captions: [
           "Il pool di specialisti e i comandi slash, pronti all'uso.",
-          'Convenzioni cross-progetto, quelle che valgono ovunque.',
+          'Pattern cross-progetto, quelli che valgono ovunque.',
           'Una pagina per progetto: qui il contesto resta versionato insieme al progetto stesso, non solo nella wiki.',
-          'Non basta funzionare una volta: deve ripetersi altrove.',
-          "La soglia più severa: non 'sembra giusto', ma 'ha retto in produzione'.",
+          "L'esame di promozione: basta UNA di tre ragioni (usato da 2+ progetti, gotcha già pagato, standard dichiarato).",
+          "Sempre richiesta: non 'sembra giusto', ma 'ha retto in produzione o su un dispositivo reale'.",
         ],
         s6_lesson: 'Nella KB stabile si entra solo per promozione, mai per scrittura diretta: è la parte piccola e solida del sistema, di proposito. Meno regole, ma autorevoli.',
         s7_h2: 'Il giro completo',
         diag_session: 'Sessione', diag_session_sub: 'grezza',
         diag_wiki: 'Wiki', diag_wiki_sub: 'compilata',
-        diag_exam: 'Esame', diag_exam_sub: 'x2 + produzione',
+        diag_exam: 'Esame', diag_exam_sub: 'una ragione + produzione',
         diag_kb: 'KB stabile', diag_kb_sub: 'piccola, autorevole',
         diag_next: 'Prossima sessione', diag_next_sub: 'altro progetto',
         s7_para: "Quello che avete visto in queste sette slide non è teoria da manuale: sono estratti degli stessi file che girano ora, sul serio, dietro le sessioni di lavoro di questa stessa presentazione. Il cerchio si chiude quando la KB nutre una sessione futura, anche su un progetto che oggi non esiste ancora.",
@@ -533,7 +554,7 @@
         navNext: 'Next',
         navHome: 'Back to the index',
         s1_lead: 'How the pieces of the system are actually built, line by line.',
-        s1_note: 'Every excerpt in this appendix comes from the public claude-kb-workflow repository: anyone who clones it can check it, not just take it on faith here.',
+        s1_note: 'The excerpts of agents, documents, skill, command and wiki schema come from the public claude-kb-workflow repository at v0.4.0: anyone who clones it can check them. The two CLAUDE.md files (slides 3 and 4) are the exception: the one for this presentation is in its own repository, the global one is a personal file and is simplified here.',
         s1_index_title: "What's coming up",
         s1_index_items: [
           '🔌 The bootstrap — what Claude Code loads before your first message',
@@ -543,7 +564,7 @@
           '🤖 A real agent — frontmatter plus a prompt, nothing else',
           '🧩 A skill — when it fires on its own, and when it does not',
           "📓 A wiki page — the structure behind Act 3's network",
-          '📚 The stable KB — the bar it takes to get in',
+          '📚 The stable KB — the exam to get in',
         ],
         sboot_eyebrow: 'Every session, before the prompt',
         sboot_h2: 'The bootstrap: what happens when you open a session',
@@ -559,14 +580,14 @@
         sboot_s5_label: 'Your first message',
         sboot_s5_detail: 'only now',
         sboot_callout: 'All of this happens BEFORE your first prompt, every session.',
-        sboot_code: "## Basi di conoscenza          <- pointers to the stable KB and the LLM Wiki (where to look)\n## Standard ingegneristici     <- rules that hold on every project (auth, UI, store text)\n## Flusso di orchestrazione    <- who does what: lead, subagents, the reviewer gate\n## Stile di comunicazione      <- when to talk and when to work in silence\n## Code review incrementale    <- only the delta since the last approved SHA gets reviewed",
+        sboot_code: "## Basi di conoscenza          <- pointers to the stable KB and the LLM Wiki (where to look)\n## Standard obbligatori        <- rules that hold on every project (auth, UI, store text)\n## Orchestrazione              <- who does what: lead, three model tiers, the reviewer gate\n## Stile di comunicazione      <- when to talk and when to work in silence\n## Code review incrementale    <- only the delta since the last approved SHA gets reviewed",
         sboot_note1: 'CLAUDE.md is the one file loaded every time, so it stays short and works as an index: pointers to the knowledge, never the knowledge itself. If the content lived there, every session would pay the cost of reading all of it.',
         sboot_note2: "It's the same hierarchy of levers in the next slide: global (the method), then project (the context), then prompt (today's task). Change the method once, and it holds everywhere from that point.",
-        sA3_eyebrow: 'The same file, three real excerpts',
+        sA3_eyebrow: 'The same file, three excerpts (simplified paths)',
         sA3_h2: 'Inside the global CLAUDE.md',
         sA3_cap1: 'The file does not hold the knowledge: it says where it lives and when to go look for it. The line about gotchas already paid for is the same one that, in Appendix B, stops the lead before it writes a single line of code.',
         sA3_cap2: 'Rules come from real mistakes: this one from an afternoon spent manually stripping line breaks out of a store listing. From that afternoon on, it holds on every project, for good.',
-        sA3_cap3: "The constitution you watched run in the Appendix B simulator. Nobody repeats it in prompts: it holds because it's written here.",
+        sA3_cap3: "The orchestration block, identical to the example in docs/orchestration.md, with the three model tiers and the relaunch one tier up. Nobody repeats it in prompts: it holds because it is written here.",
         sA3_closing: 'Three kinds of content live in these lines: where to look, which quality rules apply, who does what. One principle covers all of it, the same one that holds for every session from here on: what you write in this file counts on every project, starting immediately.',
         sA4_eyebrow: 'One level more specific',
         sA4_h2: 'Inside the project CLAUDE.md',
@@ -578,7 +599,8 @@
         s2_captions: [
           'A markdown heading, not a line of code: this policy is prose inside CLAUDE.md, reloaded at the start of every session.',
           'The core constraint: whoever orchestrates does not execute. It plans and delegates, the messy work stays inside the subagents.',
-          'Two default lanes already decided: deep reasoning to one model, mechanical work to another.',
+          'Three model tiers chosen by the kind of job: Haiku for small, closed work (the default), Sonnet for causes to find, Opus for design and a second opinion.',
+          'The relaunch: if a tier comes back incomplete or fails, start again one tier up with the work already done attached.',
           'The quality gate: nothing counts as done before a second, clean context has looked at it.',
         ],
         s2_lesson: 'The orchestrator is not a program that runs: it is a contract written in plain language, inside a file the system reloads on every start. When something goes wrong, the hierarchy of levers is CLAUDE.md (the policy) first, the agent description next, the session prompt last.',
@@ -613,16 +635,16 @@
         s6_h2: 'The stable KB',
         s6_captions: [
           'The pool of specialists and the slash commands, ready to use.',
-          'Cross-project conventions, the ones that hold everywhere.',
+          'Cross-project patterns, the ones that hold everywhere.',
           'One page per project: here the context stays versioned together with the project itself, not only in the wiki.',
-          'Working once is not enough: it has to repeat somewhere else.',
-          "The strictest bar: not 'looks right', but 'held up in production'.",
+          'The promotion exam: ONE of three reasons is enough (used by 2+ projects, a gotcha already paid for, a declared standard).',
+          "Always required: not 'looks right', but 'held up in production or on a real device'.",
         ],
         s6_lesson: 'You only get into the stable KB through promotion, never by writing there directly: it is the small, solid part of the system, on purpose. Fewer rules, but ones you can trust.',
         s7_h2: 'The full loop',
         diag_session: 'Session', diag_session_sub: 'raw',
         diag_wiki: 'Wiki', diag_wiki_sub: 'compiled',
-        diag_exam: 'Exam', diag_exam_sub: 'x2 + production',
+        diag_exam: 'Exam', diag_exam_sub: 'one reason + production',
         diag_kb: 'Stable KB', diag_kb_sub: 'small, trusted',
         diag_next: 'Next session', diag_next_sub: 'different project',
         s7_para: 'What you just saw across these seven slides is not textbook theory: these are excerpts from the same files running right now, for real, behind the working sessions of this very presentation. The loop closes when the KB feeds a future session, even on a project that does not exist yet today.',
