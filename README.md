@@ -14,7 +14,7 @@ Ora è bilingue italiano/inglese: un selettore di lingua in apertura sull'indice
 |------|--------|-----------|-------|
 | 1 | Il problema | L'amnesia dell'AI, prodotti reali gestiti nei ritagli di tempo, l'idea di Karpathy | 6 |
 | 2 | L'architettura | I tre livelli, l'esame di promozione, l'orchestra di agenti | 6 |
-| 3 | Le tre storie | 10 agenti fantasma, il bug dei 4 caratteri, il recupero in un'ora, la memoria vista dall'alto, i 26 errori | 10 |
+| 3 | Le tre storie | 10 agenti fantasma e il bug dei 4 caratteri; il recupero in un'ora e la memoria vista dall'alto; i 26 errori | 10 |
 | 4 | La macchina completa | Il workflow end-to-end, l'orchestrazione parallela, wiki e KB anche per gli agenti, le skill in pratica, cosa c'è nel repo | 7 |
 | 5 | Perché lo regalo | Mappa vs territorio, le 3 lezioni trasferibili, come provarlo | 6 |
 | Appendice | Sotto il cofano | Estratti reali dal repo pubblico: bootstrap di sessione, CLAUDE.md globale e di progetto, orchestratore, agente, skill, pagina wiki, KB stabile | 10 |
