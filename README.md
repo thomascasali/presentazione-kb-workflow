@@ -1,4 +1,4 @@
-# Dare una memoria all'AI — come ho costruito un sistema di conoscenza per Claude Code
+# Conoscenza che attraversa i progetti — come ho costruito un sistema di conoscenza per Claude Code
 
 Presentation available in English: https://thomascasali.github.io/presentazione-kb-workflow/?lang=en
 

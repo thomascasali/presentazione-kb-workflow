@@ -1,4 +1,4 @@
-# Presentazione kb-workflow — Dare una memoria all'AI
+# Presentazione kb-workflow — Conoscenza che attraversa i progetti
 
 ## Stack Tecnologico
 - HTML5 + CSS3 (CSS Grid, Flexbox, clamp(), media queries)
